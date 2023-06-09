@@ -27,9 +27,8 @@ module Seedie
 
     def generate_record(model_config, index)
       model = model_name.capitalize.constantize
-      field_values_set = FieldValuesGenerator.new(model, model_config['attributes'], index).generate_field_values
-      puts field_values_set
-      # model.create!(field_values_set)
+      field_values_set = FieldValuesGenerator.new(model, model_config, index).generate_field_values
+      model.create!(field_values_set)
     end
   end
 end

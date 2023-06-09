@@ -6,16 +6,19 @@ module Seedie
       @model = model
       @model_config = model_config
       @index = index
+      @attributes_config = model_config['attributes']
       @model_fields = ModelFields.new(model, model_config)
       @field_values = {}
     end
 
     def generate_field_values
-      @model.column_hash.map do |name, column|
+      @field_values = @model.columns_hash.map do |name, column|
         next if @model_fields.disabled_fields.include?(name)
         
         [name, generate_field_value(name, column)]
-      end.to_h
+      end
+
+      @field_values.compact.to_h
     end
 
     def generate_field_value(name, column)

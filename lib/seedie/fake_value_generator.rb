@@ -8,7 +8,7 @@ module Seedie
     def generate_fake_value
       case @column.type
       when :string
-        Faker::Name.send(@name)
+        Faker::Lorem.word
       when :text
         Faker::Lorem.paragraph
       when :integer
