@@ -1,0 +1,12 @@
+
+default_count: 10
+models:
+  user:
+    count: 5
+    attributes:
+      name: "User {{index}}"
+    disabled_fields: [nickname, password]
+  post:
+    count: 5
+    attributes:
+      title: "Post {{index}}"
