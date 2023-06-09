@@ -8,6 +8,8 @@ require_relative "seedie/model_seeds"
 require_relative "seedie/seeds_generator"
 require_relative "seedie/version"
 
+require 'seedie/railtie' if defined?(Rails)
+
 require "active_record"
 require "faker"
 require "yaml"
