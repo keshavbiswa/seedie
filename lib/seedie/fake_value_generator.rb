@@ -12,9 +12,9 @@ module Seedie
       when :text
         Faker::Lorem.paragraph
       when :integer
-        Faker::Number.number(2)
+        Faker::Number.number(digits: 2)
       when :datetime
-        Faker::Time.between(DateTime.now - 1, DateTime.now)
+        Faker::Time.between(from: DateTime.now - 1, to: DateTime.now)
       when :boolean
         Faker::Boolean.boolean
       else
