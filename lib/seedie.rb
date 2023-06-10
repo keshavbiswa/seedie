@@ -5,7 +5,7 @@ require_relative "seedie/custom_field_value_generator"
 require_relative "seedie/field_values_generator"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_seeds"
-require_relative "seedie/seeds_generator"
+require_relative "seedie/seeder"
 require_relative "seedie/version"
 
 require 'seedie/railtie' if defined?(Rails)
