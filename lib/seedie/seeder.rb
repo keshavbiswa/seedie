@@ -9,7 +9,7 @@ module Seedie
 
     def seed_models
       config['models'].each do |model_name, model_config|
-        ModelSeeds.new(model_name, model_config, config).generate_records
+        ModelLoader.new(model_name, model_config, config).generate_records
       end
     end
 

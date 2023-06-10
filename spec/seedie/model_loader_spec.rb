@@ -1,7 +1,7 @@
 require 'spec_helper'
 require "seedie"
 
-describe Seedie::ModelSeeds do
+describe Seedie::ModelLoader do
   let(:model_name) { 'User' }
   let(:model_config) { {} }
   let(:config) { {} }

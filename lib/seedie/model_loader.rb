@@ -1,5 +1,5 @@
 module Seedie
-  class ModelSeeds
+  class ModelLoader
     DEFAULT_MODEL_COUNT = 1
 
     attr_reader :model_config, :model_name, :config
