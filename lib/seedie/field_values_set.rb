@@ -1,5 +1,5 @@
 module Seedie
-  class FieldValuesGenerator
+  class FieldValuesSet
     attr_reader :attributes_config, :index
 
     def initialize(model, model_config, index)

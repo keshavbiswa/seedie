@@ -2,7 +2,7 @@
 
 require_relative "seedie/fake_value_generator"
 require_relative "seedie/custom_field_value_generator"
-require_relative "seedie/field_values_generator"
+require_relative "seedie/field_values_set"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_loader"
 require_relative "seedie/seeder"

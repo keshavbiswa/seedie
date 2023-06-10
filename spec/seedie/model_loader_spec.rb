@@ -6,11 +6,11 @@ describe Seedie::ModelLoader do
   let(:model_config) { {} }
   let(:config) { {} }
   let(:model_class) { double(:model_class) }
-  let(:field_values_generator) { double(:field_values_generator, generate_field_values: {}) }
+  let(:field_values_set) { double(:field_values_set, generate_field_values: {}) }
 
   before do
     stub_const("#{model_name}", model_class)
-    allow(Seedie::FieldValuesGenerator).to receive(:new).and_return(field_values_generator)
+    allow(Seedie::FieldValuesSet).to receive(:new).and_return(field_values_set)
     allow(model_class).to receive(:create!)
   end
   

@@ -2,10 +2,11 @@ module Seedie
   class ModelLoader
     DEFAULT_MODEL_COUNT = 1
 
-    attr_reader :model_config, :model_name, :config
+    attr_reader :model, :model_config, :model_name, :config
 
     def initialize(model_name, model_config, config)
       @model_name = model_name
+      @model = model_name.capitalize.constantize
       @model_config = model_config
       @config = config
     end
@@ -26,8 +27,7 @@ module Seedie
     end
 
     def generate_record(model_config, index)
-      model = model_name.capitalize.constantize
-      field_values_set = FieldValuesGenerator.new(model, model_config, index).generate_field_values
+      field_values_set = FieldValuesSet.new(model, model_config, index).generate_field_values
       model.create!(field_values_set)
     end
   end
