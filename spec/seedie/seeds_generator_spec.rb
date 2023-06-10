@@ -1,7 +1,7 @@
 require 'spec_helper'
 require "seedie"
 
-describe Seedie::SeedsGenerator do
+describe Seedie::Seeder do
   let(:config_path) { Rails.root.join('config', 'seedie.yml') }
   let(:model_config) { {} }
   let(:config) { {'models' => {'User' => model_config}} }
@@ -21,10 +21,10 @@ describe Seedie::SeedsGenerator do
     end
   end
 
-  describe '#perform' do
+  describe '#seed_models' do
     it 'generates records for each model in the configuration' do
       seeds_generator = described_class.new(config_path)
-      seeds_generator.perform
+      seeds_generator.seed_models
       expect(Seedie::ModelSeeds).to have_received(:new).with('User', model_config, config)
       expect(model_seeds).to have_received(:generate_records)
     end

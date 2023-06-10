@@ -1,13 +1,13 @@
 module Seedie
-  class SeedsGenerator
-    attr_reader :config
-
-    def initialize(config_path = nil)
+  class Seeder
+  attr_reader :config
+  
+  def initialize(config_path = nil)
       @config_path = config_path
       @config = load_config(config_path)
     end
 
-    def perform
+    def seed_models
       config['models'].each do |model_name, model_config|
         ModelSeeds.new(model_name, model_config, config).generate_records
       end

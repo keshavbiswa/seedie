@@ -6,7 +6,7 @@ RSpec.describe "SimpleSeed" do
   end
 
   it 'seeds the User model based on the given config' do
-    Seedie::SeedsGenerator.new(@config_path).perform
+    Seedie::Seeder.new(@config_path).seed_models
 
     expect(User.count).to eq 5
     expect(User.first.name).to eq 'User 0'

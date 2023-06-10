@@ -3,6 +3,6 @@ require "seedie"
 namespace :seedie do
   desc "Load the Seedie seeds"
   task :seed => :environment do
-    Seedie::SeedsGenerator.new.perform
+    Seedie::Seeder.new.seed_models
   end
 end
