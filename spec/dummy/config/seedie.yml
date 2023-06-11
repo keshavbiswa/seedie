@@ -5,13 +5,12 @@ models:
       name: "name {{index}}"
       email: "email {{index}}"
     disabled_fields: []
-  post:
+  post: &post
     attributes:
       title: "title {{index}}"
     associations:
-      comments: 4
+      has_many:
+        comments: 4
     disabled_fields: []
   comment:
     attributes:
-      user_id: 
-

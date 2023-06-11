@@ -13,8 +13,10 @@ module Seedie
     def generate_records
       model_count(model_config).times do |index|
         record = generate_record(model_config, index)
-        if model_config["associations"].present?
-          AssociationsLoader.new(record, model, model_config).generate_associations
+        associations_config = model_config["associations"]
+
+        if associations_config.present?
+          Associations::HasMany.new(record, model, associations_config).generate_associations
         end
       end
     end

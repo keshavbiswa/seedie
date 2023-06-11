@@ -45,7 +45,15 @@ describe Seedie::ModelLoader do
 
     context "when associations are specified in model_config" do
       let(:model) { Post }
-      let(:model_config) { {"associations" => {"comments" => {"count" => 2}}} }
+      let(:model_config) do 
+        { "associations" =>
+          { 
+            "has_many" => {
+              "comments" => { "count" => 2 }
+            }
+          } 
+        }
+      end
 
       it "generates the specified number of associations" do
         subject.generate_records
