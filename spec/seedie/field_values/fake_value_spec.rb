@@ -61,7 +61,7 @@ describe Seedie::FieldValues::FakeValue do
       it 'raises an error' do
         allow(column).to receive(:type).and_return(:unknown)
 
-        expect { fake_value.generate_fake_value }.to raise_error("Unknown column type: unknown")
+        expect { fake_value.generate_fake_value }.to raise_error(Seedie::UnknownColumnTypeError, "Unknown column type: unknown")
       end
     end
   end

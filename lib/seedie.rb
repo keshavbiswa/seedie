@@ -17,4 +17,6 @@ require "yaml"
 module Seedie
   class Error < StandardError; end
   class InvalidFakerMethodError < StandardError; end
+  class UnknownColumnTypeError < StandardError; end
+  
 end

@@ -19,7 +19,7 @@ module Seedie
         when :boolean
           Faker::Boolean.boolean
         else
-          raise "Unknown column type: #{@column.type}"
+          raise UnknownColumnTypeError, "Unknown column type: #{@column.type}"
         end
       end
     end
