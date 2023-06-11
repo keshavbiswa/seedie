@@ -8,8 +8,11 @@ Gem::Specification.new do |spec|
   spec.authors = ["Keshav Biswa"]
   spec.email = ["keshavbiswa21@gmail.com"]
 
-  spec.summary = "A Rails gem to automate and customize database seeding for ActiveRecord models, using Faker and configurable YAML files."
-  spec.description = "A Rails gem to automate and customize database seeding for ActiveRecord models, using Faker and configurable YAML files."
+  spec.summary = "Automate Database Seeding For ActiveRecord"
+  spec.description = <<-DESC
+    A Rails gem to automate and customize database seeding for ActiveRecord models, using Faker and configurable YAML files.
+  DESC
+
   spec.homepage = "https://github.com/keshavbiswa/seedie"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.7.7"
