@@ -1,0 +1,10 @@
+models:
+<% @models_config.each do |model, config| -%>
+  <%= model %>:
+    count: <%= config['count'] %>
+    disabled_fields: <%= config['disabled_fields'] %>
+    attributes:
+<% config['attributes'].each do |name, value| -%>
+      <%= name %>: "<%= value %>"
+<% end -%>
+<% end -%>

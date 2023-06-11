@@ -1,0 +1,7 @@
+Description:
+  Creates a seedie.yml file in your config directory.
+Example:
+  bin/rails generate seedie:install
+
+  This will create:
+    config/seedie.yml
