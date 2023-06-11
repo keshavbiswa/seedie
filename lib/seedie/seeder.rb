@@ -9,7 +9,8 @@ module Seedie
 
     def seed_models
       config['models'].each do |model_name, model_config|
-        ModelLoader.new(model_name, model_config, config).generate_records
+        model = model_name.classify.constantize
+        ModelLoader.new(model, model_config, config).generate_records
       end
     end
 
@@ -17,7 +18,7 @@ module Seedie
 
     def load_config(path)
       path = Rails.root.join('config', 'seedie.yml') if path.nil?
-      raise ConfigFileNotFound, "Configuration file config/seedie.yml not found" unless File.exist?(path)
+      raise ConfigFileNotFound, "Config file not found in #{path}" unless File.exist?(path)
       
       YAML.load_file(path)
     end

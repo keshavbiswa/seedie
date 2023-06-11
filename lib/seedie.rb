@@ -5,6 +5,7 @@ require_relative "seedie/field_values/custom_value"
 require_relative "seedie/field_values_set"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_loader"
+require_relative "seedie/associations_loader"
 require_relative "seedie/seeder"
 require_relative "seedie/version"
 

@@ -1,0 +1,5 @@
+models:
+  user:
+    count: 5
+    attributes:
+      name: "name {{index}}"

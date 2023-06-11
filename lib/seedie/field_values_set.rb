@@ -14,6 +14,7 @@ module Seedie
     def generate_field_values
       @field_values = @model.columns_hash.map do |name, column|
         next if @model_fields.disabled_fields.include?(name)
+        next if @model_fields.foreign_fields.include?(name)
         
         [name, generate_field_value(name, column)]
       end
@@ -22,7 +23,7 @@ module Seedie
     end
 
     def generate_field_value(name, column)
-      custom_value = attributes_config[name]
+      custom_value = attributes_config && attributes_config[name]
 
       if custom_value.present?
         FieldValues::CustomValue.new(name, custom_value, index).generate_custom_field_value

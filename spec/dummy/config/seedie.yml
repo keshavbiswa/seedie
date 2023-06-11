@@ -8,7 +8,10 @@ models:
   post:
     attributes:
       title: "title {{index}}"
+    associations:
+      comments: 4
     disabled_fields: []
   comment:
     attributes:
-    disabled_fields: []
+      user_id: 
+
