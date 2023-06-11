@@ -1,13 +1,14 @@
-
-default_count: 10
+default_count: 5
 models:
   user:
-    count: 5
     attributes:
-      name: "User {{index}}"
-      email: "user{{index}}@example.com"
-    disabled_fields: [nickname, password password_digest]
+      name: "name {{index}}"
+      email: "email {{index}}"
+    disabled_fields: []
   post:
-    count: 5
     attributes:
-      title: "Post {{index}}"
+      title: "title {{index}}"
+    disabled_fields: []
+  comment:
+    attributes:
+    disabled_fields: []
