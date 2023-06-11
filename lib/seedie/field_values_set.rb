@@ -6,7 +6,7 @@ module Seedie
       @model = model
       @model_config = model_config
       @index = index
-      @attributes_config = model_config['attributes']
+      @attributes_config = model_config["attributes"]
       @model_fields = ModelFields.new(model, model_config)
       @field_values = {}
     end

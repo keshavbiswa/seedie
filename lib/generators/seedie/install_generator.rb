@@ -1,16 +1,16 @@
-require 'rails/generators/base'
-require 'active_record'
+require "rails/generators/base"
+require "active_record"
 
 module Seedie
   module Generators
     class InstallGenerator < Rails::Generators::Base
       EXCLUDED_MODELS = "ActiveRecord::SchemaMigration, ActiveRecord::InternalMetadata"
 
-      source_root File.expand_path('templates', __dir__)
+      source_root File.expand_path("templates", __dir__)
 
       desc "Creates a seedie.yml for your application."
       def copy_seedie_file
-        if File.exist?('config/seedie.yml')
+        if File.exist?("config/seedie.yml")
           if ask_for_confirmation
             generate_seedie_file
           else
@@ -32,7 +32,7 @@ module Seedie
         Rails.application.eager_load! # Load all models. This is required!!
         
         @models_config = models_configuration
-        template 'seedie.yml', 'config/seedie.yml'
+        template "seedie.yml", "config/seedie.yml"
       end
 
       def models_configuration
@@ -48,8 +48,8 @@ module Seedie
 
       def model_configuration(model)
         {
-          'disabled_fields' => [],
-          'attributes' => string_columns_configuration(model)
+          "disabled_fields" => [],
+          "attributes" => string_columns_configuration(model)
         }
       end
 

@@ -9,7 +9,7 @@ require_relative "seedie/associations_loader"
 require_relative "seedie/seeder"
 require_relative "seedie/version"
 
-require 'seedie/railtie' if defined?(Rails)
+require "seedie/railtie" if defined?(Rails)
 
 require "active_record"
 require "faker"

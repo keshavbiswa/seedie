@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 require "seedie"
 require "rails_helper"
 
@@ -9,7 +9,7 @@ describe Seedie::FieldValuesSet do
   
   subject { described_class.new(model, model_config, index) }
 
-  describe '#generate_field_values' do
+  describe "#generate_field_values" do
     
     it "excludes disabled_fields" do
       model_config["disabled_fields"] = ["content"]
@@ -17,15 +17,15 @@ describe Seedie::FieldValuesSet do
     end
 
     it "excludes foreign_fields" do
-      model_config['attributes'] = { 'content' => 'comment {{index}}' }
+      model_config["attributes"] = { "content" => "comment {{index}}" }
 
-      expect(subject.generate_field_values.keys).not_to include('post_id')
+      expect(subject.generate_field_values.keys).not_to include("post_id")
     end
 
     it "generates custom value" do
-      model_config['attributes'] = { 'content' => 'custom name' }
+      model_config["attributes"] = { "content" => "custom name" }
 
-      expect(subject.generate_field_values).to eq({ 'content' => 'custom name' })
+      expect(subject.generate_field_values).to eq({ "content" => "custom name" })
     end
   end
 end

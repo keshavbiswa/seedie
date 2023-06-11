@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "spec_helper"
 require "rails"
 
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../dummy/config/environment', __FILE__)
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../dummy/config/environment", __FILE__)
 
-require 'rspec/rails'
+require "rspec/rails"
 
 RSpec.configure do |config|
   config.before(:suite) do
