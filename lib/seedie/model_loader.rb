@@ -17,6 +17,7 @@ module Seedie
 
         if associations_config.present?
           Associations::HasMany.new(record, model, associations_config).generate_associations
+          Associations::HasOne.new(record, model, associations_config).generate_associations
         end
       end
     end

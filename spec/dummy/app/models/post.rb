@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   has_many :comments
   has_one :post_metadatum
-  belongs_to :user
+  
+  belongs_to :user, optional: true
 end

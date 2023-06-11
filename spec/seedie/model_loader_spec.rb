@@ -50,6 +50,9 @@ describe Seedie::ModelLoader do
           { 
             "has_many" => {
               "comments" => { "count" => 2 }
+            },
+            "has_one" => {
+              "post_metadatum" => { "count" => 1 }
             }
           } 
         }
@@ -59,6 +62,7 @@ describe Seedie::ModelLoader do
         subject.generate_records
 
         expect(model.first.comments.count).to eq 2
+        expect(model.first.post_metadatum).to be_present
       end
     end
   end
