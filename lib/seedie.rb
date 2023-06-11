@@ -8,6 +8,7 @@ require_relative "seedie/model_loader"
 
 require_relative "seedie/associations/base_association"
 require_relative "seedie/associations/has_many"
+require_relative "seedie/associations/has_one"
 
 require_relative "seedie/seeder"
 require_relative "seedie/version"
@@ -23,5 +24,6 @@ module Seedie
   class InvalidFakerMethodError < StandardError; end
   class UnknownColumnTypeError < StandardError; end
   class ConfigFileNotFound < StandardError; end
+  class InvalidAssociationConfigError < StandardError; end
   
 end

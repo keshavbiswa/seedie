@@ -2,9 +2,9 @@ module Seedie
   module Associations
     class HasMany < BaseAssociation
       def generate_associations
-        return if model_config["has_many"].nil?
+        return if association_config["has_many"].nil?
         
-        model_config["has_many"].each do |association_name, association_config|
+        association_config["has_many"].each do |association_name, association_config|
           association_class = association_name.to_s.classify.constantize
           count = get_association_count(association_config)
           config = only_count_given?(association_config) ? {} : association_config

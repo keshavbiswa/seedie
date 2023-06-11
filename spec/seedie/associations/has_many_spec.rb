@@ -1,4 +1,3 @@
-require "spec_helper"
 require "seedie"
 require "rails_helper"
 
