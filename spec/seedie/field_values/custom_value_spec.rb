@@ -32,7 +32,7 @@ describe Seedie::FieldValues::CustomValue do
       expect { custom_value.generate_custom_field_value }.to raise_error(Seedie::InvalidFakerMethodError, "Invalid method: NotFaker::Name.name")
     end
 
-    it "want to see what happens when invalid method is eval'd" do
+    it "raises an error if the Faker method is invalid" do
       value_template = "value_template {{Faker::SomeInvalidMethod.name}}"
       custom_value = described_class.new(name, value_template, index)
 

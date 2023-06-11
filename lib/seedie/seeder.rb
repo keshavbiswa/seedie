@@ -17,7 +17,7 @@ module Seedie
 
     def load_config(path)
       path = Rails.root.join('config', 'seedie.yml') if path.nil?
-      raise "Configuration file config/seedie.yml not found" unless File.exist?(path)
+      raise ConfigFileNotFound, "Configuration file config/seedie.yml not found" unless File.exist?(path)
       
       YAML.load_file(path)
     end

@@ -33,7 +33,7 @@ describe Seedie::Seeder do
   context 'when configuration file does not exist' do
     it 'raises an error' do
       allow(File).to receive(:exist?).and_return(false)
-      expect { described_class.new(config_path) }.to raise_error("Configuration file config/seedie.yml not found")
+      expect { described_class.new(config_path) }.to raise_error(Seedie::ConfigFileNotFound, "Configuration file config/seedie.yml not found")
     end
   end
 end
