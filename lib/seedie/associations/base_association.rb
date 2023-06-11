@@ -1,6 +1,7 @@
 module Seedie
   class BaseAssociation
     DEFAULT_COUNT = 1
+    INDEX = 0
 
     attr_reader :record, :model, :association_config
 

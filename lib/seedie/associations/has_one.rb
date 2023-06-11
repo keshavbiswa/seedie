@@ -1,8 +1,6 @@
 module Seedie
   module Associations
     class HasOne < BaseAssociation
-      INDEX = 0
-      
       def generate_associations
         return if association_config["has_one"].nil?
         

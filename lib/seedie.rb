@@ -9,6 +9,7 @@ require_relative "seedie/model_loader"
 require_relative "seedie/associations/base_association"
 require_relative "seedie/associations/has_many"
 require_relative "seedie/associations/has_one"
+require_relative "seedie/associations/belongs_to"
 
 require_relative "seedie/seeder"
 require_relative "seedie/version"

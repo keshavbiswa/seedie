@@ -1,4 +1,3 @@
-require "spec_helper"
 require "rails_helper"
 require "seedie"
 
@@ -6,13 +5,8 @@ describe Seedie::ModelLoader do
   let(:model) { User }
   let(:model_config) { {} }
   let(:config) { {} }
-  let(:field_values_set) { double(:field_values_set, generate_field_values: {}) }
 
   subject { described_class.new(model, model_config, config) }
-
-  before do
-    allow(Seedie::FieldValuesSet).to receive(:new).and_return(field_values_set)
-  end
   
   describe "#generate_records" do
     context "when count is specified in model_config" do
@@ -63,6 +57,26 @@ describe Seedie::ModelLoader do
 
         expect(model.first.comments.count).to eq 2
         expect(model.first.post_metadatum).to be_present
+      end
+    end
+
+    context "when belongs_to associations are specified in model_config" do
+      let(:model) { Comment }
+      let(:model_config) do
+        { "associations" =>
+          { 
+            "belongs_to" => {
+              "post" => { "attributes" => { "title" => "Post {{index}}" } }
+            }
+          } 
+        }
+      end
+
+      it "generates the specified number of associations" do
+        subject.generate_records
+
+        expect(model.first.post).to be_present
+        expect(model.first.post.title).to eq "Post 0"
       end
     end
   end
