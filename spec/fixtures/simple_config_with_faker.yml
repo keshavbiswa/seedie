@@ -1,0 +1,13 @@
+
+default_count: 10
+models:
+  user:
+    count: 5
+    attributes:
+      name: "{{Faker::Name.name}}"
+      email: "{{Faker::Internet.email}}"
+    disabled_fields: [nickname, password password_digest]
+  post:
+    count: 5
+    attributes:
+      title: "Post {{index}}"

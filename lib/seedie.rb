@@ -16,5 +16,5 @@ require "yaml"
 
 module Seedie
   class Error < StandardError; end
-  # Your code goes here...
+  class InvalidFakerMethodError < StandardError; end
 end

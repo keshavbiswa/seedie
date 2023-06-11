@@ -22,8 +22,10 @@ module Seedie
     end
 
     def generate_field_value(name, column)
-      if attributes_config[name].present?
-        FieldValues::CustomValue.new(name, attributes_config[name], index).generate_custom_field_value
+      custom_value = attributes_config[name]
+
+      if custom_value.present?
+        FieldValues::CustomValue.new(name, custom_value, index).generate_custom_field_value
       else
         FieldValues::FakeValue.new(name, column).generate_fake_value
       end
