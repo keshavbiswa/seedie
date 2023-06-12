@@ -6,11 +6,19 @@ models:
       email: "email {{index}}"
     disabled_fields: []
   post: &post
+    count: 2
     attributes:
       title: "title {{index}}"
     associations:
       has_many:
         comments: 4
+      belongs_to:
+        user: random
     disabled_fields: []
   comment:
     attributes:
+      title: "title {{index}}"
+      associations:
+        belongs_to:
+          post: random
+          user: new

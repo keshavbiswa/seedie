@@ -8,7 +8,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
       "belongs_to" => {
         "post" => {
           "attributes" => {
-            "title" => "Post {{index}}"
+            "title" => "New Post {{index}}"
           }
         }
       }
@@ -18,25 +18,37 @@ RSpec.describe Seedie::Associations::BelongsTo do
   subject { described_class.new(model, association_config) }
 
   describe "#generate_associations" do
-    context "when the association config is a string (indicating count)" do
-      context "when count is 1" do
-        let(:association_config) { { "belongs_to" => { "post" => 1 } } }
+    context "when the association config is a string" do
+      context "when config says random" do
+        let(:association_config) { { "belongs_to" => { "post" => "random" } } }
 
-        it "generates the correct number of associations" do
-          subject.generate_associations
+        context "when post exists" do
+          let!(:post) { Post.create!(title: "Post 1") }
+          let!(:post2) { Post.create!(title: "Post 2") }
 
-          expect(Post.count).to eq(1)
-          expect(Post.first).to be_a(Post)
+          it "generates associates the comment to a random post" do
+            subject.generate_associations
+
+            expect(subject.associated_field_set["post_id"]).to be_in([post.id, post2.id])
+          end
+        end
+
+        context "when post does not exist" do
+          it "raises InvalidAssociationConfigError" do
+            expect {
+              subject.generate_associations
+            }.to raise_error(Seedie::InvalidAssociationConfigError, "Post does not exist")
+          end
         end
       end
 
-      context "when count is greater than 1" do
-        let(:association_config) { { "belongs_to" => { "post" => 2 } } }
+      context "when config says new" do
+        let(:association_config) { { "belongs_to" => { "post" => "new" } } }
 
-        it "raises InvalidAssociationConfigError" do
-          expect {
-            subject.generate_associations
-          }.to raise_error(Seedie::InvalidAssociationConfigError, "belongs_to association cannot be more than 1")
+        it "generates a new post" do
+          subject.generate_associations
+
+          expect(Post.count).to eq(1)
         end
       end
     end
@@ -46,7 +58,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
         subject.generate_associations
 
         expect(Post.count).to eq(1)
-        expect(Post.first.title).to eq("Post 0")
+        expect(Post.first.title).to eq("New Post 0")
       end
     end
   end

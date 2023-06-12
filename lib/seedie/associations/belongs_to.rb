@@ -14,18 +14,43 @@ module Seedie
         
         association_config["belongs_to"].each do |association_name, association_config|
           klass = association_name.to_s.classify.constantize
-          count = get_association_count(association_config)
+          association_config_type = get_type(association_config)
           
-          if count > 1
-            raise InvalidAssociationConfigError, "belongs_to association cannot be more than 1"
+          if association_config_type == "random"
+            id = klass.ids.sample
+            raise InvalidAssociationConfigError, "#{klass} does not exist" if id.nil?
+
+            set_associated_field_set(id, association_name)
+          elsif association_config_type == "new"
+            record = generate_association(klass, {}, INDEX)
+            set_associated_field_set(record.id, association_name)
           else
-            config = only_count_given?(association_config) ? {} : association_config
-            field_values_set = FieldValuesSet.new(klass, config, INDEX).generate_field_values
-            
-            klass.create!(field_values_set)
-            associated_field_set["#{association_name}_id"] = klass.last.id
+            record = generate_association(klass, association_config, INDEX)
+            set_associated_field_set(record.id, association_name)
           end
         end
+      end
+
+      def generate_association(klass, config, index)
+        field_values_set = FieldValuesSet.new(klass, config, index).generate_field_values
+
+        klass.create!(field_values_set)
+      end
+
+      private
+
+      def get_type(association_config)
+        if association_config.is_a?(String)
+          raise InvalidAssociationConfigError, "Invalid association config" unless ["random", "new"].include?(association_config)
+
+          return association_config
+        else
+          association_config
+        end
+      end
+
+      def set_associated_field_set(id, association_name)
+        associated_field_set["#{association_name}_id"] = id
       end
     end
   end
