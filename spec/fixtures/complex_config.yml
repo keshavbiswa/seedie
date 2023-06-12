@@ -1,0 +1,30 @@
+default_count: 5
+models:
+  user:
+    attributes:
+      name: "name {{index}}"
+      email: "{{Faker::Internet.email}}"
+      address: "{{Faker::Address.street_address}}"
+    disabled_fields: [nickname password password_digest]
+  post: &post
+    count: 2
+    attributes:
+      title: "title {{index}}"
+    associations:
+      has_many:
+        comments: 4
+      belongs_to:
+        user: random
+      has_one:
+        post_metadatum: 
+          attributes:
+            seo_text: "{{Faker::Lorem.paragraph}}"
+    disabled_fields: []
+  comment:
+    attributes:
+      title: "title {{index}}"
+    associations:
+      belongs_to:
+        post:
+          attributes:
+            title: "Comment Post {{index}}"
