@@ -6,15 +6,15 @@ describe Seedie::Seeder do
   let(:config_path) { Rails.root.join("config", "seedie.yml") }
   let(:model_config) { { "count" => 5, "attributes" => { "name" => "name {{index}}" } } }
   let(:config) { {"models" => {"user" => model_config}} }
-  let(:model_loader) { double(:model_loader) }
+  let(:model_seeder) { double(:model_seeder) }
 
   subject { described_class.new(config_path) }
   
   before do
     allow(File).to receive(:exist?).and_return(true)
     allow(YAML).to receive(:load_file).and_return(config)
-    allow(Seedie::ModelLoader).to receive(:new).and_return(model_loader)
-    allow(model_loader).to receive(:generate_records)
+    allow(Seedie::ModelSeeder).to receive(:new).and_return(model_seeder)
+    allow(model_seeder).to receive(:generate_records)
   end
   
   describe "#initialize" do
@@ -27,8 +27,8 @@ describe Seedie::Seeder do
     it "generates records for each model in the configuration" do
       subject.seed_models
 
-      expect(Seedie::ModelLoader).to have_received(:new).with(User, model_config, config)
-      expect(model_loader).to have_received(:generate_records)
+      expect(Seedie::ModelSeeder).to have_received(:new).with(User, model_config, config)
+      expect(model_seeder).to have_received(:generate_records)
     end
   end
 
