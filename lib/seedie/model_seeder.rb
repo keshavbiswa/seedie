@@ -8,6 +8,7 @@ module Seedie
       @model = model
       @model_config = model_config
       @config = config
+      @record_creator = RecordCreator.new(model)
     end
 
     def generate_records
@@ -36,7 +37,7 @@ module Seedie
 
       field_values_set = FieldValuesSet.new(model, model_config, index).generate_field_values
       field_values_set.merge!(associated_field_set)
-      model.create!(field_values_set)
+      @record_creator.create!(field_values_set)
     end
 
     def generate_belongs_to_associations(model, model_config)
