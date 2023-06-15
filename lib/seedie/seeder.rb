@@ -1,8 +1,8 @@
 module Seedie
   class Seeder
-  attr_reader :config
-  
-  def initialize(config_path = nil)
+    attr_reader :config
+
+    def initialize(config_path = nil)
       @config_path = config_path
       @config = load_config(config_path)
     end
@@ -10,7 +10,7 @@ module Seedie
     def seed_models
       config["models"].each do |model_name, model_config|
         model = model_name.classify.constantize
-        ModelLoader.new(model, model_config, config).generate_records
+        ModelSeeder.new(model, model_config, config).generate_records
       end
     end
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 require "seedie"
 
-describe Seedie::ModelLoader do
+describe Seedie::ModelSeeder do
   let(:model) { User }
   let(:model_config) { {} }
   let(:config) { {} }

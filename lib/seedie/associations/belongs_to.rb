@@ -17,8 +17,7 @@ module Seedie
           association_config_type = get_type(association_config)
           
           if association_config_type == "random"
-            id = klass.ids.sample
-            raise InvalidAssociationConfigError, "#{klass} does not exist" if id.nil?
+            id = RecordCreator.new(klass).get_random_id
 
             set_associated_field_set(id, association_name)
           elsif association_config_type == "new"
@@ -34,7 +33,7 @@ module Seedie
       def generate_association(klass, config, index)
         field_values_set = FieldValuesSet.new(klass, config, index).generate_field_values
 
-        klass.create!(field_values_set)
+        RecordCreator.new(klass).create!(field_values_set)
       end
 
       private
