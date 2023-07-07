@@ -1,14 +1,19 @@
 module Seedie
   class BaseAssociation
+    include Reporters::Reportable
+    
     DEFAULT_COUNT = 1
     INDEX = 0
 
-    attr_reader :record, :model, :association_config
+    attr_reader :record, :model, :association_config, :reporters
 
-    def initialize(record, model, association_config)
+    def initialize(record, model, association_config, reporters = [])
       @record = record
       @model = model
       @association_config = association_config
+      @reporters = reporters
+
+      add_observers(@reporters)
     end
 
     def generate_associations
@@ -30,6 +35,10 @@ module Seedie
 
     def only_count_given?(config)
       config.is_a?(Numeric) || config.is_a?(String)
+    end
+
+    def generate_associated_field(id, association_name)
+      { "#{association_name}_id" => id }
     end
   end
 end

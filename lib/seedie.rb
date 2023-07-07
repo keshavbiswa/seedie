@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require_relative "seedie/reporters/reportable"
+require_relative "seedie/reporters/base_reporter"
+require_relative "seedie/reporters/console_reporter"
+
 require_relative "seedie/field_values/fake_value"
 require_relative "seedie/field_values/custom_value"
 require_relative "seedie/field_values_set"
@@ -27,5 +31,4 @@ module Seedie
   class UnknownColumnTypeError < StandardError; end
   class ConfigFileNotFound < StandardError; end
   class InvalidAssociationConfigError < StandardError; end
-  
 end

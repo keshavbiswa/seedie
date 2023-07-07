@@ -5,8 +5,9 @@ describe Seedie::ModelSeeder do
   let(:model) { User }
   let(:model_config) { {} }
   let(:config) { {} }
+  let(:reporters) { [] }
 
-  subject { described_class.new(model, model_config, config) }
+  subject { described_class.new(model, model_config, config, reporters) }
   
   describe "#generate_records" do
     context "when count is specified in model_config" do
