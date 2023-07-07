@@ -16,7 +16,7 @@ module Seedie
     end
 
     def generate_records
-      notify(:model_seed_start, name: "#{model.to_s}")
+      report(:model_seed_start, name: "#{model.to_s}")
       model_count(model_config).times do |index|
         record = generate_record(model_config, index)
         associations_config = model_config["associations"]

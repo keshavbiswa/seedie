@@ -11,7 +11,7 @@ module Seedie
     
     def create!(field_values_set)
       record = @model.create!(field_values_set)
-      notify(:record_created, name: "#{record.class}", id: "#{record.id}")
+      report(:record_created, name: "#{record.class}", id: "#{record.id}")
 
       record
     end
@@ -20,7 +20,7 @@ module Seedie
       begin
         create!(field_values_set)
       rescue ActiveRecord::RecordInvalid => e
-        notify(:record_invalid, record: e.record)
+        report(:record_invalid, record: e.record)
         return nil
       end
     end

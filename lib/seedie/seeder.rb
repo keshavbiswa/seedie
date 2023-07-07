@@ -14,12 +14,12 @@ module Seedie
     end
 
     def seed_models
-      notify(:seed_start)
+      report(:seed_start)
       config["models"].each do |model_name, model_config|
         model = model_name.classify.constantize
         ModelSeeder.new(model, model_config, config, @reporters).generate_records
       end
-      notify(:seed_finish)
+      report(:seed_finish)
       
       @reporters.each(&:close)
     end

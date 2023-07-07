@@ -12,7 +12,7 @@ module Seedie
       def generate_associations
         return if association_config["belongs_to"].nil?
         
-        notify(:belongs_to_start)
+        report(:belongs_to_start)
         association_config["belongs_to"].each do |association_name, association_config|
           klass = association_name.to_s.classify.constantize
           association_config_type = get_type(association_config)
@@ -20,15 +20,15 @@ module Seedie
           if association_config_type == "random"
             id = RecordCreator.new(klass).get_random_id
 
-            notify(:random_association, name: klass.to_s, parent_name: model.to_s, id: id)
+            report(:random_association, name: klass.to_s, parent_name: model.to_s, id: id)
             associated_field_set.merge!(generate_associated_field(id, association_name))
           elsif association_config_type == "new"
-            notify(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
+            report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
             new_associated_record = generate_association(klass, {}, INDEX)
             associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
           else
-            notify(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
+            report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
             new_associated_record = generate_association(klass, association_config, INDEX)
             associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
