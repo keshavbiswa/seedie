@@ -19,16 +19,16 @@ describe Seedie::FieldValues::FakeValue do
     context "when column type is text" do
       it "returns a faker paragraph" do
         allow(column).to receive(:type).and_return(:text)
-        allow(Faker::Lorem).to receive(:paragraph).and_return("random_paragraph")
+        allow(Faker::Lorem).to receive(:word).and_return("random_text")
 
-        expect(fake_value.generate_fake_value).to eq("random_paragraph")
+        expect(fake_value.generate_fake_value).to eq("random_text")
       end
     end
 
     context "when column type is integer" do
       it "returns a faker number" do
         allow(column).to receive(:type).and_return(:integer)
-        allow(Faker::Number).to receive(:number).with(digits: 2).and_return(45)
+        allow(Faker::Number).to receive(:number).with(digits: 5).and_return(45)
 
         expect(fake_value.generate_fake_value).to eq(45)
       end
@@ -54,6 +54,122 @@ describe Seedie::FieldValues::FakeValue do
         allow(Faker::Boolean).to receive(:boolean).and_return(true)
 
         expect(fake_value.generate_fake_value).to eq(true)
+      end
+    end
+
+    context "when column type is uuid" do
+      it "returns a SecureRandom.uuid" do
+        allow(column).to receive(:type).and_return(:uuid)
+        allow(SecureRandom).to receive(:uuid).and_return("uuid")
+
+        expect(fake_value.generate_fake_value).to eq("uuid")
+      end
+    end
+
+    context "when column type is decimal, float or real" do
+      it "returns a faker decimal" do
+        allow(column).to receive(:type).and_return(:decimal)
+        allow(Faker::Number).to receive(:decimal).with(l_digits: 2, r_digits: 2).and_return(45.45)
+        
+        expect(fake_value.generate_fake_value).to eq(45.45)
+      end
+    end
+
+    context "when column type is date" do
+      it "returns a faker date between 2 days ago and today" do
+        date_today = Date.today
+        date_two_days_ago = Date.today - 2
+
+        allow(Date).to receive(:today).and_return(date_today)
+        allow(column).to receive(:type).and_return(:date)
+        allow(Faker::Date).to receive(:between).with(from: date_two_days_ago, to: date_today).and_return(date_today)
+
+        expect(fake_value.generate_fake_value).to eq(date_today)
+      end
+    end
+
+    context "when column type is time or timez" do
+      it "returns a faker time" do
+        allow(column).to receive(:type).and_return(:time)
+        allow(Faker::Time).to receive(:forward).with(days: 23, period: :morning).and_return("time")
+
+        expect(fake_value.generate_fake_value).to eq("time")
+      end
+    end
+
+    context "when column type is json or jsonb" do
+      it "returns a faker json" do
+        allow(column).to receive(:type).and_return(:json)
+        allow(Faker::Lorem).to receive(:word).and_return("json")
+        allow(Faker::Number).to receive(:number).with(digits: 2).and_return(2)
+
+        expect(fake_value.generate_fake_value).to eq({ "key1": "json", "key2": 2 }.to_json)
+      end
+    end
+
+    context "when column type is inet" do
+      it "returns a faker ip address" do
+        allow(column).to receive(:type).and_return(:inet)
+        allow(Faker::Internet).to receive(:ip_v4_address).and_return("ip_address")
+
+        expect(fake_value.generate_fake_value).to eq("ip_address")
+      end
+    end
+
+    context "when column type is cidr or macaddr" do
+      it "returns a faker mac address" do
+        allow(column).to receive(:type).and_return(:cidr)
+        allow(Faker::Internet).to receive(:mac_address).and_return("mac_address")
+
+        expect(fake_value.generate_fake_value).to eq("mac_address")
+      end
+    end
+
+    context "when column type is bytea" do
+      it "returns a faker password" do
+        allow(column).to receive(:type).and_return(:bytea)
+        allow(Faker::Internet).to receive(:password).and_return("password")
+
+        expect(fake_value.generate_fake_value).to eq("password")
+      end
+    end
+
+    context "when column type is bit or bit_varying" do
+      it "returns a bit" do
+        allow(column).to receive(:type).and_return(:bit)
+
+        expect(["1", "0"]).to include(fake_value.generate_fake_value)
+      end
+    end
+
+    context "when column type is money" do
+      it "returns a faker money" do
+        allow(column).to receive(:type).and_return(:money)
+        allow(Faker::Commerce).to receive(:price).and_return(45)
+
+        expect(fake_value.generate_fake_value).to eq(45.to_s)
+      end
+    end
+
+    context "when column type is hstore" do
+      it "returns a hash" do
+        allow(column).to receive(:type).and_return(:hstore)
+        allow(Faker::Lorem).to receive(:word).and_return("random_text")
+        allow(Faker::Number).to receive(:number).with(digits: 2).and_return(2)
+
+        result = { "key1": "random_text", "key2": 2 }
+        expect(fake_value.generate_fake_value.to_json).to eq(result.to_json)
+      end
+    end
+
+    context "when column type is year" do
+      before { srand(1) }
+      after { srand }
+
+      it "returns a year" do
+        allow(column).to receive(:type).and_return(:year)
+    
+        expect(fake_value.generate_fake_value).to eq(1938)
       end
     end
 
