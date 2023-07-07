@@ -4,9 +4,9 @@ module Reporters
   module Reportable
     include Observable
 
-    def report(event_type, body = {})
+    def report(event_type, options = {})
       changed
-      notify_observers(event_type, body)
+      notify_observers(event_type, options)
     end
 
     def add_observers(observers)

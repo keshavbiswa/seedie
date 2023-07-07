@@ -10,6 +10,7 @@ module Seedie
       @reporters = []
       @console_reporter = Reporters::ConsoleReporter.new
       @reporters << @console_reporter
+
       add_observers(@reporters)
     end
 

@@ -12,6 +12,7 @@ module Seedie
       @config = config
       @record_creator = RecordCreator.new(model, reporters)
       @reporters = reporters
+
       add_observers(@reporters)
     end
 
@@ -26,6 +27,7 @@ module Seedie
           Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
         end
       end
+      report(:model_seed_finish, name: "#{model.to_s}")
     end
 
     private
