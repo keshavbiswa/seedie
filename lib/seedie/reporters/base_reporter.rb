@@ -1,6 +1,6 @@
 module Reporters
   class BaseReporter
-    attr_reader :output
+    attr_reader :output, :reports
 
     def initialize(output = nil)
       @output = output || StringIO.new

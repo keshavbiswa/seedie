@@ -27,5 +27,12 @@ describe Seedie::FieldValuesSet do
 
       expect(subject.generate_field_values).to eq({ "content" => "custom name" })
     end
+
+    it "generates fake value" do
+      model_config["attributes"] = { }
+
+      expect(subject.generate_field_values["content"]).to be_a(String)
+    end
+
   end
 end
