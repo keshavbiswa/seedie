@@ -1,17 +1,18 @@
 module Seedie
   module Associations
     class BelongsTo < BaseAssociation
-      attr_reader :model, :association_config, :associated_field_set
+      attr_reader :associated_field_set
 
-      def initialize(model, association_config)
-        @model = model
-        @association_config = association_config
+      def initialize(model, association_config, reporters = [])
+        super(nil, model, association_config, reporters)
+
         @associated_field_set = {}
       end
 
       def generate_associations
         return if association_config["belongs_to"].nil?
         
+        notify(:belongs_to_start)
         association_config["belongs_to"].each do |association_name, association_config|
           klass = association_name.to_s.classify.constantize
           association_config_type = get_type(association_config)
@@ -19,13 +20,18 @@ module Seedie
           if association_config_type == "random"
             id = RecordCreator.new(klass).get_random_id
 
-            set_associated_field_set(id, association_name)
+            notify(:random_association, name: klass.to_s, parent_name: model.to_s, id: id)
+            associated_field_set.merge!(generate_associated_field(id, association_name))
           elsif association_config_type == "new"
-            record = generate_association(klass, {}, INDEX)
-            set_associated_field_set(record.id, association_name)
+            notify(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
+            
+            new_associated_record = generate_association(klass, {}, INDEX)
+            associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
           else
-            record = generate_association(klass, association_config, INDEX)
-            set_associated_field_set(record.id, association_name)
+            notify(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
+            
+            new_associated_record = generate_association(klass, association_config, INDEX)
+            associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
           end
         end
       end
@@ -46,10 +52,6 @@ module Seedie
         else
           association_config
         end
-      end
-
-      def set_associated_field_set(id, association_name)
-        associated_field_set["#{association_name}_id"] = id
       end
     end
   end

@@ -4,13 +4,13 @@ module Seedie
 
     DEFAULT_MODEL_COUNT = 1
 
-    attr_reader :model, :model_config, :config
+    attr_reader :model, :model_config, :config, :reporters
 
     def initialize(model, model_config, config, reporters)
       @model = model
       @model_config = model_config
       @config = config
-      @record_creator = RecordCreator.new(model)
+      @record_creator = RecordCreator.new(model, reporters)
       @reporters = reporters
       add_observers(@reporters)
     end
@@ -22,8 +22,8 @@ module Seedie
         associations_config = model_config["associations"]
 
         if associations_config.present?
-          Associations::HasMany.new(record, model, associations_config).generate_associations
-          Associations::HasOne.new(record, model, associations_config).generate_associations
+          Associations::HasMany.new(record, model, associations_config, reporters).generate_associations
+          Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
         end
       end
     end
@@ -49,7 +49,7 @@ module Seedie
       associations_config = model_config["associations"]
       return {} unless associations_config.present?
 
-      belongs_to_associations = Associations::BelongsTo.new(model, associations_config)
+      belongs_to_associations = Associations::BelongsTo.new(model, associations_config, reporters)
       belongs_to_associations.generate_associations
       
       return belongs_to_associations.associated_field_set

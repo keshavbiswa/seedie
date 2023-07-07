@@ -28,6 +28,22 @@ module Reporters
         "Creating #{body[:name]}"
       when :model_seed_finish
         "Seeding #{body[:name]} finished!"
+      when :record_created
+        "Created #{body[:name]} with id: #{body[:id]}"
+      when :has_many_start
+        "Creating HasMany associations:"
+      when :associated_records
+        "Creating #{body[:count]} #{body[:name]} for #{body[:parent_name]}"
+      when :belongs_to_start
+        "Creating BelongsTo associations:"
+      when :random_association
+        "Randomly associating #{body[:name]} with id: #{body[:id]} for #{body[:parent_name]}"
+      when :belongs_to_associations
+        "Creating a new #{body[:name].titleize} for #{body[:parent_name]}"
+      when :has_one_start
+        "Creating HasOne associations:"
+      else
+        "Unknown event type"
       end
     end
   end
