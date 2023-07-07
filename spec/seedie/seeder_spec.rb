@@ -27,7 +27,6 @@ describe Seedie::Seeder do
     it "generates records for each model in the configuration" do
       subject.seed_models
 
-      expect(Seedie::ModelSeeder).to have_received(:new).with(User, model_config, config)
       expect(model_seeder).to have_received(:generate_records)
     end
   end

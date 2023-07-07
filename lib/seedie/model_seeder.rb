@@ -1,17 +1,22 @@
 module Seedie
   class ModelSeeder
+    include Reporters::Reportable
+
     DEFAULT_MODEL_COUNT = 1
 
     attr_reader :model, :model_config, :config
 
-    def initialize(model, model_config, config)
+    def initialize(model, model_config, config, reporters)
       @model = model
       @model_config = model_config
       @config = config
       @record_creator = RecordCreator.new(model)
+      @reporters = reporters
+      add_observers(@reporters)
     end
 
     def generate_records
+      notify(:model_seed_start, name: "#{model.to_s}")
       model_count(model_config).times do |index|
         record = generate_record(model_config, index)
         associations_config = model_config["associations"]
