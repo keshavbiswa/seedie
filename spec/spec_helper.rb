@@ -8,7 +8,7 @@ end
 RSpec.configure do |config|
 
   config.before do
-    allow($stdout).to receive(:puts) unless ENV["DEBUG"] == "true"
+    allow_any_instance_of(Reporters::ConsoleReporter).to receive(:update) unless ENV["DEBUG_OUTPUT"] == "true"
   end
 
   config.expect_with :rspec do |expectations|

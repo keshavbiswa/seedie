@@ -4,6 +4,10 @@ require "seedie"
 RSpec.describe Reporters::ConsoleReporter do
   let(:console_reporter) { described_class.new }
 
+  before do
+    allow_any_instance_of(Reporters::ConsoleReporter).to receive(:update).and_call_original
+  end
+
   describe "#initialize" do
     it "sets output to $stdout" do
       expect(console_reporter.output).to eq($stdout)
