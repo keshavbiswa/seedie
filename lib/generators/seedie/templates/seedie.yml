@@ -7,4 +7,13 @@ models:
       <%= name %>: "<%= value %>"
 <% end -%>
     disabled_fields: <%= config['disabled_fields'] %>
+<% if config['associations'] -%>
+    associations:
+<% config['associations'].each do |type, associations| -%>
+      <%= type %>:
+<% associations.each do |association, value| -%>
+        <%= association %>: <%= value %>
+<% end -%>
+<% end -%>
+<% end -%>
 <% end -%>

@@ -24,11 +24,6 @@ module Seedie
 
       private
 
-      def ask_for_confirmation
-        question = "A seedie.yml file already exists. Do you want to overwrite it? (y/n)"
-        yes?(question)
-      end
-
       def generate_seedie_file
         Rails.application.eager_load! # Load all models. This is required!!
         
@@ -45,17 +40,38 @@ module Seedie
           model.name.start_with?("HABTM_") # Excluded HABTM Models
         end
 
+        models = Model::ModelSorter.new(models).sort_by_dependency
         models.reduce({}) do |config, model|
           config[model.name.underscore] = model_configuration(model)
           config
         end
-      end
+      end      
 
       def model_configuration(model)
         {
           "disabled_fields" => [],
-          "attributes" => string_columns_configuration(model)
+          "attributes" => string_columns_configuration(model),
+          "associations" => {
+            "belongs_to" => belongs_to_associations_configuration(model),
+            "has_one" => {},
+            "has_many" => {},
+          }
         }
+      end
+
+      def belongs_to_associations_configuration(model)
+        belongs_to_associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
+          association.options[:polymorphic] == true || # Excluded Polymorphic Associations
+          association.options[:optional] == true || # Excluded Optional Associations
+          association.options[:through] != nil || # Excluded Through Associations
+          association.options[:foreign_key] != nil || # Excluded Custom Foreign Key Associations
+          association.options[:class_name] != nil # Excluded Custom Class Name Associations
+        end
+
+        belongs_to_associations.reduce({}) do |config, association|
+          config[association.name.to_s] = "random"
+          config
+        end
       end
 
       def string_columns_configuration(model)
