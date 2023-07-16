@@ -19,15 +19,7 @@ module Seedie
 
       desc "Creates a seedie.yml for your application."
       def copy_seedie_file
-        if File.exist?("config/seedie.yml")
-          if ask_for_confirmation
-            generate_seedie_file
-          else
-            say("Seedie installation aborted!", :red)
-          end
-        else
-          generate_seedie_file
-        end
+        generate_seedie_file
       end
 
       private
@@ -46,7 +38,10 @@ module Seedie
 
       def models_configuration
         models = ActiveRecord::Base.descendants.reject do |model|
-          EXCLUDED_MODELS.include?(model.name) || model.abstract_class?
+          EXCLUDED_MODELS.include?(model.name) || # Excluded Reserved Models
+          model.abstract_class? || # Excluded Abstract Models
+          model.name.blank? || # Excluded Anonymous Models
+          model.name.start_with?("HABTM_") # Excluded HABTM Models
         end
 
         models.reduce({}) do |config, model|
