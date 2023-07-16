@@ -16,9 +16,11 @@ module Seedie
 
     def seed_models
       report(:seed_start)
-      config["models"].each do |model_name, model_config|
-        model = model_name.classify.constantize
-        ModelSeeder.new(model, model_config, config, @reporters).generate_records
+      ActiveRecord::Base.transaction do
+        config["models"].each do |model_name, model_config|
+          model = model_name.classify.constantize
+          ModelSeeder.new(model, model_config, config, @reporters).generate_records
+        end
       end
       report(:seed_finish)
       

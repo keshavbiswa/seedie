@@ -19,6 +19,16 @@ module Seedie
         [name, generate_field_value(name, column)]
       end
 
+      virtual_fields = @attributes_config.keys - @model.columns_hash.keys if @attributes_config
+
+      if virtual_fields
+        @field_values += virtual_fields.map do |name|
+          if @attributes_config && attributes_config[name]
+            [name, FieldValues::CustomValue.new(name, attributes_config[name], index).generate_custom_field_value]
+          end
+        end
+      end
+
       @field_values.compact.to_h
     end
 
