@@ -1,6 +1,7 @@
+require "seedie"
 require "rails_helper"
 
-RSpec.describe Seedie::RecordCreator do
+RSpec.describe Seedie::Model::Creator do
   let(:model) { User }
   let(:field_values_set) { { name: "name 0", email: "email 0", address: "address 0" } }
 
@@ -44,25 +45,6 @@ RSpec.describe Seedie::RecordCreator do
 
       it "returns nil" do
         expect(subject.create(field_values_set)).to be_nil
-      end
-    end
-  end
-
-  describe "#get_random_id" do
-    context "when there are records" do
-      let!(:user) { User.create!(name: "name 0", email: "email 0", address: "address 0") }
-      let!(:user2) { User.create!(name: "name 1", email: "email 1", address: "address 1") }
-
-      it "returns a random id" do
-        expect(subject.get_random_id).to be_in([user.id, user2.id])
-      end
-    end
-
-    context "when there are no records" do
-      it "raises InvalidAssociationConfigError" do
-        expect {
-          subject.get_random_id
-        }.to raise_error(Seedie::InvalidAssociationConfigError, "User does not exist")
       end
     end
   end

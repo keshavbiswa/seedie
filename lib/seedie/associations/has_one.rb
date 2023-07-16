@@ -18,7 +18,7 @@ module Seedie
             field_values_set = FieldValuesSet.new(association_class, config, INDEX).generate_field_values
             parent_field_set = generate_associated_field(record.id, record.class.to_s.underscore)
             
-            record_creator = RecordCreator.new(association_class, reporters)
+            record_creator = Model::Creator.new(association_class, reporters)
             record_creator.create!(field_values_set.merge!(parent_field_set))
           end
         end

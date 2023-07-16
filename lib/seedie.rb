@@ -9,7 +9,9 @@ require_relative "seedie/field_values/custom_value"
 require_relative "seedie/field_values_set"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_seeder"
-require_relative "seedie/record_creator"
+
+require_relative "seedie/model/creator"
+require_relative "seedie/model/id_generator"
 
 require_relative "seedie/associations/base_association"
 require_relative "seedie/associations/has_many"

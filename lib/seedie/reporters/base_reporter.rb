@@ -43,6 +43,8 @@ module Reporters
         "Creating #{options[:count]} #{options[:name]} for #{options[:parent_name]}"
       when :random_association
         "Randomly associating #{options[:name]} with id: #{options[:id]} for #{options[:parent_name]}"
+      when :unique_association
+        "Uniquely associating #{options[:name]} for #{options[:parent_name]}"
       when :belongs_to_associations
         "Creating a new #{options[:name].titleize} for #{options[:parent_name]}"
       else
@@ -69,8 +71,8 @@ module Reporters
     end
 
     def set_indent_level(event_type)
-      if event_type.in?([:record_created, :random_association])
-        @indent_level += 1 if !@reports.last[:event_type].in?([:record_created, :random_association])
+      if event_type.in?([:record_created, :random_association, :unique_association])
+        @indent_level += 1 if !@reports.last[:event_type].in?([:record_created, :random_association, :unique_association])
       elsif @reports.blank? || @reports.last[:event_type] != event_type
         @indent_level = indent_level_for(event_type)
       end
