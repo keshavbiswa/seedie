@@ -10,7 +10,6 @@ describe Seedie::FieldValuesSet do
   subject { described_class.new(model, model_config, index) }
 
   describe "#generate_field_values" do
-    
     it "excludes disabled_fields" do
       model_config["disabled_fields"] = ["content"]
       expect(subject.generate_field_values).to eq({})
@@ -34,5 +33,10 @@ describe Seedie::FieldValuesSet do
       expect(subject.generate_field_values["content"]).to be_a(String)
     end
 
+    it "generates values for virtual fields" do
+      model_config["attributes"] = { "virtual_field" => "Virtual Field Value" }
+
+      expect(subject.generate_field_values).to include({ "virtual_field" => "Virtual Field Value" })
+    end
   end
 end

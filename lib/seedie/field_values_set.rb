@@ -15,7 +15,7 @@ module Seedie
       populate_values_for_model_fields
       populate_values_for_virtual_fields if @attributes_config
 
-      @field_values.compact.to_h
+      @field_values
     end
 
     def generate_field_value(name, column)
@@ -32,7 +32,7 @@ module Seedie
         next if @model_fields.foreign_fields.include?(name)
         
         [name, generate_field_value(name, column)]
-      end
+      end.compact.to_h
     end
 
     def populate_values_for_virtual_fields
