@@ -25,22 +25,6 @@ module Seedie
           return nil
         end
       end
-
-      def get_random_id
-        id = @model.pluck(:id).sample
-        raise InvalidAssociationConfigError, "#{@model} does not exist" if id.nil?
-
-        return id
-      end
-      
-      def get_unique_id(association_klass)      
-        existing_ids = association_klass.pluck("#{@model.to_s.underscore}_id")
-        unique_ids = @model.pluck(:id) - existing_ids
-
-        raise InvalidAssociationConfigError, "#{@model} does not exist" if unique_ids.nil?
-
-        return unique_ids.sample
-      end
     end
   end
 end

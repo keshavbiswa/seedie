@@ -16,10 +16,8 @@ module Seedie
 
         association_config["belongs_to"].each do |association_name, association_config|
           klass = association_name.to_s.classify.constantize
-          association_config_type = get_type(association_config)
-          record_creator = Model::Creator.new(klass, reporters)
 
-          handle_association_config_type(klass, association_name, association_config, record_creator)
+          handle_association_config_type(klass, association_name, association_config)
         end
       end
 
@@ -31,41 +29,41 @@ module Seedie
 
       private
 
-      def handle_association_config_type(klass, association_name, association_config, record_creator)
+      def handle_association_config_type(klass, association_name, association_config)
         case get_type(association_config)
         when "random"
-          handle_random_config_type(klass, association_name, record_creator)
+          handle_random_config_type(klass, association_name)
         when "unique"
-          handle_unique_config_type(klass, association_name, record_creator)
+          handle_unique_config_type(klass, association_name)
         when "new"
-          handle_new_config_type(klass, association_name, record_creator)
+          handle_new_config_type(klass, association_name)
         else
-          handle_other_config_type(klass, association_name, association_config, record_creator)
+          handle_other_config_type(klass, association_name, association_config)
         end
       end
 
-      def handle_random_config_type(klass, association_name, record_creator)
-        id = record_creator.get_random_id
+      def handle_random_config_type(klass, association_name)
+        id = Model::IdGenerator.new(klass).random_id
 
         report(:random_association, name: klass.to_s, parent_name: model.to_s, id: id)
         associated_field_set.merge!(generate_associated_field(id, association_name))
       end
 
-      def handle_unique_config_type(klass, association_name, record_creator)
-        report(:unique_association, name: klass.to_s, parent_name: model.to_s)
+      def handle_unique_config_type(klass, association_name)
+        report(:unique_association, name: klass.to_s, parent_name: @model.to_s)
 
-        id = record_creator.get_unique_id(model)
+        id = Model::IdGenerator.new(klass).unique_id_for(@model)
         associated_field_set.merge!(generate_associated_field(id, association_name))
       end
 
-      def handle_new_config_type(klass, association_name, record_creator)
+      def handle_new_config_type(klass, association_name)
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
         new_associated_record = generate_association(klass, {}, INDEX)
         associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
       end
 
-      def handle_other_config_type(klass, association_name, association_config, record_creator)
+      def handle_other_config_type(klass, association_name, association_config)
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
         new_associated_record = generate_association(klass, association_config, INDEX)
