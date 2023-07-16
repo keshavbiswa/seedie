@@ -10,7 +10,7 @@ module Seedie
       @model = model
       @model_config = model_config
       @config = config
-      @record_creator = RecordCreator.new(model, reporters)
+      @record_creator = Model::Creator.new(model, reporters)
       @reporters = reporters
 
       add_observers(@reporters)

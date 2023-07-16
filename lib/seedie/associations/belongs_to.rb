@@ -17,7 +17,7 @@ module Seedie
         association_config["belongs_to"].each do |association_name, association_config|
           klass = association_name.to_s.classify.constantize
           association_config_type = get_type(association_config)
-          record_creator = RecordCreator.new(klass, reporters)
+          record_creator = Model::Creator.new(klass, reporters)
 
           handle_association_config_type(klass, association_name, association_config, record_creator)
         end
@@ -26,7 +26,7 @@ module Seedie
       def generate_association(klass, config, index)
         field_values_set = FieldValuesSet.new(klass, config, index).generate_field_values
 
-        RecordCreator.new(klass).create!(field_values_set)
+        Model::Creator.new(klass).create!(field_values_set)
       end
 
       private

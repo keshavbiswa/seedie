@@ -1,6 +1,7 @@
+require "seedie"
 require "rails_helper"
 
-RSpec.describe Seedie::RecordCreator do
+RSpec.describe Seedie::Model::Creator do
   let(:model) { User }
   let(:field_values_set) { { name: "name 0", email: "email 0", address: "address 0" } }
 

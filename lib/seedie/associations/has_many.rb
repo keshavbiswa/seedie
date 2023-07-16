@@ -13,7 +13,7 @@ module Seedie
           report(:associated_records, name: association_name, count: count, parent_name: model.to_s)
           count.times do |index|
             field_values_set = FieldValuesSet.new(association_class, config, index).generate_field_values
-            record_creator = RecordCreator.new(record.send(association_name), reporters)
+            record_creator = Model::Creator.new(record.send(association_name), reporters)
 
             record_creator.create!(field_values_set)
           end
