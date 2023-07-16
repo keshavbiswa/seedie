@@ -31,5 +31,14 @@ module Seedie
 
       return id
     end
+    
+    def get_unique_id(association_klass)      
+      existing_ids = association_klass.pluck("#{@model.to_s.underscore}_id")
+      unique_ids = @model.pluck(:id) - existing_ids
+
+      raise InvalidAssociationConfigError, "#{@model} does not exist" if unique_ids.nil?
+
+      return unique_ids.sample
+    end
   end
 end
