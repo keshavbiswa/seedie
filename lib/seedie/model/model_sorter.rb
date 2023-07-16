@@ -19,11 +19,13 @@ module Seedie
       private
     
       def resolve_dependencies(model)
-        raise "Circular dependency detected: #{model}" if @unresolved.include?(model)
+        if @unresolved.include?(model)
+          puts "Circular dependency detected for #{model}. Ignoring..."
+          return
+        end
     
         @unresolved << model
         dependencies = @model_dependencies[model]
-        puts "I have dependencies: #{dependencies}"
         
         if dependencies
           dependencies.each do |dependency|
@@ -36,7 +38,6 @@ module Seedie
       end
     
       def get_model_dependencies(model)
-        puts "Getting dependencies for #{model}"
         associations = model.reflect_on_all_associations(:belongs_to).reject! do |association|
           association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
@@ -44,11 +45,9 @@ module Seedie
 
         return [] if associations.blank?
 
-        puts "Associations for #{model}: #{associations}"
-        
         associations.map do |association|
           if association.options[:class_name]
-            association.options[:class_name].constantize
+            association.active_record
           else
             association.klass
           end
