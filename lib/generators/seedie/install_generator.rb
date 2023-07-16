@@ -4,7 +4,16 @@ require "active_record"
 module Seedie
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      EXCLUDED_MODELS = "ActiveRecord::SchemaMigration, ActiveRecord::InternalMetadata"
+      EXCLUDED_MODELS = %w[
+        ActiveRecord::SchemaMigration
+        ActiveRecord::InternalMetadata
+        ActiveStorage::Attachment
+        ActiveStorage::Blob
+        ActiveStorage::VariantRecord
+        ActionText::RichText
+        ActionMailbox::InboundEmail
+        ActionText::EncryptedRichText
+      ]
 
       source_root File.expand_path("templates", __dir__)
 
@@ -41,7 +50,7 @@ module Seedie
         end
 
         models.reduce({}) do |config, model|
-          config[model.name.downcase] = model_configuration(model)
+          config[model.name.underscore] = model_configuration(model)
           config
         end
       end
