@@ -39,6 +39,7 @@ module Seedie
       def models_configuration
         models = ActiveRecord::Base.descendants.reject do |model|
           EXCLUDED_MODELS.include?(model.name) || # Excluded Reserved Models
+          model.table_exists? == false || # Excluded Models without tables
           model.abstract_class? || # Excluded Abstract Models
           model.name.blank? || # Excluded Anonymous Models
           model.name.start_with?("HABTM_") # Excluded HABTM Models
@@ -58,9 +59,16 @@ module Seedie
       end
 
       def string_columns_configuration(model)
-        string_columns = model.columns.select { |column| column.type == :string }.first(2)
+        string_columns = model.columns.reject do |column|
+          ModelFields::DEFAULT_DISABLED_FIELDS.include?(column.name) || # Excluded reserved columns
+          column.name.end_with?("_id") || # Excluded foreign key columns
+          column.name.end_with?("_type") || # Excluded polymorphic columns
+          column.name.end_with?("_digest") || # Excluded password digest columns
+          column.name.end_with?("_token") # Excluded remember token columns
+        end
+        
         string_columns.reduce({}) do |config, column|
-          config[column.name] = "#{column.name} {{index}}"
+          config[column.name] = FieldValues::FakeValue.new(column.name, column).generate_fake_value
           config
         end
       end
