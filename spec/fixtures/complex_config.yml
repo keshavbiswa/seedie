@@ -22,7 +22,7 @@ models:
     disabled_fields: []
   comment:
     attributes:
-      title: "title {{index}}"
+      # title: "title {{index}}"
     associations:
       belongs_to:
         post:

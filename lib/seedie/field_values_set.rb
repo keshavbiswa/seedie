@@ -12,34 +12,39 @@ module Seedie
     end
 
     def generate_field_values
+      populate_values_for_model_fields
+      populate_values_for_virtual_fields if @attributes_config
+
+      @field_values.compact.to_h
+    end
+
+    def generate_field_value(name, column)
+      return generate_custom_field_value(name) if @attributes_config&.key?(name)
+
+      FieldValues::FakeValue.new(name, column).generate_fake_value
+    end
+
+    private
+
+    def populate_values_for_model_fields
       @field_values = @model.columns_hash.map do |name, column|
         next if @model_fields.disabled_fields.include?(name)
         next if @model_fields.foreign_fields.include?(name)
         
         [name, generate_field_value(name, column)]
       end
-
-      virtual_fields = @attributes_config.keys - @model.columns_hash.keys if @attributes_config
-
-      if virtual_fields
-        @field_values += virtual_fields.map do |name|
-          if @attributes_config && attributes_config[name]
-            [name, FieldValues::CustomValue.new(name, attributes_config[name], index).generate_custom_field_value]
-          end
-        end
-      end
-
-      @field_values.compact.to_h
     end
 
-    def generate_field_value(name, column)
-      custom_value = attributes_config && attributes_config[name]
-
-      if custom_value.present?
-        FieldValues::CustomValue.new(name, custom_value, index).generate_custom_field_value
-      else
-        FieldValues::FakeValue.new(name, column).generate_fake_value
+    def populate_values_for_virtual_fields
+      virtual_fields = @attributes_config.keys - @model.columns_hash.keys
+      
+      virtual_fields.each do |name|
+        @field_values[name] = generate_custom_field_value(name) if @attributes_config[name]
       end
+    end
+
+    def generate_custom_field_value(name)
+      FieldValues::CustomValue.new(name, @attributes_config[name], @index).generate_custom_field_value
     end
   end
 end
