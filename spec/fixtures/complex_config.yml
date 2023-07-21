@@ -28,3 +28,10 @@ models:
         post:
           attributes:
             title: "Comment Post {{index}}"
+  game_room:
+    attributes:
+      name: "{{Faker::Game.title}}"
+    associations:
+      belongs_to:
+        creator: random
+        updater: random
