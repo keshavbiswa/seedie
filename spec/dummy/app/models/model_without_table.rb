@@ -1,0 +1,2 @@
+class ModelWithoutTable < ApplicationRecord
+end
