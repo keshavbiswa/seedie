@@ -37,7 +37,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
           it "raises InvalidAssociationConfigError" do
             expect {
               subject.generate_associations
-            }.to raise_error(Seedie::InvalidAssociationConfigError, "Post does not exist")
+            }.to raise_error(Seedie::InvalidAssociationConfigError, "Post has no records")
           end
         end
       end

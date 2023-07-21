@@ -21,7 +21,7 @@ RSpec.describe Seedie::Model::IdGenerator do
       it "raises InvalidAssociationConfigError" do
         expect {
           subject.random_id
-        }.to raise_error(Seedie::InvalidAssociationConfigError, "User does not exist")
+        }.to raise_error(Seedie::InvalidAssociationConfigError, "User has no records")
       end
     end
   end
