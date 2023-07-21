@@ -63,7 +63,6 @@ module Seedie
         belongs_to_associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
           association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true || # Excluded Optional Associations
-          association.options[:through] != nil || # Excluded Through Associations
           association.options[:foreign_key] != nil || # Excluded Custom Foreign Key Associations
           association.options[:class_name] != nil # Excluded Custom Class Name Associations
         end
