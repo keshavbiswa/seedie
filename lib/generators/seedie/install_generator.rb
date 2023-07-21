@@ -50,11 +50,11 @@ module Seedie
       def model_configuration(model)
         {
           "disabled_fields" => [],
-          "attributes" => string_columns_configuration(model),
+          "attributes" => columns_configuration(model),
           "associations" => {
             "belongs_to" => belongs_to_associations_configuration(model),
-            "has_one" => {},
-            "has_many" => {},
+            "has_one" => {}, # TODO: Add has_one associations
+            "has_many" => {}, # TODO: Add has_many associations
           }
         }
       end
@@ -74,16 +74,18 @@ module Seedie
         end
       end
 
-      def string_columns_configuration(model)
-        string_columns = model.columns.reject do |column|
+      def columns_configuration(model)
+        columns = model.columns.reject do |column|
           ModelFields::DEFAULT_DISABLED_FIELDS.include?(column.name) || # Excluded reserved columns
           column.name.end_with?("_id") || # Excluded foreign key columns
           column.name.end_with?("_type") || # Excluded polymorphic columns
           column.name.end_with?("_digest") || # Excluded password digest columns
-          column.name.end_with?("_token") # Excluded remember token columns
+          column.name.end_with?("_token") || # Excluded remember token columns
+          column.default_function.present? || # Excluded columns with default function
+          column.default.present? # Excluded columns with default values
         end
         
-        string_columns.reduce({}) do |config, column|
+        columns.reduce({}) do |config, column|
           config[column.name] = FieldValues::FakeValue.new(column.name, column).generate_fake_value
           config
         end
