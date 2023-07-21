@@ -18,7 +18,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
 
 
   after do
-    # FileUtils.rm_rf destination_root
+    FileUtils.rm_rf destination_root
   end
 
   it "creates a config file" do
