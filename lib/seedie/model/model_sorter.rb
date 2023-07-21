@@ -38,14 +38,13 @@ module Seedie
       end
     
       def get_model_dependencies(model)
-        associations = model.reflect_on_all_associations(:belongs_to).reject! do |association|
+        associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
           association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
-          association
         end
-
+      
         return [] if associations.blank?
-
+      
         associations.map do |association|
           if association.options[:class_name]
             association.options[:class_name].constantize
@@ -53,7 +52,7 @@ module Seedie
             association.klass
           end
         end
-      end
+      end      
     end    
   end
 end
