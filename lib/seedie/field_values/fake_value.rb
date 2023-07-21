@@ -25,7 +25,7 @@ module Seedie
         when :boolean
           Faker::Boolean.boolean
         when :json, :jsonb
-          { "key1" => Faker::Lorem.word, "key2" => Faker::Number.number(digits: 2) }.to_json
+          Faker::Json.shallow_json(width: 3, options: { key: "Name.first_name", value: "Number.number(digits: 2)" })
         when :inet
           Faker::Internet.ip_v4_address
         when :cidr, :macaddr

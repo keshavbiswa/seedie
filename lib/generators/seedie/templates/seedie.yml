@@ -4,7 +4,11 @@ models:
   <%= model %>:
     attributes:
 <% config['attributes'].each do |name, value| -%>
+<% if value.is_a?(String) && value.start_with?('{') -%>
+      <%= name %>: <%= value %>
+<% else -%>
       <%= name %>: "<%= value %>"
+<% end -%>
 <% end -%>
     disabled_fields: <%= config['disabled_fields'] %>
 <% if config['associations'] -%>

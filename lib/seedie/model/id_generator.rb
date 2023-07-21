@@ -7,7 +7,7 @@ module Seedie
   
       def random_id
         id = @model.pluck(:id).sample
-        raise InvalidAssociationConfigError, "#{@model} does not exist" if id.nil?
+        raise InvalidAssociationConfigError, "#{@model} record does not exist" if id.nil?
 
         return id
       end

@@ -34,8 +34,8 @@ module Seedie
       def models_configuration
         models = ActiveRecord::Base.descendants.reject do |model|
           EXCLUDED_MODELS.include?(model.name) || # Excluded Reserved Models
-          model.table_exists? == false || # Excluded Models without tables
           model.abstract_class? || # Excluded Abstract Models
+          model.table_exists? == false || # Excluded Models without tables
           model.name.blank? || # Excluded Anonymous Models
           model.name.start_with?("HABTM_") # Excluded HABTM Models
         end

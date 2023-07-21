@@ -41,13 +41,14 @@ module Seedie
         associations = model.reflect_on_all_associations(:belongs_to).reject! do |association|
           association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
+          association
         end
 
         return [] if associations.blank?
 
         associations.map do |association|
           if association.options[:class_name]
-            association.active_record
+            association.options[:class_name].constantize
           else
             association.klass
           end
