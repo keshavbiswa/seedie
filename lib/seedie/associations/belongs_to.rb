@@ -15,7 +15,7 @@ module Seedie
         report(:belongs_to_start)
 
         association_config["belongs_to"].each do |association_name, association_config|
-          klass = association_name.to_s.classify.constantize
+          klass = model.reflect_on_association(association_name).klass
 
           handle_association_config_type(klass, association_name, association_config)
         end

@@ -1,0 +1,17 @@
+
+default_count: 10
+models:
+  user:
+    count: 5
+    attributes:
+      name: "{{Faker::Name.name}}"
+      email: "{{Faker::Internet.email}}"
+    disabled_fields: [nickname, password password_digest]
+  game_room:
+    count: 5
+    attributes:
+      name: "Game Room {{index}}"
+    associations:
+      belongs_to:
+        creator: random
+        updater: random
