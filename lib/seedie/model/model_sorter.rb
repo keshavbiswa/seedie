@@ -59,12 +59,10 @@ module Seedie
       
         associations.map do |association|
           if association.options[:class_name]
-            namespaced_class = constantize_class_name(association.options[:class_name], model.name)
+            constantize_class_name(association.options[:class_name], model.name)
           else
-            namespaced_class = association.klass
+            association.klass
           end
-          puts "Model: #{model}, Association: #{association.name}, Class: #{namespaced_class}"
-          namespaced_class
         end
       end
 
