@@ -29,7 +29,6 @@ module Seedie
       
         @models_config = models_configuration
         template "seedie.yml", "config/seedie.yml"
-      
         output.puts "Seedie config file generated at config/seedie.yml"
         
         output.puts "##################################################"
@@ -90,7 +89,12 @@ module Seedie
         end
         
         columns.reduce({}) do |config, column|
-          config[column.name] = FieldValues::FakeValue.new(column.name, column).generate_fake_value
+          validations = model.validators_on(column.name)
+          config[column.name] = if validations.present?
+                                  FieldValues::FakerBuilder.new(column.name, column, validations).build_faker_constant
+                                else
+                                  FieldValues::FakeValue.new(column.name, column).generate_fake_value
+                                end
           config
         end
       end

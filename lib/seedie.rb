@@ -6,6 +6,7 @@ require_relative "seedie/reporters/console_reporter"
 
 require_relative "seedie/field_values/fake_value"
 require_relative "seedie/field_values/custom_value"
+require_relative "seedie/field_values/faker_builder"
 require_relative "seedie/field_values_set"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_seeder"
