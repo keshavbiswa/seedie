@@ -24,11 +24,18 @@ module Seedie
 
       private
 
-      def generate_seedie_file
+      def generate_seedie_file(output = STDOUT)
         Rails.application.eager_load! # Load all models. This is required!!
-        
+      
         @models_config = models_configuration
         template "seedie.yml", "config/seedie.yml"
+      
+        output.puts "Seedie config file generated at config/seedie.yml"
+        
+        output.puts "##################################################"
+        output.puts "WARNING: Please review the generated config file."
+        output.puts "There might be some things that you might need to change to ensure that the generated seeds run successfully."
+        output.puts "##################################################"
       end
 
       def models_configuration
