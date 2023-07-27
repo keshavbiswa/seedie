@@ -55,7 +55,7 @@ module Seedie
         when :date
           @class_prefix = "Date."
           @method_prefix = "between"
-          @options = "(from: DateTime.now - 1, to: DateTime.now)"
+          @options = "(from: Date.today - 1, to: Date.today)"
         when :boolean
           @class_prefix = "Boolean."
           @method_prefix = "boolean"
@@ -98,11 +98,11 @@ module Seedie
         numericality_validator = @validations.find { |v| v.kind == :numericality }
         options = numericality_validator.options
         if options[:greater_than_or_equal_to] && options[:less_than_or_equal_to]
-          "between(from: #{options[:greater_than_or_equal_to]}, to: #{options[:less_than_or_equal_to]})"
+          ".between(from: #{options[:greater_than_or_equal_to]}, to: #{options[:less_than_or_equal_to]})"
         elsif options[:greater_than_or_equal_to]
-          "between(from: #{options[:greater_than_or_equal_to]})"
+          ".between(from: #{options[:greater_than_or_equal_to]})"
         elsif options[:less_than_or_equal_to]
-          "between(to: #{options[:less_than_or_equal_to]})"
+          ".between(to: #{options[:less_than_or_equal_to]})"
         else
           ""
         end
@@ -110,13 +110,14 @@ module Seedie
 
       def handle_length_validation
         length_validator = @validations.find { |v| v.kind == :length }
+        @method_prefix = "characters"
         options = length_validator.options
         if options[:minimum] && options[:maximum]
-          "characters(number: rand(#{options[:minimum]}..#{options[:maximum]}))"
+          "(number: rand(#{options[:minimum]}..#{options[:maximum]}))"
         elsif options[:minimum]
-          "characters(number: rand(#{options[:minimum]}..100))"
+          "(number: rand(#{options[:minimum]}..100))"
         elsif options[:maximum]
-          "characters(number: rand(1..#{options[:maximum]}))"
+          "(number: rand(1..#{options[:maximum]}))"
         else
           ""
         end
@@ -128,7 +129,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = "(#{options[:in]})"
+        @faker_expression = "{{#{options[:in]}"
       end
     end
   end
