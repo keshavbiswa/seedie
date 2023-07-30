@@ -8,7 +8,7 @@ models:
       <%= name %>:
         custom_attr_value:
           values: <%= value["custom_attr_value"]["values"] %>
-          pick: <%= value["custom_attr_value"]["pick"] %>
+          pick_strategy: <%= value["custom_attr_value"]["pick_strategy"] %>
 <% else -%>
       <%= name %>: '<%= value %>'
 <% end -%>

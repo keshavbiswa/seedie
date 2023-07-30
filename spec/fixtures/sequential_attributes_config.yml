@@ -12,7 +12,7 @@ models:
       category:
         custom_attr_value:
           values: [tech, news, sports, politics, entertainment]
-          pick: sequential
+          pick_strategy: sequential
     associations:
       belongs_to:
         user: random

@@ -1,7 +1,7 @@
 module Seedie
   module FieldValues
     class CustomValue
-      VALID_KEYS = ["values", "pick"]
+      VALID_KEYS = ["values", "pick_strategy"]
       CUSTOM_VALUE = "custom_attr_value"
 
       attr_reader :name, :parsed_value
@@ -34,7 +34,7 @@ module Seedie
 
         validate_hash_keys
         validate_values_key
-        validate_pick_key
+        validate_pick_strategy_key
       end
 
       def validate_hash_keys
@@ -42,7 +42,7 @@ module Seedie
         return if invalid_keys.empty?
 
         raise InvalidCustomFieldKeysError, 
-          "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only 'values' and 'pick' are allowed."
+          "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only 'values' and 'pick_strategy' are allowed."
       end
 
       def validate_values_key
@@ -57,11 +57,11 @@ module Seedie
         raise CustomFieldNotEnoughValuesError, "There are not enough values for name. Please add more values."
       end
 
-      def validate_pick_key
-        @pick = @value_template["pick"] || "random"
-        return if %w[random sequential].include?(@pick)
+      def validate_pick_strategy_key
+        @pick_strategy = @value_template["pick_strategy"] || "random"
+        return if %w[random sequential].include?(@pick_strategy)
 
-        raise CustomFieldInvalidPickValueError, "The pick value for #{@name} must be either 'sequential' or 'random'."
+        raise CustomFieldInvalidPickValueError, "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
       end
 
       def generate_custom_value_from_string
@@ -81,7 +81,7 @@ module Seedie
       def generate_custom_value_from_hash
         if @custom_attr_value
           values = @value_template["values"]
-          if @pick == "sequential"
+          if @pick_strategy == "sequential"
             validate_values_length
 
             @parsed_value = values[@index]

@@ -53,7 +53,7 @@ describe Seedie::FieldValues::CustomValue do
           let (:value_template) { { "custom_attr_value" => { "SomeInvalid key" => "value" } } }
           
           it "raises an error" do
-            message = "Invalid keys for name: SomeInvalid key. Only 'values' and 'pick' are allowed."
+            message = "Invalid keys for name: SomeInvalid key. Only 'values' and 'pick_strategy' are allowed."
             expect {
               custom_value.generate_custom_field_value
             }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
@@ -71,8 +71,8 @@ describe Seedie::FieldValues::CustomValue do
           end
         end
 
-        context "when pick is sequential" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick" => "sequential" } } }
+        context "when pick_strategy is sequential" do
+          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "sequential" } } }
           
           context "when values is less than index" do
             let(:index) { 3 }
@@ -94,8 +94,8 @@ describe Seedie::FieldValues::CustomValue do
           end
         end
 
-        context "when pick is random" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick" => "random" } } }
+        context "when pick_strategy is random" do
+          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "random" } } }
           it "returns a random value from the given array" do
             
             custom_value = described_class.new(name, value_template, 0)
@@ -104,11 +104,11 @@ describe Seedie::FieldValues::CustomValue do
           end
         end
 
-        context "when pick is invalid" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick" => "invalid" } } }
+        context "when pick_strategy is invalid" do
+          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "invalid" } } }
 
           it "raises an error" do
-            message = "The pick value for name must be either 'sequential' or 'random'."
+            message = "The pick_strategy for name must be either 'sequential' or 'random'."
 
             expect {
               custom_value.generate_custom_field_value

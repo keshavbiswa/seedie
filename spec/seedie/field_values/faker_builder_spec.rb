@@ -184,7 +184,7 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression with inclusion options" do
-        expect(faker_builder.build_faker_constant).to eq({"custom_attr_value"=>{"pick"=>"random", "values"=>["foo", "bar"]}})
+        expect(faker_builder.build_faker_constant).to eq({"custom_attr_value"=>{"pick_strategy"=>"random", "values"=>["foo", "bar"]}})
       end
     end
 

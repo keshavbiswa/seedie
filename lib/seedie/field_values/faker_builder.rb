@@ -131,7 +131,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = { "custom_attr_value" => { "values" => options[:in], "pick" => "random" } }
+        @faker_expression = { "custom_attr_value" => { "values" => options[:in], "pick_strategy" => "random" } }
       end
     end
   end
