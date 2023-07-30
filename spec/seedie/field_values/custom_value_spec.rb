@@ -46,5 +46,74 @@ describe Seedie::FieldValues::CustomValue do
         end
       end
     end
+
+    context "when the value is not a string" do
+      context "when keys are invalid" do
+        let (:value_template) { { "SomeInvalid key" => "value" } } 
+        
+        it "raises an error" do
+          message = "Invalid keys for name: SomeInvalid key. Only 'values' and 'pick' are allowed."
+          expect {
+            custom_value.generate_custom_field_value
+          }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
+        end
+      end
+
+      context "when values key is not an array" do
+        let(:value_template) { { "values" => "value" } }
+
+        it "raises an error" do
+          message = "The values key for name must be an array."
+          expect {
+            custom_value.generate_custom_field_value
+          }.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
+        end
+      end
+    end
+
+    context "when pick is sequential" do
+      context "when values is less than index" do
+        let(:value_template) { { "values" => ["value1", "value2"], "pick" => "sequential" } }
+        let(:index) { 3 }
+
+        it "raises an error" do
+          message = "There are not enough values for name. Please add more values."
+          expect {
+            custom_value.generate_custom_field_value
+          }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+        end
+      end
+
+      it "returns a sequential value from the given array" do
+        value_template = { "values" => ["value1", "value2"], "pick" => "sequential" }
+        custom_value = described_class.new(name, value_template, 0)
+        expect(custom_value.generate_custom_field_value).to eq("value1")
+
+        custom_value = described_class.new(name, value_template, 1)
+        expect(custom_value.generate_custom_field_value).to eq("value2")
+      end
+    end
+
+        
+    context "when pick is random" do
+      it "returns a random value from the given array" do
+        value_template = { "values" => ["value1", "value2"], "pick" => "random" }
+        custom_value = described_class.new(name, value_template, 0)
+
+        expect((["value1", "value2"])).to include(custom_value.generate_custom_field_value)
+      end
+    end
+
+    context "when pick is invalid" do
+      let(:value_template) { { "values" => ["value1", "value2"], "pick" => "invalid" } }
+
+      it "raises an error" do
+        message = "The pick value for name must be either 'sequential' or 'random'."
+
+        expect {
+          custom_value.generate_custom_field_value
+        }.to raise_error(Seedie::CustomFieldInvalidPickValueError, message)
+      end
+    end
   end
 end

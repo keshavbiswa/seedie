@@ -4,8 +4,11 @@ models:
   <%= model %>:
     attributes:
 <% config['attributes'].each do |name, value| -%>
-<% if value.is_a?(String) && value.start_with?('{') && !value.start_with?('{{') -%>
-      <%= name %>: <%= value %>
+<% if value.is_a?(Hash) -%>
+      <%= name %>:
+<% value.each do |k, v| -%>
+        <%= k %>: <%= v.inspect %>
+<% end -%>
 <% else -%>
       <%= name %>: "<%= value %>"
 <% end -%>

@@ -11,7 +11,7 @@ describe Seedie::ModelSeeder do
   
   describe "#generate_records" do
     context "when count is specified in model_config" do
-      let(:model_config) { {"count" => 2} }
+      let(:model_config) { {"count" => 2, "attributes" => { "email" => "{{Faker::Internet.unique.email}}"} } }
 
       it "generates the specified number of records" do
         subject.generate_records

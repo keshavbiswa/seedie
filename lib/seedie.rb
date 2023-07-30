@@ -35,4 +35,8 @@ module Seedie
   class UnknownColumnTypeError < StandardError; end
   class ConfigFileNotFound < StandardError; end
   class InvalidAssociationConfigError < StandardError; end
+  class InvalidCustomFieldKeysError < StandardError; end
+  class InvalidCustomFieldValuesError < StandardError; end
+  class CustomFieldNotEnoughValuesError < StandardError; end
+  class CustomFieldInvalidPickValueError < StandardError; end
 end
