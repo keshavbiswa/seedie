@@ -63,7 +63,7 @@ module Seedie
           @method_prefix = "boolean"
         when :json, :jsonb
           @class_prefix = "Json."
-          @method_prefix = "shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"
+          @method_prefix = "shallow_json(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })"
         when :inet
           @class_prefix = "Internet."
           @method_prefix = "ip_v4_address"
@@ -131,7 +131,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = { values: options[:in], pick: "random" }
+        @faker_expression = { "custom_attr_value" => { "values" => options[:in], "pick" => "random" } }
       end
     end
   end

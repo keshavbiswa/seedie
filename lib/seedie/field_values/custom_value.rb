@@ -2,6 +2,7 @@ module Seedie
   module FieldValues
     class CustomValue
       VALID_KEYS = ["values", "pick"]
+      CUSTOM_VALUE = "custom_attr_value"
 
       attr_reader :name, :parsed_value
 
@@ -10,8 +11,9 @@ module Seedie
         @value_template = value_template
         @index = index
         @parsed_value = ""
+        @custom_attr_value = false
         
-        validate_template
+        validate_template if @value_template.is_a?(Hash) && @value_template.has_key?(CUSTOM_VALUE)
       end
 
       def generate_custom_field_value
@@ -27,11 +29,12 @@ module Seedie
       private
 
       def validate_template
-        if @value_template.is_a?(Hash)
-          validate_hash_keys
-          validate_values_key
-          validate_pick_key
-        end
+        @value_template = @value_template[CUSTOM_VALUE]
+        @custom_attr_value = true
+
+        validate_hash_keys
+        validate_values_key
+        validate_pick_key
       end
 
       def validate_hash_keys
@@ -76,13 +79,17 @@ module Seedie
       end
 
       def generate_custom_value_from_hash
-        values = @value_template["values"]
-        if @pick == "sequential"
-          validate_values_length
+        if @custom_attr_value
+          values = @value_template["values"]
+          if @pick == "sequential"
+            validate_values_length
 
-          @parsed_value = values[@index]
+            @parsed_value = values[@index]
+          else
+            @parsed_value = values.sample
+          end
         else
-          @parsed_value = values.sample
+          @parsed_value = @value_template
         end
       end
     end

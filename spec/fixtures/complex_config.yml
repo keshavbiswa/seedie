@@ -11,8 +11,9 @@ models:
     attributes:
       title: "title {{index}}"
       category:
-        values: [tech, news, sports, politics, entertainment]
-        pick: random
+        custom_attr_value:
+          values: [tech, news, sports, politics, entertainment]
+          pick: random
     associations:
       has_many:
         comments: 4

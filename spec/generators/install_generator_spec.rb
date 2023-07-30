@@ -96,7 +96,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "generates random attributes from a given values array" do
-      category_values = {"pick"=>"random", "values"=>["tech", "news", "sports", "politics", "entertainment"]}
+      category_values = {"custom_attr_value"=>{"pick"=>"random", "values"=>["tech", "news", "sports", "politics", "entertainment"]}}
       
       expect(content["models"]["simple_model"]["attributes"]["category"]).to eq(category_values)
     end

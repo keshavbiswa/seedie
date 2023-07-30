@@ -100,16 +100,11 @@ describe Seedie::FieldValues::FakeValue do
     context "when column type is json or jsonb" do
       it "returns a faker json" do
         allow(column).to receive(:type).and_return(:json)
-        Faker::Json.shallow_json(width: 3, options: { key: "Name.first_name", value: "Number.number(digits: 2)" })
+        allow(Faker::Lorem).to receive(:word).and_return("random_text")
+        allow(Faker::Number).to receive(:number).with(digits: 2).and_return(2)
 
-        allow(Faker::Json).to receive(:shallow_json).with(
-          width: 3, 
-          options: {
-            key: "Name.first_name", 
-            value: "Number.number(digits: 2)" }).and_return({ "key1": "json", "key2": 2 }
-        )
-
-        expect(fake_value.generate_fake_value).to eq({ "key1": "json", "key2": 2 })
+        result = { "key1": "random_text", "key2": 2 }
+        expect(fake_value.generate_fake_value.to_json).to eq(result.to_json)
       end
     end
 
