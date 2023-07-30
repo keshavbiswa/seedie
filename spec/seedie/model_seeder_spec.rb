@@ -21,7 +21,9 @@ describe Seedie::ModelSeeder do
     end
 
     context "when default_count is specified in config" do
-      let(:config) { {"default_count" => 3} }
+      let(:config) { {"default_count" => 3,
+        "models" => { "user" => { "attributes" => { "email" => "{{Faker::Internet.unique.email}}"} } } }
+      }
 
       it "generates the default number of records" do
         subject.generate_records
