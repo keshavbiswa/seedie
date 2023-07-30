@@ -3,14 +3,14 @@ require "rails_helper"
 
 RSpec.describe Seedie::Model::IdGenerator do
   let(:model) { User }
-  let(:field_values_set) { { name: "name 0", email: "email 0", address: "address 0" } }
+  let(:field_values_set) { { name: "name 0", email: "email 0", password: "password 0" } }
 
   subject { described_class.new(model) }
 
   describe "#random_id" do
     context "when there are records" do
-      let!(:user) { User.create!(name: "name 0", email: "email 0", address: "address 0") }
-      let!(:user2) { User.create!(name: "name 1", email: "email 1", address: "address 1") }
+      let!(:user) { User.create!(name: "name 0", email: "email 0", password: "password 0") }
+      let!(:user2) { User.create!(name: "name 1", email: "email 1", password: "password 1") }
 
       it "returns a random id" do
         expect(subject.random_id).to be_in([user.id, user2.id])

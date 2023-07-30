@@ -57,17 +57,26 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
   end
 
-  describe "#columns_configuration" do
+  describe "#active_columns_configuration" do
     it "generates required attributes" do
       expect(content["models"]["simple_model"]["attributes"]).to include("category")
-      expect(content["models"]["user"]["attributes"]).to include("name", "email", "address", "nickname", "password")
-      expect(content["models"]["post"]["attributes"]).to include("title", "content")
+      expect(content["models"]["user"]["attributes"]).to include("name", "email", "password")
+      expect(content["models"]["post"]["attributes"]).to include("category")
       expect(content["models"]["comment"]["attributes"]).to include("content")
       expect(content["models"]["game_room"]["attributes"]).to include("name")
     end
 
     it "generates required belongs_to associations" do
       expect(content["models"]["comment"]["associations"]["belongs_to"]).to include("post")
+    end
+  end
+
+  describe "#disabled_columns_configuration" do
+    it "adds disabled_columns to the disabled_fields" do
+      expect(content["models"]["user"]["disabled_fields"]).to include("nickname", "address")
+      expect(content["models"]["simple_model"]["disabled_fields"]).to include("name", "content")
+      expect(content["models"]["post"]["disabled_fields"]).to include("title", "content")
+      expect(content["models"]["game_room"]["disabled_fields"]).to include("token")
     end
   end
 
