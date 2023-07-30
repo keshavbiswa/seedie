@@ -24,9 +24,8 @@ module Seedie
           @options += handle_length_validation if has_validation?(:length)
         end
 
-
         @faker_expression += "#{@class_prefix}#{@unique_prefix}#{@method_prefix}#{@options}"
-        @faker_expression += "}}"
+        @faker_expression += "}}" if @faker_expression.start_with?("{{") # We may not need }} when random attributes
         @faker_expression
       end
 
@@ -129,7 +128,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = "{{#{options[:in]}"
+        @faker_expression = "{ values: #{options[:in].inspect}, pick: \"random\" }"
       end
     end
   end

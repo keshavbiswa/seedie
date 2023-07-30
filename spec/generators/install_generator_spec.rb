@@ -49,7 +49,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "sorts models by dependency" do
-      expect(content["models"].keys).to eq ["user", "post", "review", "post_metadatum", "game_room", "comment"]
+      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room", "comment"]
     end
 
     it "generates model_configuration for each model" do
@@ -59,6 +59,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
 
   describe "#columns_configuration" do
     it "generates required attributes" do
+      expect(content["models"]["simple_model"]["attributes"]).to include("category")
       expect(content["models"]["user"]["attributes"]).to include("name", "email", "address", "nickname", "password")
       expect(content["models"]["post"]["attributes"]).to include("title", "content")
       expect(content["models"]["comment"]["attributes"]).to include("content")
@@ -92,6 +93,12 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   describe "Validations" do
     it "ensures unique columns have unique values" do
       expect(content["models"]["user"]["attributes"]["email"]).to eq("{{Faker::Lorem.unique.word}}")
+    end
+
+    it "generates random attributes from a given values array" do
+      category_values = {"pick"=>"random", "values"=>["tech", "news", "sports", "politics", "entertainment"]}
+      
+      expect(content["models"]["simple_model"]["attributes"]["category"]).to eq(category_values)
     end
   end
 end
