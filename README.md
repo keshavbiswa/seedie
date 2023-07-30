@@ -5,6 +5,9 @@ Utilizing the Faker library, Seedie generates realistic data for ActiveRecord mo
 Currently supports only PostrgreSQL and SQLite3 databases.
 The gem includes a Rake task for seeding models and a Rails generator for easy setup.
 
+[![Gem Version](https://badge.fury.io/rb/seedie.svg)](https://badge.fury.io/rb/seedie)
+![Build Status](https://github.com/keshavbiswa/seedie/workflows/CI/badge.svg?branch=main)
+
 ## Installation
 
 Add the following line to your application's Gemfile:
