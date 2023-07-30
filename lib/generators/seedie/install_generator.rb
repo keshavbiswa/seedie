@@ -45,13 +45,13 @@ module Seedie
       def attributes_configuration(model)
         active_columns = []
         disabled_columns = []
-      
+
         model.columns.each do |column|
           # Excluding DEFAULT_DISABLED_FIELDS
           # Excluding foreign_keys, polymorphic associations,
-          # password digest, remember token, columns with default functions or values
+          # password digest, columns with default functions or values
           next if ModelFields::DEFAULT_DISABLED_FIELDS.include?(column.name)
-          next if column.name.end_with?("_id", "_type", "_digest", "_token")
+          next if column.name.end_with?("_id", "_type", "_digest")
           next if column.default_function.present?
           next if column.default.present?
       
@@ -65,7 +65,7 @@ module Seedie
 
         # Add atleast one column to active columns
         active_columns << disabled_columns.pop if active_columns.empty?
-      
+
         {
           "attributes" => active_columns_configuration(model, active_columns),
           "disabled_fields" => disabled_columns_configuration(disabled_columns)
