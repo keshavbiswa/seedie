@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ 3.0 ]
+        rails_version:
+          - ~> 5.2.0
+          - ~> 6.0.0
+          - ~> 6.1.0
+          - ~> 7.0.0
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+
+    - name: Setup DB
+      run: |
+        cd spec/dummy
+        bundle exec rake db:create db:migrate
+      env:
+        RAILS_ENV: test
+
+    - name: Run tests
+      run: bundle exec rspec
+      env:
+        RAILS_VERSION: ${{ matrix.rails_version }}
