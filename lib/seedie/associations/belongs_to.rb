@@ -15,9 +15,9 @@ module Seedie
         report(:belongs_to_start)
 
         association_config["belongs_to"].each do |association_name, association_config|
-          klass = model.reflect_on_association(association_name).klass
+          reflection = model.reflect_on_association(association_name)
 
-          handle_association_config_type(klass, association_name, association_config)
+          handle_association_config_type(reflection, association_name, association_config)
         end
       end
 
@@ -29,45 +29,50 @@ module Seedie
 
       private
 
-      def handle_association_config_type(klass, association_name, association_config)
+      def handle_association_config_type(reflection, association_name, association_config)
         case get_type(association_config)
         when "random"
-          handle_random_config_type(klass, association_name)
+          handle_random_config_type(reflection)
         when "unique"
-          handle_unique_config_type(klass, association_name)
+          handle_unique_config_type(reflection)
         when "new"
-          handle_new_config_type(klass, association_name)
+          handle_new_config_type(reflection)
         else
-          handle_other_config_type(klass, association_name, association_config)
+          handle_other_config_type(reflection, association_config)
         end
       end
 
-      def handle_random_config_type(klass, association_name)
+      def handle_random_config_type(reflection)
+        klass = reflection.klass
         id = Model::IdGenerator.new(klass).random_id
 
         report(:random_association, name: klass.to_s, parent_name: model.to_s, id: id)
-        associated_field_set.merge!(generate_associated_field(id, association_name))
+        associated_field_set.merge!(generate_associated_field(id, reflection.foreign_key))
       end
 
-      def handle_unique_config_type(klass, association_name)
+      def handle_unique_config_type(reflection)
+        klass = reflection.klass
         report(:unique_association, name: klass.to_s, parent_name: @model.to_s)
 
         id = Model::IdGenerator.new(klass).unique_id_for(@model)
-        associated_field_set.merge!(generate_associated_field(id, association_name))
+        associated_field_set.merge!(generate_associated_field(id, reflection.foreign_key))
       end
 
-      def handle_new_config_type(klass, association_name)
+      def handle_new_config_type(reflection)
+        klass = reflection.klass
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
         new_associated_record = generate_association(klass, {}, INDEX)
-        associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
+        associated_field_set.merge!(generate_associated_field(new_associated_record.id, reflection.foreign_key))
       end
 
-      def handle_other_config_type(klass, association_name, association_config)
+      def handle_other_config_type(reflection, association_config)
+        klass = reflection.klass
+
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
             
         new_associated_record = generate_association(klass, association_config, INDEX)
-        associated_field_set.merge!(generate_associated_field(new_associated_record.id, association_name))
+        associated_field_set.merge!(generate_associated_field(new_associated_record.id, reflection.foreign_key))
       end
 
       def get_type(association_config)

@@ -68,7 +68,7 @@ RSpec.describe "ComplexSeed" do
     it "seeds the GameRoom model based on the given config" do
       expect(GameRoom.count).to eq 5
       expect(GameRoom.first.name).to eq "custom_title"
-      expect(GameRoom.first.creator_id).to be_in(User.ids)
+      expect(GameRoom.first.user_id).to be_in(User.ids)
       expect(GameRoom.first.updater_id).to be_in(User.ids)
     end
   end
