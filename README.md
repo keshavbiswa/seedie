@@ -58,15 +58,19 @@ models:
       email: "{{Faker::Internet.email}}"
       address: "{{Faker::Address.street_address}}"
     disabled_fields: [nickname password password_digest]
-  post: &post
+  post:
     count: 2
     attributes:
       title: "title {{index}}"
+      category:
+        custom_attr_value:
+          values: [tech, sports, politics, entertainment]
+          pick_strategy: random # or sequential
     associations:
       has_many:
         comments: 4
       belongs_to:
-        user: random
+        user: random # or new
       has_one:
         post_metadatum: 
           attributes:
@@ -90,6 +94,7 @@ In this file:
 - `attributes` is a hash that maps field names to the values that should be used. If attributes are not defined, Seedie will use Faker to generate a value for the field.
   - The special `{{index}}` placeholder will be replaced by the index of the current record being created, starting from 1. This allows you to have unique values for each record.
   - Additionally, we can use placeholders like `{{Faker::Internet.email}}` to generate dynamic and unique data for each record using Faker.
+  - We can also specify an array of values that can be picked from randomly or sequentially using the `values` and `pick_strategy` options.
 - `disabled_fields` is an array of fields that should not be automatically filled by Seedie.
 - `associations` specify how associated models should be generated. Here, `has_many`, `belongs_to`, and `has_one` are supported.
 - The specified number for `has_many` represents the number of associated records to create.
