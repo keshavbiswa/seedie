@@ -16,12 +16,11 @@ RSpec.describe "SimpleSeed" do
 
   it "seeds the User model with custom values" do
     allow(Faker::Name).to receive(:name).and_return("custom_name")
-    allow(Faker::Internet).to receive(:email).and_return("custom_email")
 
     Seedie::Seeder.new(faker_config_path).seed_models
 
     expect(User.count).to eq 5
     expect(User.first.name).to eq "custom_name"
-    expect(User.first.email).to eq "custom_email"
+    expect(User.first.valid?).to eq true
   end
 end

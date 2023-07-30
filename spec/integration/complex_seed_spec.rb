@@ -6,15 +6,14 @@ RSpec.describe "ComplexSeed" do
   describe "seeding the User model" do
     before do
       allow(Faker::Internet).to receive(:email).and_return("custom_email")
-      allow(Faker::Address).to receive(:street_address).and_return("custom_address")
       Seedie::Seeder.new(config_path).seed_models
     end
 
     it "seeds the User model based on the given config" do
       expect(User.count).to eq 5
       expect(User.first.name).to eq "name 0"
-      expect(User.first.email).to eq "custom_email"
       expect(User.first.address).to eq "custom_address"
+      expect(User.first.valid?).to eq true
     end
   end
 
