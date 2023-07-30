@@ -64,7 +64,7 @@ module Seedie
         end
 
         # Add atleast one column to active columns
-        active_columns << disabled_columns.pop if active_columns.empty?
+        active_columns << disabled_columns.pop if active_columns.empty? && disabled_columns.present?
 
         {
           "attributes" => active_columns_configuration(model, active_columns),
