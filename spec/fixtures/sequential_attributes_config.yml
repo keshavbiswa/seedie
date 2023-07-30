@@ -1,0 +1,17 @@
+models:
+  user:
+    count: 5
+    attributes:
+      name: "{{Faker::Name.name}}"
+      email: "{{Faker::Internet.email}}"
+    disabled_fields: [nickname, password password_digest]
+  post: 
+    count: 5
+    attributes:
+      title: "title {{index}}"
+      category:
+        values: [tech, news, sports, politics, entertainment]
+        pick: sequential
+    associations:
+      belongs_to:
+        user: random

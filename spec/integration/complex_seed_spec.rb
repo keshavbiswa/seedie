@@ -34,6 +34,10 @@ RSpec.describe "ComplexSeed" do
       expect(Post.first.comments.count).to eq 4
     end
 
+    it "adds category to each post randomly" do
+      expect(Post.first.category).to be_in(["tech", "news", "sports", "politics", "entertainment"])
+    end
+
     it "sets the user association from existing users" do
       expect(Post.first.user_id).to be_in(User.ids)
     end
