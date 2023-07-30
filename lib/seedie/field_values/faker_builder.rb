@@ -24,8 +24,11 @@ module Seedie
           @options += handle_length_validation if has_validation?(:length)
         end
 
-        @faker_expression += "#{@class_prefix}#{@unique_prefix}#{@method_prefix}#{@options}"
-        @faker_expression += "}}" if @faker_expression.start_with?("{{") # We may not need }} when random attributes
+        if @faker_expression.is_a?(String)
+          @faker_expression += "#{@class_prefix}#{@unique_prefix}#{@method_prefix}#{@options}"
+          @faker_expression += "}}" if @faker_expression.start_with?("{{") # We may not need }} when random attributes
+        end
+
         @faker_expression
       end
 
@@ -60,7 +63,7 @@ module Seedie
           @method_prefix = "boolean"
         when :json, :jsonb
           @class_prefix = "Json."
-          @method_prefix = "shallow_json(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })"
+          @method_prefix = "shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"
         when :inet
           @class_prefix = "Internet."
           @method_prefix = "ip_v4_address"
@@ -128,7 +131,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = "{ values: #{options[:in].inspect}, pick: \"random\" }"
+        @faker_expression = { values: options[:in], pick: "random" }
       end
     end
   end
