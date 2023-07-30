@@ -5,7 +5,7 @@ RSpec.describe "ComplexSeed" do
 
   describe "seeding the User model" do
     before do
-      allow(Faker::Internet).to receive(:email).and_return("custom_email")
+      allow(Faker::Address).to receive(:street_address).and_return("custom_address")
       Seedie::Seeder.new(config_path).seed_models
     end
 
