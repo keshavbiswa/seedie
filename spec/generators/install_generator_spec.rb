@@ -88,4 +88,10 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       expect(content["models"]["comment"]["associations"]["belongs_to"]).to include("post")
     end
   end
+
+  describe "Validations" do
+    it "ensures unique columns have unique values" do
+      expect(content["models"]["user"]["attributes"]["email"]).to eq("{{Faker::Lorem.unique.word}}")
+    end
+  end
 end

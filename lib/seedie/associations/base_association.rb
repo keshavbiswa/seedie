@@ -38,7 +38,7 @@ module Seedie
     end
 
     def generate_associated_field(id, association_name)
-      { "#{association_name}_id" => id }
+      { "#{association_name}" => id }
     end
   end
 end

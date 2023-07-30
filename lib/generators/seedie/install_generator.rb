@@ -24,11 +24,17 @@ module Seedie
 
       private
 
-      def generate_seedie_file
+      def generate_seedie_file(output = STDOUT)
         Rails.application.eager_load! # Load all models. This is required!!
-        
+      
         @models_config = models_configuration
         template "seedie.yml", "config/seedie.yml"
+        output.puts "Seedie config file generated at config/seedie.yml"
+        
+        output.puts "##################################################"
+        output.puts "WARNING: Please review the generated config file."
+        output.puts "There might be some things that you might need to change to ensure that the generated seeds run successfully."
+        output.puts "##################################################"
       end
 
       def models_configuration
@@ -83,7 +89,12 @@ module Seedie
         end
         
         columns.reduce({}) do |config, column|
-          config[column.name] = FieldValues::FakeValue.new(column.name, column).generate_fake_value
+          validations = model.validators_on(column.name)
+          config[column.name] = if validations.present?
+                                  FieldValues::FakerBuilder.new(column.name, column, validations).build_faker_constant
+                                else
+                                  FieldValues::FakeValue.new(column.name, column).generate_fake_value
+                                end
           config
         end
       end
