@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [ 2.7, 3.0 ]
+        ruby: [ 3.0 ]
         rails_version:
           - ~> 5.2.0
           - ~> 6.0.0
