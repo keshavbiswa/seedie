@@ -6,8 +6,8 @@ models:
 <% config['attributes'].each do |name, value| -%>
 <% if value.is_a?(Hash) -%>
       <%= name %>:
-<% value.each do |k, v| -%>
-        <%= k %>: <%= v.inspect %>
+<% value.each do |key, value| -%>
+        <%= key %>: <%= value.inspect %>
 <% end -%>
 <% else -%>
       <%= name %>: "<%= value %>"
