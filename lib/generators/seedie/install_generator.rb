@@ -100,14 +100,34 @@ module Seedie
 
       def belongs_to_associations_configuration(model)
         belongs_to_associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
-          association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
         end
 
         belongs_to_associations.reduce({}) do |config, association|
-          config[association.name.to_s] = "random"
+          if association.polymorphic?
+            config[association.name.to_s] = set_polymorphic_association_config(model, association)
+          else
+            config[association.name.to_s] = "random"
+          end
           config
         end
+      end      
+      
+      def set_polymorphic_association_config(model, association)
+        {
+          "polymorphic" => find_polymorphic_types(model, association.name),
+          "strategy" => "random"
+        }
+      end
+
+      def find_polymorphic_types(model, association_name)
+        types = @models.select do |potential_poly_model|
+          potential_poly_model.reflect_on_all_associations(:has_many).any? do |has_many_association|
+            has_many_association.options[:as] == association_name
+          end
+        end.map(&:name)
+
+        types.size == 1 ? types.first.underscore : types.map(&:underscore)
       end
 
       def has_presence_validator?(model, column_name)
