@@ -34,14 +34,14 @@ RSpec.describe Seedie::Model::IdGenerator do
       let!(:post2) { Post.create!(title: "title 1", content: "body 1") }
 
       it "returns a unique id" do
-        expect(subject.unique_id_for(Comment)).to be_in([post1.id, post2.id])
+        expect(subject.unique_id_for(Comment, "post_id")).to be_in([post1.id, post2.id])
       end
     end
 
     context "when there are no records" do
       it "raises InvalidAssociationConfigError" do
         expect {
-          subject.unique_id_for(Comment)
+          subject.unique_id_for(Comment, "post_id")
         }.to raise_error(Seedie::InvalidAssociationConfigError, "No unique ids for Post")
       end
     end

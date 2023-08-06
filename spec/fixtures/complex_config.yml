@@ -39,3 +39,14 @@ models:
       belongs_to:
         creator: random
         updater: random
+  review:
+    count: 3
+    attributes:
+      content: "{{Faker::Lorem.paragraph}}"
+    disabled_fields: [nickname, password password_digest]
+    associations:
+      belongs_to:
+        user: random
+        reviewable:
+          polymorphic: post
+          strategy: random # or unique

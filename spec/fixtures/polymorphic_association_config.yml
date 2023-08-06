@@ -1,0 +1,32 @@
+default_count: 5
+models:
+  user:
+    attributes:
+      name: "{{Faker::Name.name}}"
+      email: "{{Faker::Internet.email}}"
+    disabled_fields: [nickname, password password_digest]
+  post: 
+    count: 5
+    attributes:
+      title: "title {{index}}"
+      category:
+        custom_attr_value:
+          values: [tech, news, sports, politics, entertainment]
+          pick_strategy: sequential
+  game_room:
+    attributes:
+      name: "{{Faker::Game.title}}"
+    associations:
+      belongs_to:
+        creator: random
+        updater: random
+  review:
+    attributes:
+      content: "Review {{index}}"
+    disabled_fields: [nickname, password password_digest]
+    associations:
+      belongs_to:
+        user: random
+        reviewable:
+          polymorphic: [post, game_room]
+          strategy: random # or unique
