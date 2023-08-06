@@ -1,9 +1,11 @@
 require "rails/generators/base"
-require "active_record"
+require "seedie"
 
 module Seedie
   module Generators
     class InstallGenerator < Rails::Generators::Base
+      include PolymorphicAssociationHelper
+      
       EXCLUDED_MODELS = %w[
         ActiveRecord::SchemaMigration
         ActiveRecord::InternalMetadata
@@ -21,9 +23,10 @@ module Seedie
       def generate_seedie_file(output = STDOUT)
         Rails.application.eager_load! # Load all models. This is required!!
 
-        @models = get_models
-        @models_config = build_models_config
-        template "seedie.yml", "config/seedie.yml"
+          @models = get_models
+          @models_config = build_models_config
+          template "seedie.yml", "config/seedie.yml"
+
         output_seedie_warning(output)
       end
 
@@ -118,16 +121,6 @@ module Seedie
           "polymorphic" => find_polymorphic_types(model, association.name),
           "strategy" => "random"
         }
-      end
-
-      def find_polymorphic_types(model, association_name)
-        types = @models.select do |potential_poly_model|
-          potential_poly_model.reflect_on_all_associations(:has_many).any? do |has_many_association|
-            has_many_association.options[:as] == association_name
-          end
-        end.map(&:name)
-
-        types.size == 1 ? types.first.underscore : types.map(&:underscore)
       end
 
       def has_presence_validator?(model, column_name)
