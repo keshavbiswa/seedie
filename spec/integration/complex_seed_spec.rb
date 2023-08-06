@@ -76,4 +76,22 @@ RSpec.describe "ComplexSeed" do
       expect(GameRoom.first.updater_id).to be_in(User.ids)
     end
   end
+
+  describe "seeding the Review Model" do
+    before do
+      allow(Faker::Lorem).to receive(:paragraph).and_return("custom_content")
+      Seedie::Seeder.new(config_path).seed_models
+    end
+
+    it "seeds the Review model based on the given config" do
+      expect(Review.count).to eq 3
+      expect(Review.first.content).to eq "custom_content"
+      expect(Review.pluck(:user_id) - User.ids).to be_empty
+    end
+
+    it "assigns polymorphic associations for Reviewable" do
+      expect(Review.pluck(:reviewable_type).uniq).to eq ["Post"]
+      expect(Review.pluck(:reviewable_id) - Post.ids - GameRoom.ids).to be_empty
+    end
+  end
 end

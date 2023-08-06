@@ -12,9 +12,7 @@ module Seedie
         return id
       end
       
-      def unique_id_for(association_klass)
-        model_id_column = "#{@model.to_s.underscore}_id"
-      
+      def unique_id_for(association_klass, model_id_column)
         unless association_klass.column_names.include?(model_id_column)
           raise InvalidAssociationConfigError, "#{model_id_column} does not exist in #{association_klass}" 
         end
