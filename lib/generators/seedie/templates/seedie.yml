@@ -13,8 +13,8 @@ models:
 <% end -%>
 <% if value['options'] -%>
         options: 
-<% value['options'].each do |k, v| -%>
-          <%= k %>: '<%= v %>'
+<% value['options'].each do |key, value| -%>
+          <%= key %>: '<%= value %>'
 <% end -%>
 <% end -%>
 <% else -%>
