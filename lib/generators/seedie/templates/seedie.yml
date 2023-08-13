@@ -4,11 +4,19 @@ models:
   <%= model %>:
     attributes:
 <% config['attributes'].each do |name, value| -%>
-<% if value.is_a?(Hash) && value.key?("custom_attr_value") -%>
+<% if value.is_a?(Hash) -%>
       <%= name %>:
-        custom_attr_value:
-          values: <%= value["custom_attr_value"]["values"] %>
-          pick_strategy: <%= value["custom_attr_value"]["pick_strategy"] %>
+<% if value['values'] -%>
+        values: <%= value['values'] %>
+<% elsif value['value'] -%>
+        value: '<%= value['value'] %>'
+<% end -%>
+<% if value['options'] -%>
+        options: 
+<% value['options'].each do |key, value| -%>
+          <%= key %>: '<%= value %>'
+<% end -%>
+<% end -%>
 <% else -%>
       <%= name %>: '<%= value %>'
 <% end -%>

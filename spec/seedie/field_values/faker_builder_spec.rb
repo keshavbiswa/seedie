@@ -91,7 +91,7 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression" do
-        output = "{{Faker::Json.shallow_json(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })}}"
+        output = {"value"=>"Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"}
         expect(faker_builder.build_faker_constant).to eq(output)
       end
     end
@@ -152,7 +152,7 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression" do
-        expected_output = "{{Faker::Json.shallow_json(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })}}"
+        expected_output = {"value"=>"Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"}
 
         expect(faker_builder.build_faker_constant).to eq(expected_output)
       end
@@ -184,7 +184,7 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression with inclusion options" do
-        expect(faker_builder.build_faker_constant).to eq({"custom_attr_value"=>{"pick_strategy"=>"random", "values"=>["foo", "bar"]}})
+        expect(faker_builder.build_faker_constant).to eq({"values"=>["foo", "bar"], "options"=>{"pick_strategy"=>"random"}})
       end
     end
 

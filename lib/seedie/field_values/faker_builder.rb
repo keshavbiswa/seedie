@@ -62,8 +62,7 @@ module Seedie
           @class_prefix = "Boolean."
           @method_prefix = "boolean"
         when :json, :jsonb
-          @class_prefix = "Json."
-          @method_prefix = "shallow_json(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })"
+          @faker_expression = { "value" => "Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })" }
         when :inet
           @class_prefix = "Internet."
           @method_prefix = "ip_v4_address"
@@ -80,9 +79,7 @@ module Seedie
           @class_prefix = "Commerce."
           @method_prefix = "price.to_s"
         when :hstore
-          @class_prefix = "Json."
-          @method_prefix = "shallow_json"
-          @options = "(width: 3, options: { key: \"Name.first_name\", value: \"Number.number(digits: 2)\" })"
+          @faker_expression = { "value" => "Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })" }
         when :year
           @class_prefix = "Number."
           @method_prefix = "number"
@@ -131,7 +128,7 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = { "custom_attr_value" => { "values" => options[:in], "pick_strategy" => "random" } }
+        @faker_expression = { "values" => options[:in], "options" => { "pick_strategy" => "random" } }
       end
     end
   end
