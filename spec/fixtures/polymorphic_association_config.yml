@@ -4,7 +4,7 @@ models:
     attributes:
       name: "{{Faker::Name.name}}"
       email: "{{Faker::Internet.email}}"
-    disabled_fields: [nickname, password password_digest]
+    disabled_fields: [nickname]
   post: 
     count: 5
     attributes:
@@ -23,7 +23,7 @@ models:
   review:
     attributes:
       content: "Review {{index}}"
-    disabled_fields: [nickname, password password_digest]
+    disabled_fields: [nickname, password, password_digest, review_type]
     associations:
       belongs_to:
         user: random

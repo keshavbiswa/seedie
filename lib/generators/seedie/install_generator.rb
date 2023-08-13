@@ -49,13 +49,25 @@ module Seedie
         active_columns = []
         disabled_columns = []
         default_columns = []
+        foreign_keys = []
+        polymorphic_types = []
+
+        # Collect all foreign keys and polymorphic types
+        model.reflect_on_all_associations.each do |assoc|
+          foreign_keys << assoc.foreign_key
+          polymorphic_types << assoc.foreign_type if assoc.options[:polymorphic]
+        end
 
         model.columns.each do |column|
           # Excluding DEFAULT_DISABLED_FIELDS
           # Excluding foreign_keys, polymorphic associations,
           # password digest, columns with default functions or values
           next if ModelFields::DEFAULT_DISABLED_FIELDS.include?(column.name)
-          next if column.name.end_with?("_id", "_type", "_digest")
+          next if column.name.end_with?("_id", "_digest")
+
+          if polymorphic_types.include?(column.name) || foreign_keys.include?(column.name)
+            next
+          end
           
           # Adding default columns to default_columns
           if column.default.present? || column.default_function.present?
