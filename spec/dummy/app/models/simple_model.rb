@@ -4,4 +4,5 @@ class SimpleModel < ApplicationRecord
   enum status: { active: 0, suspended: 1 }
 
   validates :status, presence: true
+  validates :score, inclusion: 0..10, presence: true
 end

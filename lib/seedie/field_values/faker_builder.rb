@@ -128,7 +128,11 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
-        @faker_expression = { "values" => options[:in], "options" => { "pick_strategy" => "random" } }
+        if options[:in].is_a?(Range)
+          @faker_expression = { "values" => { "start" => options[:in].first, "end" => options[:in].last }, "options" => { "pick_strategy" => "random" } }
+        else
+          @faker_expression = { "values" => options[:in], "options" => { "pick_strategy" => "random" } }
+        end
       end
     end
   end

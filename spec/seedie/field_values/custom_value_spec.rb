@@ -78,38 +78,86 @@ describe Seedie::FieldValues::CustomValue do
         end
       end
 
-      context "when values key is not an array" do
+      context "when values key is not an array or a hash" do
         let (:value_template) { { "values" => "value" } }
 
         it "raises an error" do
-          message = "The values key for name must be an array."
+          message = "The values key for name must be an array or a hash with start and end keys."
           expect {
             custom_value.generate_custom_field_value
           }.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
         end
       end
 
-      context "when pick_strategy is sequential" do
-        let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "sequential" } } }
-        
-        context "when values is less than index" do
-          let(:index) { 3 }
+      context "when values key is a hash" do
+        context "when values hash does not have start and end keys" do
+          let (:value_template) { { "values" => { "invalid_key" => "value" } } }
 
           it "raises an error" do
-            message = "There are not enough values for name. Please add more values."
+            message = "The values key for name must be an array or a hash with start and end keys."
             expect {
               custom_value.generate_custom_field_value
-            }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+            }.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
           end
         end
 
-        it "returns a sequential value from the given array" do
-          custom_value = described_class.new(name, value_template, 0)
-          expect(custom_value.generate_custom_field_value).to eq("value1")
+        context "when values hash has start and end keys" do
+          let (:value_template) { { "values" => { "start" => 1, "end" => 3 } } }
 
-          custom_value = described_class.new(name, value_template, 1)
-          expect(custom_value.generate_custom_field_value).to eq("value2")
+          it "returns a random value from the given range" do
+            expect((1..3)).to include(custom_value.generate_custom_field_value)
+          end
         end
+      end
+
+      context "when pick_strategy is sequential" do
+        context "when values is an array" do
+          let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "sequential" } } }
+          
+          context "when values is less than index" do
+            let(:index) { 3 }
+
+            it "raises an error" do
+              message = "There are not enough values for name. Please add more values."
+              expect {
+                custom_value.generate_custom_field_value
+              }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+            end
+          end
+
+          it "returns a sequential value from the given array" do
+            custom_value = described_class.new(name, value_template, 0)
+            expect(custom_value.generate_custom_field_value).to eq("value1")
+  
+            custom_value = described_class.new(name, value_template, 1)
+            expect(custom_value.generate_custom_field_value).to eq("value2")
+          end
+        end
+
+        context "when values is a hash" do
+          let(:value_template) { { "values" => { "start" => 1, "end" => 3 }, "options" => { "pick_strategy" => "sequential" } } }
+          
+          context "when values is less than index" do
+            let(:index) { 3 }
+
+            it "raises an error" do
+              message = "There are not enough values for name. Please add more values."
+              expect {
+                custom_value.generate_custom_field_value
+              }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+            end
+          end
+
+          it "returns a sequential value from the start and end range" do
+            custom_value = described_class.new(name, value_template, 0)
+            expect(custom_value.generate_custom_field_value).to eq(1)
+  
+            custom_value = described_class.new(name, value_template, 1)
+            expect(custom_value.generate_custom_field_value).to eq(2)
+          end
+        end
+
+
       end
 
       context "when pick_strategy is random" do

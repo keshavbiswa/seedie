@@ -179,12 +179,24 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
     end
 
     context "when column has inclusion validation" do
-      let(:column) { double("column", type: :string) }
-      let(:validations) { [double("validation", kind: :inclusion, options: { in: ["foo", "bar"] })] }
-      let(:faker_builder) { described_class.new("name", column, validations) }
+      context "when column has inclusion validation with range" do
+        let(:column) { double("column", type: :integer) }
+        let(:validations) { [double("validation", kind: :inclusion, options: { in: 10..20 })] }
+        let(:faker_builder) { described_class.new("name", column, validations) }
 
-      it "returns a valid Faker expression with inclusion options" do
-        expect(faker_builder.build_faker_constant).to eq({"values"=>["foo", "bar"], "options"=>{"pick_strategy"=>"random"}})
+        it "returns a valid Faker expression with inclusion options" do
+          expect(faker_builder.build_faker_constant).to eq({"values"=> {"end"=> 20, "start"=>10}, "options"=>{"pick_strategy"=>"random"}})
+        end
+      end
+
+      context "when column has inclusion validation with array" do
+        let(:column) { double("column", type: :string) }
+        let(:validations) { [double("validation", kind: :inclusion, options: { in: ["foo", "bar"] })] }
+        let(:faker_builder) { described_class.new("name", column, validations) }
+
+        it "returns a valid Faker expression with inclusion options" do
+          expect(faker_builder.build_faker_constant).to eq({"values"=>["foo", "bar"], "options"=>{"pick_strategy"=>"random"}})
+        end
       end
     end
 
