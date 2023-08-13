@@ -40,9 +40,7 @@ module Seedie
         options = @value_template["options"]
         
         if values.is_a?(Array)
-          if options.present? && options["pick_strategy"] == "sequential"
-            validate_values_length
-          end
+          validate_sequential_values_length
         else
           raise InvalidCustomFieldValuesError, "The values key for #{@name} must be an array."
         end
@@ -58,7 +56,12 @@ module Seedie
         end
       end
 
-      def validate_values_length
+      ## If pick strategy is sequential, we need to ensure there is a value for each index
+      # If there isn't sufficient values, we raise an error
+      def validate_sequential_values_length
+        return unless @value_template.key?("options")
+        return unless @value_template["options"]["pick_strategy"] == "sequential"
+
         values = @value_template["values"]
         values_length = values.length
 
