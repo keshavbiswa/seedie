@@ -103,7 +103,7 @@ describe Seedie::FieldValues::FakeValue do
         allow(Faker::Lorem).to receive(:word).and_return("random_text")
         allow(Faker::Number).to receive(:number).with(digits: 2).and_return(2)
 
-        result = { "key1": "random_text", "key2": 2 }
+        result = { "value": { "key1": "random_text", "key2": 2 } }
         expect(fake_value.generate_fake_value.to_json).to eq(result.to_json)
       end
     end
@@ -158,7 +158,7 @@ describe Seedie::FieldValues::FakeValue do
         allow(Faker::Lorem).to receive(:word).and_return("random_text")
         allow(Faker::Number).to receive(:number).with(digits: 2).and_return(2)
 
-        result = { "key1": "random_text", "key2": 2 }
+        result = { "value": { "key1": "random_text", "key2": 2 } }
         expect(fake_value.generate_fake_value.to_json).to eq(result.to_json)
       end
     end

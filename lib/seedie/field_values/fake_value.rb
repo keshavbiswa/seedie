@@ -25,7 +25,7 @@ module Seedie
         when :boolean
           Faker::Boolean.boolean
         when :json, :jsonb
-          { "key1" => Faker::Lorem.word, "key2" => Faker::Number.number(digits: 2) }
+          { "value" => { "key1" => Faker::Lorem.word, "key2" => Faker::Number.number(digits: 2) } }
         when :inet
           Faker::Internet.ip_v4_address
         when :cidr, :macaddr
@@ -37,7 +37,7 @@ module Seedie
         when :money
           Faker::Commerce.price.to_s
         when :hstore
-          { "key1" => Faker::Lorem.word, "key2" => Faker::Number.number(digits: 2) }
+          { "value" => { "key1" => Faker::Lorem.word, "key2" => Faker::Number.number(digits: 2) } }
         when :year
           rand(1901..2155)
         else
