@@ -23,9 +23,9 @@ module Seedie
       def generate_seedie_file(output = STDOUT)
         Rails.application.eager_load! # Load all models. This is required!!
 
-          @models = get_models
-          @models_config = build_models_config
-          template "seedie.yml", "config/seedie.yml"
+        @models = get_models
+        @models_config = build_models_config
+        template "seedie.yml", "config/seedie.yml"
 
         output_seedie_warning(output)
       end
