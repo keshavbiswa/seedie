@@ -1,9 +1,9 @@
 module Seedie
   module FieldValues
     class CustomValue
-      VALID_KEYS = ["values", "pick_strategy"]
-      CUSTOM_VALUE = "custom_attr_value"
-
+      VALID_KEYS = ["values", "value", "options"].freeze
+      PICK_STRATEGIES = ["random", "sequential"].freeze
+      
       attr_reader :name, :parsed_value
 
       def initialize(name, value_template, index)
@@ -11,9 +11,8 @@ module Seedie
         @value_template = value_template
         @index = index
         @parsed_value = ""
-        @custom_attr_value = false
-        
-        validate_template if @value_template.is_a?(Hash) && @value_template.has_key?(CUSTOM_VALUE)
+
+        validate_value_template
       end
 
       def generate_custom_field_value
@@ -28,40 +27,59 @@ module Seedie
 
       private
 
-      def validate_template
-        @value_template = @value_template[CUSTOM_VALUE]
-        @custom_attr_value = true
+      def validate_value_template
+        return if @value_template.is_a?(String)
 
-        validate_hash_keys
-        validate_values_key
-        validate_pick_strategy_key
+        validate_keys
+        validate_values if @value_template.key?("values")
+        validate_options if @value_template.key?("options")
       end
 
-      def validate_hash_keys
-        invalid_keys = @value_template.keys - VALID_KEYS
-        return if invalid_keys.empty?
-
-        raise InvalidCustomFieldKeysError, 
-          "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only 'values' and 'pick_strategy' are allowed."
+      def validate_values
+        values = @value_template["values"]
+        options = @value_template["options"]
+        
+        if values.is_a?(Array)
+          if options.present? && options["pick_strategy"] == "sequential"
+            validate_values_length
+          end
+        else
+          raise InvalidCustomFieldValuesError, "The values key for #{@name} must be an array."
+        end
       end
 
-      def validate_values_key
-        return if @value_template["values"].is_a?(Array)
+      def validate_options
+        options = @value_template["options"]
+        pick_strategy = options["pick_strategy"]
 
-        raise InvalidCustomFieldValuesError, "The values key for #{@name} must be an array."
+        if pick_strategy.present? && !PICK_STRATEGIES.include?(pick_strategy)
+          raise InvalidCustomFieldOptionsError,
+            "The pick_strategy for name must be either 'sequential' or 'random'."
+        end
       end
 
       def validate_values_length
-        return if @value_template["values"].length >= @index
+        values = @value_template["values"]
+        values_length = values.length
 
-        raise CustomFieldNotEnoughValuesError, "There are not enough values for name. Please add more values."
+        if values_length < @index + 1
+          raise CustomFieldNotEnoughValuesError,
+            "There are not enough values for #{@name}. Please add more values."
+        end
       end
 
-      def validate_pick_strategy_key
-        @pick_strategy = @value_template["pick_strategy"] || "random"
-        return if %w[random sequential].include?(@pick_strategy)
+      def validate_keys
+        invalid_keys = @value_template.keys - VALID_KEYS
+  
+        if invalid_keys.present?
+          raise InvalidCustomFieldKeysError,
+            "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only #{VALID_KEYS} are allowed."
+        end
 
-        raise CustomFieldInvalidPickValueError, "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
+        if @value_template.key?("values") && @value_template.key?("value")
+          raise InvalidCustomFieldKeysError,
+            "Invalid keys for #{@name}: values and value cannot be used together."
+        end
       end
 
       def generate_custom_value_from_string
@@ -79,17 +97,17 @@ module Seedie
       end
 
       def generate_custom_value_from_hash
-        if @custom_attr_value
+        if @value_template.key?("values")
           values = @value_template["values"]
-          if @pick_strategy == "sequential"
-            validate_values_length
-
+          options = @value_template["options"]
+          
+          if options.present? && options["pick_strategy"] == "sequential"
             @parsed_value = values[@index]
           else
             @parsed_value = values.sample
           end
-        else
-          @parsed_value = @value_template
+        elsif @value_template.key?("value")
+          @parsed_value = @value_template["value"]
         end
       end
     end

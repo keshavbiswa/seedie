@@ -39,6 +39,6 @@ module Seedie
   class InvalidAssociationConfigError < StandardError; end
   class InvalidCustomFieldKeysError < StandardError; end
   class InvalidCustomFieldValuesError < StandardError; end
+  class InvalidCustomFieldOptionsError < StandardError; end
   class CustomFieldNotEnoughValuesError < StandardError; end
-  class CustomFieldInvalidPickValueError < StandardError; end
 end

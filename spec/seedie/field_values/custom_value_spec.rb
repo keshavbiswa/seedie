@@ -47,13 +47,24 @@ describe Seedie::FieldValues::CustomValue do
       end
     end
 
-    context "when the value is not a string" do
+    context "when the value is a hash" do
       context "when it is custom value hash" do
         context "when keys are invalid" do
-          let (:value_template) { { "custom_attr_value" => { "SomeInvalid key" => "value" } } }
+          let (:value_template) { { "SomeInvalid key" => "value" } }
           
           it "raises an error" do
-            message = "Invalid keys for name: SomeInvalid key. Only 'values' and 'pick_strategy' are allowed."
+            message = "Invalid keys for name: SomeInvalid key. Only [\"values\", \"value\", \"options\"] are allowed."
+            expect {
+              custom_value.generate_custom_field_value
+            }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
+          end
+        end
+
+        context "when both values and value keys are present" do
+          let (:value_template) { { "values" => ["value1", "value2"], "value" => "value" } }
+
+          it "raises an error" do
+            message = "Invalid keys for name: values and value cannot be used together."
             expect {
               custom_value.generate_custom_field_value
             }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
@@ -61,7 +72,7 @@ describe Seedie::FieldValues::CustomValue do
         end
 
         context "when values key is not an array" do
-          let (:value_template) { { "custom_attr_value" => { "values" => "value" } } }
+          let (:value_template) { { "values" => "value" } }
 
           it "raises an error" do
             message = "The values key for name must be an array."
@@ -72,7 +83,7 @@ describe Seedie::FieldValues::CustomValue do
         end
 
         context "when pick_strategy is sequential" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "sequential" } } }
+          let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "sequential" } } }
           
           context "when values is less than index" do
             let(:index) { 3 }
@@ -95,7 +106,7 @@ describe Seedie::FieldValues::CustomValue do
         end
 
         context "when pick_strategy is random" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "random" } } }
+          let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "random" } } }
           it "returns a random value from the given array" do
             
             custom_value = described_class.new(name, value_template, 0)
@@ -105,23 +116,15 @@ describe Seedie::FieldValues::CustomValue do
         end
 
         context "when pick_strategy is invalid" do
-          let(:value_template) { { "custom_attr_value" => { "values" => ["value1", "value2"], "pick_strategy" => "invalid" } } }
+          let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "invalid" } } }
 
           it "raises an error" do
             message = "The pick_strategy for name must be either 'sequential' or 'random'."
 
             expect {
               custom_value.generate_custom_field_value
-            }.to raise_error(Seedie::CustomFieldInvalidPickValueError, message)
+            }.to raise_error(Seedie::InvalidCustomFieldOptionsError, message)
           end
-        end
-      end
-
-      context "when it is a regular json" do
-        let(:value_template) { { "key1" => "value1", "key2" => "value2" } }
-
-        it "returns the json" do
-          expect(custom_value.generate_custom_field_value).to eq(value_template)
         end
       end
     end
