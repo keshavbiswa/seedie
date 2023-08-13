@@ -1,6 +1,8 @@
 module Seedie
   module Model
     class ModelSorter
+      include PolymorphicAssociationHelper
+      
       def initialize(models)
         @models = models
         @model_dependencies = models.map {|m| [m, get_model_dependencies(m)]}.to_h
@@ -51,7 +53,6 @@ module Seedie
     
       def get_model_dependencies(model)
         associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
-          association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
         end
       
@@ -60,10 +61,17 @@ module Seedie
         associations.map do |association|
           if association.options[:class_name]
             constantize_class_name(association.options[:class_name], model.name)
+          elsif association.polymorphic?
+            types = find_polymorphic_types(model, association.name)
+
+            if types.blank?
+              puts "Polymorphic type not found for #{model.name}. Ignoring..." 
+              next
+            end
           else
             association.klass
           end
-        end
+        end.compact
       end
 
       private

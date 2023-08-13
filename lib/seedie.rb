@@ -11,6 +11,8 @@ require_relative "seedie/field_values_set"
 require_relative "seedie/model_fields"
 require_relative "seedie/model_seeder"
 
+require_relative "seedie/polymorphic_association_helper"
+
 require_relative "seedie/model/creator"
 require_relative "seedie/model/model_sorter"
 require_relative "seedie/model/id_generator"

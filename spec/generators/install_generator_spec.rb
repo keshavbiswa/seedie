@@ -81,10 +81,6 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   end
 
   describe "#belongs_to_associations_configuration" do
-    it "excludes polymorphic associations" do
-      expect(content["models"]["review"]["associations"]["belongs_to"]).not_to include("reviewable")
-    end
-
     it "excludes optional associations" do
       expect(content["models"]["comment"]["associations"]["belongs_to"]).not_to include("user")
     end
@@ -92,10 +88,14 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     it "generates required belongs_to associations" do
       expect(content["models"]["user"]["associations"]["belongs_to"]).to be nil
       expect(content["models"]["post"]["associations"]["belongs_to"]).to be nil
-      expect(content["models"]["review"]["associations"]["belongs_to"]).to include("user")
       expect(content["models"]["post_metadatum"]["associations"]["belongs_to"]).to include("post")
       expect(content["models"]["game_room"]["associations"]["belongs_to"]).to include("creator", "updater")
       expect(content["models"]["comment"]["associations"]["belongs_to"]).to include("post")
+    end
+
+    it "generates required polymorphic belongs_to associations" do
+      expect(content["models"]["review"]["associations"]["belongs_to"]).to include("reviewable")
+      expect(content["models"]["review"]["associations"]["belongs_to"]["reviewable"]).to include("polymorphic")
     end
   end
 

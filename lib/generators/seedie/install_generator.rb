@@ -1,9 +1,11 @@
 require "rails/generators/base"
-require "active_record"
+require "seedie"
 
 module Seedie
   module Generators
     class InstallGenerator < Rails::Generators::Base
+      include PolymorphicAssociationHelper
+      
       EXCLUDED_MODELS = %w[
         ActiveRecord::SchemaMigration
         ActiveRecord::InternalMetadata
@@ -24,6 +26,7 @@ module Seedie
         @models = get_models
         @models_config = build_models_config
         template "seedie.yml", "config/seedie.yml"
+
         output_seedie_warning(output)
       end
 
@@ -100,14 +103,24 @@ module Seedie
 
       def belongs_to_associations_configuration(model)
         belongs_to_associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
-          association.options[:polymorphic] == true || # Excluded Polymorphic Associations
           association.options[:optional] == true # Excluded Optional Associations
         end
 
         belongs_to_associations.reduce({}) do |config, association|
-          config[association.name.to_s] = "random"
+          if association.polymorphic?
+            config[association.name.to_s] = set_polymorphic_association_config(model, association)
+          else
+            config[association.name.to_s] = "random"
+          end
           config
         end
+      end      
+      
+      def set_polymorphic_association_config(model, association)
+        {
+          "polymorphic" => find_polymorphic_types(model, association.name),
+          "strategy" => "random"
+        }
       end
 
       def has_presence_validator?(model, column_name)

@@ -19,7 +19,14 @@ models:
 <% config['associations'].each do |type, associations| -%>
       <%= type %>:
 <% associations.each do |association, value| -%>
+<% if value.is_a?(Hash) && value.key?("polymorphic") -%>
+<% next if value["polymorphic"].blank? -%>
+        <%= association %>:
+          polymorphic: <%= value["polymorphic"] %>
+          strategy: <%= value["strategy"] %>
+<% else -%>
         <%= association %>: <%= value %>
+<% end -%>
 <% end -%>
 <% end -%>
 <% end -%>
