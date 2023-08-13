@@ -66,6 +66,19 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       expect(content["models"]["game_room"]["attributes"]).to include("name")
     end
 
+    it "excludes foreign_keys" do
+      expect(content["models"]["user"]["attributes"]).not_to include("game_room_id")
+      expect(content["models"]["game_room"]["attributes"]).not_to include("creator_id", "updater_id")
+    end
+
+    it "excludes polymorphic_types" do
+      expect(content["models"]["review"]["attributes"]).not_to include("reviewable_type")
+    end
+
+    it "includes other columns with _type" do
+      expect(content["models"]["review"]["disabled_fields"]).to include("review_type")
+    end
+
     it "generates required belongs_to associations" do
       expect(content["models"]["comment"]["associations"]["belongs_to"]).to include("post")
     end
@@ -77,6 +90,10 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       expect(content["models"]["simple_model"]["disabled_fields"]).to include("name", "content")
       expect(content["models"]["post"]["disabled_fields"]).to include("title", "content")
       expect(content["models"]["game_room"]["disabled_fields"]).to include("token")
+    end
+
+    it "adds default columns to the disabled_fields" do
+      expect(content["models"]["simple_model"]["disabled_fields"]).to include("status")
     end
   end
 

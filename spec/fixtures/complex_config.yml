@@ -42,10 +42,19 @@ models:
     count: 3
     attributes:
       content: "{{Faker::Lorem.paragraph}}"
-    disabled_fields: [nickname, password password_digest]
+    disabled_fields: [nickname, password, password_digest, review_type]
     associations:
       belongs_to:
         user: random
         reviewable:
           polymorphic: post
           strategy: random # or unique
+  simple_model:
+    count: 2
+    attributes: 
+      name: "name {{index}}"
+      content: "content {{index}}"
+      category:
+        values: [tech, news, sports, politics, entertainment]
+        options: { pick_strategy: sequential }
+    disabled_fields: [status]

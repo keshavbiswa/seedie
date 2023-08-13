@@ -94,4 +94,24 @@ RSpec.describe "ComplexSeed" do
       expect(Review.pluck(:reviewable_id) - Post.ids - GameRoom.ids).to be_empty
     end
   end
+
+  describe "seeding the SimpleModel Model" do
+    before do
+      Seedie::Seeder.new(config_path).seed_models
+    end
+
+    it "seeds the Review model based on the given config" do
+      expect(SimpleModel.count).to eq 2
+      expect(SimpleModel.pluck(:content)).to eq ["content 0", "content 1"]
+      expect(SimpleModel.pluck(:name)).to eq ["name 0", "name 1"]
+    end
+
+    it "assigns category to each SimpleModel sequentially" do
+      expect(SimpleModel.pluck(:category)).to eq ["tech", "news"]
+    end
+
+    it "assigns default status to SimpleModel" do
+      expect(SimpleModel.pluck(:status)).to eq ["active", "active"]
+    end
+  end
 end

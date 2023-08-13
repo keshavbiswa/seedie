@@ -48,18 +48,32 @@ module Seedie
       def attributes_configuration(model)
         active_columns = []
         disabled_columns = []
+        default_columns = []
+        foreign_keys = []
+        polymorphic_types = []
+
+        # Collect all foreign keys and polymorphic types
+        model.reflect_on_all_associations.each do |assoc|
+          foreign_keys << assoc.foreign_key
+          polymorphic_types << assoc.foreign_type if assoc.options[:polymorphic]
+        end
 
         model.columns.each do |column|
           # Excluding DEFAULT_DISABLED_FIELDS
           # Excluding foreign_keys, polymorphic associations,
           # password digest, columns with default functions or values
           next if ModelFields::DEFAULT_DISABLED_FIELDS.include?(column.name)
-          next if column.name.end_with?("_id", "_type", "_digest")
-          next if column.default_function.present?
-          next if column.default.present?
-      
+          next if column.name.end_with?("_id", "_digest")
+
+          if polymorphic_types.include?(column.name) || foreign_keys.include?(column.name)
+            next
+          end
+          
+          # Adding default columns to default_columns
+          if column.default.present? || column.default_function.present?
+            default_columns << column
+          elsif column.null == false || has_presence_validator?(model, column.name)
           # Only add to active if its required or has presence validator
-          if column.null == false || has_presence_validator?(model, column.name)
             active_columns << column
           else
             disabled_columns << column
@@ -68,6 +82,9 @@ module Seedie
 
         # Add atleast one column to active columns
         active_columns << disabled_columns.pop if active_columns.empty? && disabled_columns.present?
+        
+        # Disable all default columns
+        disabled_columns += default_columns
 
         {
           "attributes" => active_columns_configuration(model, active_columns),
