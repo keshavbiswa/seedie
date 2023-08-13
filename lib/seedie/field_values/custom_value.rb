@@ -52,7 +52,7 @@ module Seedie
 
         if pick_strategy.present? && !PICK_STRATEGIES.include?(pick_strategy)
           raise InvalidCustomFieldOptionsError,
-            "The pick_strategy for name must be either 'sequential' or 'random'."
+            "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
         end
       end
 
