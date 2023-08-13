@@ -49,3 +49,12 @@ models:
         reviewable:
           polymorphic: post
           strategy: random # or unique
+  simple_model:
+    count: 2
+    attributes: 
+      name: "name {{index}}"
+      content: "content {{index}}"
+      category:
+        values: [tech, news, sports, politics, entertainment]
+        options: { pick_strategy: sequential }
+    disabled_fields: [status]

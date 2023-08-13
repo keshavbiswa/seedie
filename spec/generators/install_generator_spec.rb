@@ -78,6 +78,10 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       expect(content["models"]["post"]["disabled_fields"]).to include("title", "content")
       expect(content["models"]["game_room"]["disabled_fields"]).to include("token")
     end
+
+    it "adds default columns to the disabled_fields" do
+      expect(content["models"]["simple_model"]["disabled_fields"]).to include("status")
+    end
   end
 
   describe "#belongs_to_associations_configuration" do
