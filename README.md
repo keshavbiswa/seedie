@@ -63,8 +63,8 @@ models:
     attributes:
       title: "title {{index}}"
       category:
-        custom_attr_value:
-          values: [tech, sports, politics, entertainment]
+        values: [tech, sports, politics, entertainment]
+        options: 
           pick_strategy: random # or sequential
     associations:
       has_many:
