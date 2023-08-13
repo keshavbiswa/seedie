@@ -126,5 +126,9 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       
       expect(content["models"]["simple_model"]["attributes"]["category"]).to eq(category_values)
     end
+
+    it "generates ranges for inclusion with ranges" do
+      expect(content["models"]["simple_model"]["attributes"]["score"]).to eq({"values"=>{ "start" => 0, "end" => 10}, "options"=>{"pick_strategy"=>"random"}})
+    end
   end
 end

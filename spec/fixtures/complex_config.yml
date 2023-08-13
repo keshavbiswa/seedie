@@ -57,4 +57,9 @@ models:
       category:
         values: [tech, news, sports, politics, entertainment]
         options: { pick_strategy: sequential }
+      score:
+        values: 
+          start: 0
+          end: 100
+        options: { pick_strategy: sequential }
     disabled_fields: [status]

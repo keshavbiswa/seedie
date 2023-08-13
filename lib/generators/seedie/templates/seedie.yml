@@ -7,7 +7,14 @@ models:
 <% if value.is_a?(Hash) -%>
       <%= name %>:
 <% if value['values'] -%>
+<% if value['values'].is_a?(Array) -%>
         values: <%= value['values'] %>
+<% elsif value['values'].is_a?(Hash) -%>
+        values:
+<% value['values'].each do |key, value| -%>
+          <%= key %>: <%= value %>
+<% end -%>
+<% end -%>
 <% elsif value['value'] -%>
         value: '<%= value['value'] %>'
 <% end -%>
