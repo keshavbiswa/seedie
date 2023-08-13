@@ -60,6 +60,14 @@ describe Seedie::FieldValues::CustomValue do
           end
         end
 
+        context "when value key is present" do
+          let (:value_template) { { "value" => "value" } }
+
+          it "returns the value" do
+            expect(custom_value.generate_custom_field_value).to eq("value")
+          end
+        end
+
         context "when both values and value keys are present" do
           let (:value_template) { { "values" => ["value1", "value2"], "value" => "value" } }
 
