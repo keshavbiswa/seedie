@@ -44,6 +44,7 @@ module Seedie
           template "seedie.yml", "config/seedie.yml"
         end
 
+        template "seedie_initializer.rb", "config/initializers/seedie.rb"
         output_seedie_warning
       end
 
