@@ -8,6 +8,7 @@ require "seedie"
 RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   destination File.expand_path("../../tmp", __FILE__)
   let(:seedie_config) { File.join(destination_root, "config", "seedie.yml") }
+  let(:seedie_initializer) { File.join(destination_root, "config", "initializers", "seedie.rb") }
   let(:content) { YAML.load_file(seedie_config) }
   let(:output) { StringIO.new }
 
@@ -119,6 +120,10 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   
   it "creates a config file" do
     expect(File).to exist(seedie_config)
+  end
+
+  it "creates a seedie initializer" do
+    expect(File).to exist(seedie_initializer)
   end
 
   describe "#model_configuration" do
