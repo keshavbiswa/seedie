@@ -142,7 +142,7 @@ module Seedie
           association.options[:optional] == true # Excluded Optional Associations
         end
 
-        unique_indexes = model.connection.indexes(model.table_name).select(&:unique).map(&:columns).flatten
+        unique_indexes = model.connection.indexes(model.table_name).select(&:unique).flat_map(&:columns)
 
         belongs_to_associations.reduce({}) do |config, association|
           if association.polymorphic?
