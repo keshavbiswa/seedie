@@ -21,9 +21,16 @@ module Seedie
 
       class_option :blank, type: :boolean, default: false, desc: "Generate a blank seedie.yml with examples"
       class_option :excluded_models, type: :array, default: [], desc: "Models to exclude from seedie.yml"
+      class_option :include_only_models, type: :array, default: [], 
+        desc: "Models to be specifically included in seedie.yml. This will ignore all other models."
+
 
       desc "Creates a seedie.yml for your application."
       def generate_seedie_file(output = STDOUT)
+        if options[:include_only_models].present? && options[:excluded_models].present?
+          raise ArgumentError, "Cannot use both --include_only_models and --excluded_models together." 
+        end
+
         @excluded_models = options[:excluded_models] + EXCLUDED_MODELS
         @output = output
 
@@ -45,7 +52,7 @@ module Seedie
       def build_models_config
         models = Model::ModelSorter.new(@models).sort_by_dependency
 
-        output_warning_for_required_excluded_models(models)
+        output_warning_for_extra_models(models)
 
         models.reduce({}) do |config, model|
           config[model.name.underscore] = model_configuration(model)
@@ -158,7 +165,13 @@ module Seedie
 
       def get_models
         @get_models ||= begin
-          ActiveRecord::Base.descendants.reject do |model|
+          all_models = ActiveRecord::Base.descendants
+
+          if options[:include_only_models].present?
+            all_models.select! { |model| options[:include_only_models].include?(model.name) }
+          end
+
+          all_models.reject do |model|
             @excluded_models.include?(model.name) || # Excluded Reserved Models
             model.abstract_class? || # Excluded Abstract Models
             model.table_exists? == false || # Excluded Models without tables
@@ -176,10 +189,19 @@ module Seedie
         @output.puts "##################################################"
       end
 
-      def output_warning_for_required_excluded_models(models)
-        required_excluded_models = models.map(&:name) & @excluded_models
-        required_excluded_models.each do |model_name|
-          @output.puts "WARNING: #{model_name} has dependencies with other models and cannot be excluded."
+      def output_warning_for_extra_models(models)
+        if options[:excluded_models].present?
+          required_excluded_models = models.map(&:name) & @excluded_models
+
+          required_excluded_models.each do |model_name|
+            @output.puts "WARNING: #{model_name} has dependencies with other models and cannot be excluded."
+          end
+        elsif options[:include_only_models].present?
+          dependent_models = models.map(&:name) - @models.map(&:name)
+
+          dependent_models.each do |model_name|
+            @output.puts "WARNING: #{model_name} is a dependency of included models and needs to be included."
+          end
         end
       end
     end

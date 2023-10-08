@@ -54,18 +54,33 @@ $ rails generate seedie:install --blank
 This will generate a blank seedie.yml config file for you that you can now customize according to your needs.
 
 ### Excluding Models
-If you want to exclude certain models while generating the `seedie.yml`, use the `--exclude-models` option:
+If you want to exclude certain models while generating the `seedie.yml`, use the `--exclude_models` option:
 
 ```bash
-$ rails generate seedie:install --exclude-models="User Admin Post"
+$ rails generate seedie:install --exclude_models User Admin Post
 ```
 
-NOTE: Some models may not be excluded because of their dependencies. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will not be excluded even if you specify it in the `--exclude-models` option.
+NOTE: Some models may not be excluded because of their dependencies. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will not be excluded even if you specify it in the `--exclude_models` option.
 
 You'll get a warning in your console if any models are not excluded:
 
 ```bash
 WARNING: User has dependencies with other models and cannot be excluded.
+```
+
+### Including only few Models
+If you want to include only few particular models while generating the `seedie.yml`, use the `--include_only_models` option:
+
+```bash
+$ rails generate seedie:install --include_only_models Post Comment
+```
+
+NOTE: Some models may be a dependency for the required models and will need to be included for successful seeding. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will need to be included even if you didn't specify it in the `--include_only_models` option.
+
+You'll get a warning in your console if any other models are included:
+
+```bash
+WARNING: User is a dependency of included models and needs to be included.
 ```
 
 ### Seeding Models
