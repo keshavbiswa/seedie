@@ -52,7 +52,7 @@ module Seedie
       def build_models_config
         models = Model::ModelSorter.new(@models).sort_by_dependency
 
-        output_warning_for_required_excluded_models(models)
+        output_warning_for_extra_models(models)
 
         models.reduce({}) do |config, model|
           config[model.name.underscore] = model_configuration(model)
@@ -189,10 +189,19 @@ module Seedie
         @output.puts "##################################################"
       end
 
-      def output_warning_for_required_excluded_models(models)
-        required_excluded_models = models.map(&:name) & @excluded_models
-        required_excluded_models.each do |model_name|
-          @output.puts "WARNING: #{model_name} has dependencies with other models and cannot be excluded."
+      def output_warning_for_extra_models(models)
+        if options[:excluded_models].present?
+          required_excluded_models = models.map(&:name) & @excluded_models
+
+          required_excluded_models.each do |model_name|
+            @output.puts "WARNING: #{model_name} has dependencies with other models and cannot be excluded."
+          end
+        elsif options[:include_only_models].present?
+          dependent_models = models.map(&:name) - @models.map(&:name)
+
+          dependent_models.each do |model_name|
+            @output.puts "WARNING: #{model_name} is a dependency of included models and needs to be included."
+          end
         end
       end
     end

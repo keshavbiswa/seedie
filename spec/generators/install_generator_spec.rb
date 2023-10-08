@@ -9,6 +9,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   destination File.expand_path("../../tmp", __FILE__)
   let(:seedie_config) { File.join(destination_root, "config", "seedie.yml") }
   let(:content) { YAML.load_file(seedie_config) }
+  let(:output) { StringIO.new }
 
   before do
     Rails.application.eager_load!
@@ -54,8 +55,6 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     context "when excluded models values are invalid / not excludeable" do
-      let(:output) { StringIO.new }
-    
       before do
         Rails.application.eager_load!
         prepare_destination
@@ -74,24 +73,43 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   end
 
   context "with include_only_models option" do
+    context "when included model values don't have dependencies" do
+      before do
+        Rails.application.eager_load!
+        prepare_destination
+        run_generator %w[--include_only_models SimpleModel User]
+      end
+    
+      it "only includes specified models" do
+        expect(content["models"]).to include("simple_model")
+        expect(content["models"]).not_to include("comment", "game_room", "review")
+      end
+    end
+
+    context "when included model values have dependencies" do
+      before do
+        Rails.application.eager_load!
+        prepare_destination
+        described_class.new([], { include_only_models: ["Comment"] }, { destination_root: destination_root })
+          .generate_seedie_file(output)
+      end
+
+      it "includes specified models and their dependencies" do
+        expect(content["models"]).to include("post", "comment")
+        expect(output.string).to include("WARNING: Post is a dependency of included models and needs to be included.")
+      end
+    end
+  end
+
+  context "with both include_only_models and excluded_models options" do
+    let(:output) { StringIO.new }
+
     before do
       Rails.application.eager_load!
       prepare_destination
-      run_generator %w[--include_only_models SimpleModel User]
     end
-  
-    it "only includes specified models" do
-      expect(content["models"]).to include("simple_model")
-      expect(content["models"]).not_to include("comment", "game_room", "review")
-    end
-  end
-  
-  context "with both include_only_models and excluded_models options" do
-    let(:output) { StringIO.new }
   
     it "raises an error" do
-      Rails.application.eager_load!
-      prepare_destination
       expect {
         generator = described_class.new([], { include_only_models: ["User"], excluded_models: ["Post"] }, { destination_root: destination_root })
         generator.generate_seedie_file(output)
