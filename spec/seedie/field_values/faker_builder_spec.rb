@@ -3,6 +3,29 @@ require "rails_helper"
 RSpec.describe Seedie::FieldValues::FakerBuilder do
   
   describe "#build_faker_constant" do
+    context "when there is a custom attribute in the configuration" do
+      let(:column) { double("column", type: :string) }
+      let(:validations) { [] }
+      let(:faker_builder) { described_class.new("name", column, validations) }
+
+      before do
+        Seedie.configure do |config|
+          config.custom_attributes[:name] = "custom_attribute"
+        end
+      end
+
+      # Need to clean this up else it will affect other tests
+      after do
+        Seedie.configure do |config|
+          config.custom_attributes = {}
+        end
+      end
+
+      it "returns the custom attribute" do
+        expect(faker_builder.build_faker_constant).to eq("custom_attribute")
+      end
+    end
+
     context "when column type is unknown" do
       let(:column) { double("column", type: :unknown) }
       let(:validations) { [] }
