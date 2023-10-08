@@ -2,6 +2,58 @@
 
 ### New Features
 
+#### Generate a Blank Seedie.yml file with `--blank` option
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/20)
+
+  You can now generate a blank seedie.yml file with the `--blank` option:
+
+  ```bash
+  rails g seedie:install --blank
+  ```
+
+#### Exclude models from seedie.yml generation with `--excluded_models` option
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/21)
+
+  You can now exclude models from seedie.yml generation with the `--excluded_models` option:
+
+  ```bash
+  rails g seedie:install --excluded_models Post Comment
+  ```
+
+#### Generate a Seedie.yml file with only specific models with `--include_only_models` option
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/22)
+
+  You can now generate a seedie.yml file with only specific models with the `--include_only_models` option:
+
+  ```bash
+  rails g seedie:install --include_only_models Post Comment
+  ```
+
+#### Bugfix: Now unique indexes will be generated with `unique` instead of `random` pick_strategy
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/23)
+
+#### Introducing new Seedie.rb initializer
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/28)
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/29)
+
+```ruby
+Seedie.configure do |config|
+  # config.default_count = 10
+
+  config.custom_attributes[:email] = "{{Faker::Internet.unique.email}}"
+  # Add more custom attributes here
+end
+```
+
+## Version 0.2.0
+
+### New Features
+
 #### Polymorphic Association
 * [GitHub PR](https://github.com/keshavbiswa/seedie/pull/12)
   
