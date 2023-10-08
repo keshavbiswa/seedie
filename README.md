@@ -36,6 +36,24 @@ This will create a seedie.yml file in your config directory, which will include 
 
 ## Usage
 
+### Generating blank seedie.yml
+If you want to create a blank seedie.yml file, use the `--blank` option:
+
+```bash
+$ rails generate seedie:install --blank
+```
+
+This will generate a blank seedie.yml config file for you that you can now customize according to your needs.
+
+### Excluding Models
+If you want to exclude certain models while generating the `seedie.yml`, use the `--exclude-models` option:
+
+```bash
+$ rails generate seedie:install --exclude-models="User Admin Post"
+```
+
+### Seeding Models
+
 To seed your models, run the following Rake task:
 
 ```bash

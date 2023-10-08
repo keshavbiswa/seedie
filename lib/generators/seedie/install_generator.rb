@@ -19,6 +19,9 @@ module Seedie
 
       source_root File.expand_path("templates", __dir__)
 
+      class_option :blank, type: :boolean, default: false, desc: "Generate a blank seedie.yml with examples"
+      class_option :excluded_models, type: :array, default: [], desc: "Models to exclude from seedie.yml"
+
       desc "Creates a seedie.yml for your application."
       def generate_seedie_file(output = STDOUT)
         Rails.application.eager_load! # Load all models. This is required!!
@@ -145,12 +148,15 @@ module Seedie
       end
 
       def get_models
-        @get_models ||= ActiveRecord::Base.descendants.reject do |model|
-          EXCLUDED_MODELS.include?(model.name) || # Excluded Reserved Models
-          model.abstract_class? || # Excluded Abstract Models
-          model.table_exists? == false || # Excluded Models without tables
-          model.name.blank? || # Excluded Anonymous Models
-          model.name.start_with?("HABTM_") # Excluded HABTM Models
+        @get_models ||= begin
+          excluded_models = options[:excluded_models] + EXCLUDED_MODELS
+          ActiveRecord::Base.descendants.reject do |model|
+            excluded_models.include?(model.name) || # Excluded Reserved Models
+            model.abstract_class? || # Excluded Abstract Models
+            model.table_exists? == false || # Excluded Models without tables
+            model.name.blank? || # Excluded Anonymous Models
+            model.name.start_with?("HABTM_") # Excluded HABTM Models
+          end
         end
       end
 

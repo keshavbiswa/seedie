@@ -21,12 +21,42 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     FileUtils.rm_rf destination_root
   end
 
+  context "with blank option" do
+    let(:content) { File.read(seedie_config) }
+
+    before do
+      Rails.application.eager_load!
+      prepare_destination
+      run_generator %w[--blank]
+    end
+
+    it "creates a blank config file" do
+      expect(File).to exist(seedie_config)
+      expect(content).to include("This is a blank seedie.yml file")
+    end
+
+    it "Has an example model" do
+      expect(content).to include("model_name")
+    end
+  end
+
+  context "with exclude_models option" do
+    before do
+      Rails.application.eager_load!
+      prepare_destination
+      run_generator %w[--exclude-models User Post]
+    end
+  
+    it "excludes specified models" do
+      expect(content["models"]).not_to include("user", "post")
+    end
+  end
+  
   it "creates a config file" do
     expect(File).to exist(seedie_config)
   end
 
   describe "#model_configuration" do
-
     it "excludes reserved models" do
       excluded_models = described_class::EXCLUDED_MODELS.map(&:underscore)
       expect(content["models"]).not_to include(*excluded_models)
