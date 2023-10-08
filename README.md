@@ -60,6 +60,14 @@ If you want to exclude certain models while generating the `seedie.yml`, use the
 $ rails generate seedie:install --exclude-models="User Admin Post"
 ```
 
+NOTE: Some models may not be excluded because of their dependencies. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will not be excluded even if you specify it in the `--exclude-models` option.
+
+You'll get a warning in your console if any models are not excluded:
+
+```bash
+WARNING: User has dependencies with other models and cannot be excluded.
+```
+
 ### Seeding Models
 
 To seed your models, run the following Rake task:

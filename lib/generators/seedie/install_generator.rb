@@ -24,6 +24,9 @@ module Seedie
 
       desc "Creates a seedie.yml for your application."
       def generate_seedie_file(output = STDOUT)
+        @excluded_models = options[:excluded_models] + EXCLUDED_MODELS
+        @output = output
+
         if options[:blank]
           template "blank_seedie.yml", "config/seedie.yml"
         else
@@ -34,13 +37,16 @@ module Seedie
           template "seedie.yml", "config/seedie.yml"
         end
 
-        output_seedie_warning(output)
+        output_seedie_warning
       end
 
       private
 
       def build_models_config
         models = Model::ModelSorter.new(@models).sort_by_dependency
+
+        output_warning_for_required_excluded_models(models)
+
         models.reduce({}) do |config, model|
           config[model.name.underscore] = model_configuration(model)
           config
@@ -152,9 +158,8 @@ module Seedie
 
       def get_models
         @get_models ||= begin
-          excluded_models = options[:excluded_models] + EXCLUDED_MODELS
           ActiveRecord::Base.descendants.reject do |model|
-            excluded_models.include?(model.name) || # Excluded Reserved Models
+            @excluded_models.include?(model.name) || # Excluded Reserved Models
             model.abstract_class? || # Excluded Abstract Models
             model.table_exists? == false || # Excluded Models without tables
             model.name.blank? || # Excluded Anonymous Models
@@ -163,12 +168,19 @@ module Seedie
         end
       end
 
-      def output_seedie_warning(output)
-        output.puts "Seedie config file generated at config/seedie.yml"
-        output.puts "##################################################"
-        output.puts "WARNING: Please review the generated config file before running the seeds."
-        output.puts "There might be some things that you might need to change to ensure that the generated seeds run successfully."
-        output.puts "##################################################"
+      def output_seedie_warning
+        @output.puts "Seedie config file generated at config/seedie.yml"
+        @output.puts "##################################################"
+        @output.puts "WARNING: Please review the generated config file before running the seeds."
+        @output.puts "There might be some things that you might need to change to ensure that the generated seeds run successfully."
+        @output.puts "##################################################"
+      end
+
+      def output_warning_for_required_excluded_models(models)
+        required_excluded_models = models.map(&:name) & @excluded_models
+        required_excluded_models.each do |model_name|
+          @output.puts "WARNING: #{model_name} has dependencies with other models and cannot be excluded."
+        end
       end
     end
   end

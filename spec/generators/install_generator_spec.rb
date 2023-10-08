@@ -41,14 +41,35 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   end
 
   context "with exclude_models option" do
-    before do
-      Rails.application.eager_load!
-      prepare_destination
-      run_generator %w[--excluded_models SimpleModel]
+    context "when excluded models values are valid / excludeable" do
+      before do
+        Rails.application.eager_load!
+        prepare_destination
+        run_generator %w[--excluded_models SimpleModel]
+      end
+    
+      it "excludes specified models" do
+        expect(content["models"]).not_to include("simple_model")
+      end
     end
-  
-    it "excludes specified models" do
-      expect(content["models"]).not_to include("simple_model")
+
+    context "when excluded models values are invalid / not excludeable" do
+      let(:output) { StringIO.new }
+    
+      before do
+        Rails.application.eager_load!
+        prepare_destination
+        generator = described_class.new([], { excluded_models: ["User"] }, { destination_root: destination_root })
+        generator.generate_seedie_file(output)
+      end
+    
+      it "includes specified models" do
+        expect(content["models"]).to include("user")
+      end
+    
+      it "outputs a warning for non-excludable models" do
+        expect(output.string).to include("WARNING: User has dependencies with other models and cannot be excluded.")
+      end
     end
   end
   
