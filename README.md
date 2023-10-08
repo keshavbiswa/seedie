@@ -147,7 +147,7 @@ In this file:
 - `disabled_fields` is an array of fields that should not be automatically filled by Seedie.
 - `associations` specify how associated models should be generated. Here, `has_many`, `belongs_to`, and `has_one` are supported.
 - The specified number for `has_many` represents the number of associated records to create.
-- For `belongs_to`, the value `random` means that a random existing record will be associated.
+- For `belongs_to`, the value `random` means that a random existing record will be associated. If there is a unique index associated, then `unique` will be set or else `random` is the default.
 - If attributes are specified under an association, those attributes will be used when creating the associated record(s)
 - When using associations, it's important to define the models in the correct order in the `seedie.yml` file. Associated models should be defined before the models that reference them.
 
