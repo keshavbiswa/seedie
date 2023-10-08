@@ -72,6 +72,32 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       end
     end
   end
+
+  context "with include_only_models option" do
+    before do
+      Rails.application.eager_load!
+      prepare_destination
+      run_generator %w[--include_only_models SimpleModel User]
+    end
+  
+    it "only includes specified models" do
+      expect(content["models"]).to include("simple_model")
+      expect(content["models"]).not_to include("comment", "game_room", "review")
+    end
+  end
+  
+  context "with both include_only_models and excluded_models options" do
+    let(:output) { StringIO.new }
+  
+    it "raises an error" do
+      Rails.application.eager_load!
+      prepare_destination
+      expect {
+        generator = described_class.new([], { include_only_models: ["User"], excluded_models: ["Post"] }, { destination_root: destination_root })
+        generator.generate_seedie_file(output)
+      }.to raise_error(ArgumentError, "Cannot use both --include_only_models and --excluded_models together.")
+    end
+  end
   
   it "creates a config file" do
     expect(File).to exist(seedie_config)
