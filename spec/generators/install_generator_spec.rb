@@ -144,7 +144,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "sorts models by dependency" do
-      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room", "comment"]
+      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room", "game_room_user", "comment"]
     end
 
     it "generates model_configuration for each model" do
@@ -208,6 +208,12 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     it "generates required polymorphic belongs_to associations" do
       expect(content["models"]["review"]["associations"]["belongs_to"]).to include("reviewable")
       expect(content["models"]["review"]["associations"]["belongs_to"]["reviewable"]).to include("polymorphic")
+    end
+
+    it "sets association to 'unique' when there is a unique index on the foreign key" do
+      # The 'user_id' and 'game_room_id' in 'game_room_users' has a unique index
+      expect(content["models"]["game_room_user"]["associations"]["belongs_to"]["user"]).to eq("unique")
+      expect(content["models"]["game_room_user"]["associations"]["belongs_to"]["game_room"]).to eq("unique")
     end
   end
 
