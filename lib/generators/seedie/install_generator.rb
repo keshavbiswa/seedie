@@ -19,13 +19,19 @@ module Seedie
 
       source_root File.expand_path("templates", __dir__)
 
+      class_option :blank, type: :boolean, default: false, desc: "Generate a blank seedie.yml with examples"
+
       desc "Creates a seedie.yml for your application."
       def generate_seedie_file(output = STDOUT)
-        Rails.application.eager_load! # Load all models. This is required!!
+        if options[:blank]
+          template "blank_seedie.yml", "config/seedie.yml"
+        else
+          Rails.application.eager_load! # Load all models. This is required!!
 
-        @models = get_models
-        @models_config = build_models_config
-        template "seedie.yml", "config/seedie.yml"
+          @models = get_models
+          @models_config = build_models_config
+          template "seedie.yml", "config/seedie.yml"
+        end
 
         output_seedie_warning(output)
       end

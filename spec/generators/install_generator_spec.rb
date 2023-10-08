@@ -21,6 +21,25 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     FileUtils.rm_rf destination_root
   end
 
+  context "with blank option" do
+    let(:content) { File.read(seedie_config) }
+
+    before do
+      Rails.application.eager_load!
+      prepare_destination
+      run_generator %w[--blank]
+    end
+
+    it "creates a blank config file" do
+      expect(File).to exist(seedie_config)
+      expect(content).to include("This is a blank seedie.yml file")
+    end
+
+    it "Has an example model" do
+      expect(content).to include("model_name")
+    end
+  end
+
   it "creates a config file" do
     expect(File).to exist(seedie_config)
   end

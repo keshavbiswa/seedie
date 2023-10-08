@@ -1,0 +1,22 @@
+### This is a blank seedie.yml file. ###
+
+# default_count: 10
+#
+# models:
+#   model_name:
+#     attributes:
+#       string_field: '{{Faker::Lorem.word}}'
+#       integer_field:
+#         values: [1, 2, 3]
+#         options: 
+#           pick_strategy: random
+#       jsonb_field:
+#         value: '{"key": "value"}'
+#     disabled_fields: ["unwanted_field"]
+#     associations:
+#       belongs_to:
+#         parent_model: random
+#       has_one:
+#         associated_model: random
+#       has_many:
+#         other_models: random
