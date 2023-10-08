@@ -22,7 +22,6 @@ module Seedie
     
       private
 
-
       # Independent models need to be added first
       def add_independent_models_to_queue
         @models.each do |model|
