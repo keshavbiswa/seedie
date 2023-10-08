@@ -39,7 +39,6 @@ module Seedie
 
       private
 
-
       def build_models_config
         models = Model::ModelSorter.new(@models).sort_by_dependency
         models.reduce({}) do |config, model|

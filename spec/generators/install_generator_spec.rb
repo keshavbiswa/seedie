@@ -44,11 +44,11 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     before do
       Rails.application.eager_load!
       prepare_destination
-      run_generator %w[--exclude-models User Post]
+      run_generator %w[--excluded_models SimpleModel]
     end
   
     it "excludes specified models" do
-      expect(content["models"]).not_to include("user", "post")
+      expect(content["models"]).not_to include("simple_model")
     end
   end
   
