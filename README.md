@@ -34,6 +34,14 @@ $ rails generate seedie:install
 ```
 This will create a seedie.yml file in your config directory, which will include configurations for your models.
 
+Alternatively, you can also create a blank seedie.yml file by running:
+
+```bash
+$ rails generate seedie:install --blank
+```
+
+This will generate a blank seedie.yml config file for you that you can now customize according to your needs.
+
 ## Usage
 
 To seed your models, run the following Rake task:
