@@ -10,9 +10,12 @@ module Seedie
         @class_prefix = ""
         @method_prefix = ""
         @options = ""
+        @seedie_config_custom_attributes = Seedie.configuration.custom_attributes
       end
 
       def build_faker_constant
+        return @seedie_config_custom_attributes[@name.to_sym] if @seedie_config_custom_attributes.key?(@name.to_sym)
+
         @unique_prefix = "unique." if has_validation?(:uniqueness)
         
         add_faker_class_and_method(@column.type)

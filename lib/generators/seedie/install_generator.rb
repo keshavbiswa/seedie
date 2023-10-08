@@ -30,7 +30,10 @@ module Seedie
         if options[:include_only_models].present? && options[:excluded_models].present?
           raise ArgumentError, "Cannot use both --include_only_models and --excluded_models together." 
         end
-
+        
+        # This needs to be generated before anything else.
+        template "seedie_initializer.rb", "config/initializers/seedie.rb"
+        
         @excluded_models = options[:excluded_models] + EXCLUDED_MODELS
         @output = output
 
@@ -44,7 +47,6 @@ module Seedie
           template "seedie.yml", "config/seedie.yml"
         end
 
-        template "seedie_initializer.rb", "config/initializers/seedie.rb"
         output_seedie_warning
       end
 

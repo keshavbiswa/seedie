@@ -24,6 +24,7 @@ require_relative "seedie/associations/belongs_to"
 
 require_relative "seedie/seeder"
 require_relative "seedie/version"
+require_relative "seedie/configuration"
 
 require "seedie/railtie" if defined?(Rails)
 
@@ -41,4 +42,14 @@ module Seedie
   class InvalidCustomFieldValuesError < StandardError; end
   class InvalidCustomFieldOptionsError < StandardError; end
   class CustomFieldNotEnoughValuesError < StandardError; end
+
+  class << self
+    def configure
+      yield configuration if block_given?
+    end
+
+    def configuration
+      @configuration ||= Configuration.new
+    end
+  end
 end

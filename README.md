@@ -83,6 +83,26 @@ You'll get a warning in your console if any other models are included:
 WARNING: User is a dependency of included models and needs to be included.
 ```
 
+### Add Custom Attributes inside seedie.rb initializer
+
+While generating the seedie.yml file, there are default values.
+For example, for every `string` field, the default value is `{{Faker::Lorem.word}}`.
+This works fine for most attributes, but for some there are validations which breaks the seeding.
+Take `email` as an example, the default value `{{Faker::Lorem.word}}` will not be a valid email.
+By default, when we generate the seedie.yml file, we add a `seedie.rb` initializer file in the `config/initializers` directory.
+
+```ruby
+Seedie.configure do |config|
+  # config.default_count = 10
+
+  config.custom_attributes[:email] = "{{Faker::Internet.unique.email}}"
+  # Add more custom attributes here
+end
+```
+
+This ensures that the `email` field is seeded with a valid email address.
+You can add more custom attributes in the `seedie.rb` initializer file.
+
 ### Seeding Models
 
 To seed your models, run the following Rake task:
