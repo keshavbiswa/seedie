@@ -3,8 +3,8 @@ class GameRoom < ApplicationRecord
   belongs_to :updater, class_name: "User", foreign_key: "updater_id"
 
   has_many :reviews, as: :reviewable
-
-  has_and_belongs_to_many :users
+  has_many :game_room_users, dependent: :destroy
+  has_many :users, through: :game_room_users
 
   validates :name, presence: true
 end

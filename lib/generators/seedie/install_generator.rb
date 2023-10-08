@@ -142,11 +142,14 @@ module Seedie
           association.options[:optional] == true # Excluded Optional Associations
         end
 
+        unique_indexes = model.connection.indexes(model.table_name).select(&:unique).flat_map(&:columns)
+
         belongs_to_associations.reduce({}) do |config, association|
           if association.polymorphic?
             config[association.name.to_s] = set_polymorphic_association_config(model, association)
           else
-            config[association.name.to_s] = "random"
+            association_has_unique_index = unique_indexes.include?(association.foreign_key.to_s)
+            config[association.name.to_s] = association_has_unique_index ? "unique" : "random"
           end
           config
         end
