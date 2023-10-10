@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reporters
   class ConsoleReporter < BaseReporter
     def initialize

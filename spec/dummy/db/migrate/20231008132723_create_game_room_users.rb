@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGameRoomUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :game_room_users do |t|

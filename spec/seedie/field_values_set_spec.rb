@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "seedie"
 require "rails_helper"
@@ -6,7 +8,7 @@ describe Seedie::FieldValuesSet do
   let(:model) { Comment }
   let(:model_config) { {} }
   let(:index) { 1 }
-  
+
   subject { described_class.new(model, model_config, index) }
 
   describe "#generate_field_values" do
@@ -28,7 +30,7 @@ describe Seedie::FieldValuesSet do
     end
 
     it "generates fake value" do
-      model_config["attributes"] = { }
+      model_config["attributes"] = {}
 
       expect(subject.generate_field_values["content"]).to be_a(String)
     end

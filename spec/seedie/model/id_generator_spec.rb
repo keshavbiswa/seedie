@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "seedie"
 require "rails_helper"
 

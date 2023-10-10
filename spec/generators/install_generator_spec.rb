@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails/generators"
 require "generators/seedie/install_generator"
 require "fileutils"
@@ -17,7 +19,6 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     prepare_destination
     run_generator
   end
-
 
   after do
     FileUtils.rm_rf destination_root
@@ -49,7 +50,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
         prepare_destination
         run_generator %w[--excluded_models SimpleModel]
       end
-    
+
       it "excludes specified models" do
         expect(content["models"]).not_to include("simple_model")
       end
@@ -62,11 +63,11 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
         generator = described_class.new([], { excluded_models: ["User"] }, { destination_root: destination_root })
         generator.generate_seedie_file(output)
       end
-    
+
       it "includes specified models" do
         expect(content["models"]).to include("user")
       end
-    
+
       it "outputs a warning for non-excludable models" do
         expect(output.string).to include("WARNING: User has dependencies with other models and cannot be excluded.")
       end
@@ -80,7 +81,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
         prepare_destination
         run_generator %w[--include_only_models SimpleModel User]
       end
-    
+
       it "only includes specified models" do
         expect(content["models"]).to include("simple_model")
         expect(content["models"]).not_to include("comment", "game_room", "review")
@@ -109,15 +110,17 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
       Rails.application.eager_load!
       prepare_destination
     end
-  
+
     it "raises an error" do
       expect {
-        generator = described_class.new([], { include_only_models: ["User"], excluded_models: ["Post"] }, { destination_root: destination_root })
+        generator = described_class.new(
+          [], { include_only_models: ["User"], excluded_models: ["Post"] },
+          { destination_root: destination_root })
         generator.generate_seedie_file(output)
       }.to raise_error(ArgumentError, "Cannot use both --include_only_models and --excluded_models together.")
     end
   end
-  
+
   it "creates a config file" do
     expect(File).to exist(seedie_config)
   end
@@ -149,7 +152,8 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "sorts models by dependency" do
-      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room", "game_room_user", "comment"]
+      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room",
+                                            "game_room_user", "comment"]
     end
 
     it "generates model_configuration for each model" do
@@ -228,13 +232,20 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "generates random attributes from a given values array" do
-      category_values = {"values"=>["tech", "news", "sports", "politics", "entertainment"], "options"=> { "pick_strategy" => "random" }}
-      
+      category_values = {
+        "values" => ["tech", "news", "sports", "politics", "entertainment"],
+        "options" => { "pick_strategy" => "random" }
+      }
+
       expect(content["models"]["simple_model"]["attributes"]["category"]).to eq(category_values)
     end
 
     it "generates ranges for inclusion with ranges" do
-      expect(content["models"]["simple_model"]["attributes"]["score"]).to eq({"values"=>{ "start" => 0, "end" => 10}, "options"=>{"pick_strategy"=>"random"}})
+      expect(content["models"]["simple_model"]["attributes"]["score"]).to eq(
+        {
+          "values" => { "start" => 0, "end" => 10 },
+          "options" => { "pick_strategy" => "random" }
+        })
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   class ModelSeeder
     include Reporters::Reportable
@@ -17,7 +19,7 @@ module Seedie
     end
 
     def generate_records
-      report(:model_seed_start, name: "#{model.to_s}")
+      report(:model_seed_start, name: "#{model}")
       model_count(model_config).times do |index|
         record = generate_record(model_config, index)
         associations_config = model_config["associations"]
@@ -27,34 +29,34 @@ module Seedie
           Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
         end
       end
-      report(:model_seed_finish, name: "#{model.to_s}")
+      report(:model_seed_finish, name: "#{model}")
     end
 
     private
 
-    def model_count(model_config)
-      return model_config["count"] if model_config["count"].present?
-      return config["default_count"] if config["default_count"].present?
+      def model_count(model_config)
+        return model_config["count"] if model_config["count"].present?
+        return config["default_count"] if config["default_count"].present?
 
-      DEFAULT_MODEL_COUNT
-    end
+        DEFAULT_MODEL_COUNT
+      end
 
-    def generate_record(model_config, index)
-      associated_field_set = generate_belongs_to_associations(model, model_config)
+      def generate_record(model_config, index)
+        associated_field_set = generate_belongs_to_associations(model, model_config)
 
-      field_values_set = FieldValuesSet.new(model, model_config, index).generate_field_values
-      field_values_set.merge!(associated_field_set)
-      @record_creator.create!(field_values_set)
-    end
+        field_values_set = FieldValuesSet.new(model, model_config, index).generate_field_values
+        field_values_set.merge!(associated_field_set)
+        @record_creator.create!(field_values_set)
+      end
 
-    def generate_belongs_to_associations(model, model_config)
-      associations_config = model_config["associations"]
-      return {} unless associations_config.present?
+      def generate_belongs_to_associations(model, model_config)
+        associations_config = model_config["associations"]
+        return {} unless associations_config.present?
 
-      belongs_to_associations = Associations::BelongsTo.new(model, associations_config, reporters)
-      belongs_to_associations.generate_associations
-      
-      return belongs_to_associations.associated_field_set
-    end
+        belongs_to_associations = Associations::BelongsTo.new(model, associations_config, reporters)
+        belongs_to_associations.generate_associations
+
+        belongs_to_associations.associated_field_set
+      end
   end
 end

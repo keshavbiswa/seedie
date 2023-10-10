@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   class Seeder
     include Reporters::Reportable
@@ -23,17 +25,17 @@ module Seedie
         end
       end
       report(:seed_finish)
-      
+
       @reporters.each(&:close)
     end
 
     private
 
-    def load_config(path)
-      path = Rails.root.join("config", "seedie.yml") if path.nil?
-      raise ConfigFileNotFound, "Config file not found in #{path}" unless File.exist?(path)
-      
-      YAML.load_file(path)
-    end
+      def load_config(path)
+        path = Rails.root.join("config", "seedie.yml") if path.nil?
+        raise ConfigFileNotFound, "Config file not found in #{path}" unless File.exist?(path)
+
+        YAML.load_file(path)
+      end
   end
 end

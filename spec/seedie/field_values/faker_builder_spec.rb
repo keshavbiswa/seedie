@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Seedie::FieldValues::FakerBuilder do
-  
   describe "#build_faker_constant" do
     context "when there is a custom attribute in the configuration" do
       let(:column) { double("column", type: :string) }
@@ -114,7 +115,10 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression" do
-        output = {"value"=>"Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"}
+        output = {
+          "value" => "Json.shallow_json(width: 3,
+          options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"
+        }
         expect(faker_builder.build_faker_constant).to eq(output)
       end
     end
@@ -175,7 +179,10 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression" do
-        expected_output = {"value"=>"Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"}
+        expected_output = {
+          "value" => "Json.shallow_json(width: 3,
+          options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })"
+        }
 
         expect(faker_builder.build_faker_constant).to eq(expected_output)
       end
@@ -208,7 +215,11 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
         let(:faker_builder) { described_class.new("name", column, validations) }
 
         it "returns a valid Faker expression with inclusion options" do
-          expect(faker_builder.build_faker_constant).to eq({"values"=> {"end"=> 20, "start"=>10}, "options"=>{"pick_strategy"=>"random"}})
+          expect(faker_builder.build_faker_constant).to eq(
+            {
+              "values" => { "end" => 20, "start" => 10 },
+              "options" => { "pick_strategy" => "random" }
+            })
         end
       end
 
@@ -218,7 +229,11 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
         let(:faker_builder) { described_class.new("name", column, validations) }
 
         it "returns a valid Faker expression with inclusion options" do
-          expect(faker_builder.build_faker_constant).to eq({"values"=>["foo", "bar"], "options"=>{"pick_strategy"=>"random"}})
+          expect(faker_builder.build_faker_constant).to eq(
+            {
+              "values" => ["foo", "bar"],
+              "options" => { "pick_strategy" => "random" }
+            })
         end
       end
     end
@@ -226,7 +241,8 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
     context "when column has numericality validation with range" do
       let(:column) { double("column", type: :integer) }
       let(:validations) {
- [double("validation", kind: :numericality, options: { greater_than_or_equal_to: 10, less_than_or_equal_to: 20 })] }
+  [double("validation", kind: :numericality, options: { greater_than_or_equal_to: 10, less_than_or_equal_to: 20 })]
+}
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression with numericality options" do

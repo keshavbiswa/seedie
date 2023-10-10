@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Seedie
   class ModelFields
     DEFAULT_DISABLED_FIELDS = %w[id created_at updated_at]
 
     attr_reader :model_name, :model_config, :fields, :disabled_fields, :foreign_fields
-    
+
     def initialize(model, model_config)
       @model_name = model.to_s
       @model_config = model_config

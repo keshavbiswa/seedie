@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "seedie"
 
@@ -43,7 +45,9 @@ RSpec.describe Seedie::Associations::HasOne do
     end
 
     context "when the association config is a hash" do
-      let(:config) { { "has_one" => { "post_metadatum" => { "attributes" => { "seo_text" => "PostMetadatum {{index}}" } } } } }
+      let(:config) {
+  { "has_one" => { "post_metadatum" => { "attributes" => { "seo_text" => "PostMetadatum {{index}}" } } } }
+}
 
       it "generates one association" do
         subject.generate_associations

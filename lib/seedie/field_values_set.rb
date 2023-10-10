@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   class FieldValuesSet
     attr_reader :attributes_config, :index
@@ -26,25 +28,25 @@ module Seedie
 
     private
 
-    def populate_values_for_model_fields
-      @field_values = @model.columns_hash.map do |name, column|
-        next if @model_fields.disabled_fields.include?(name)
-        next if @model_fields.foreign_fields.include?(name)
-        
-        [name, generate_field_value(name, column)]
-      end.compact.to_h
-    end
+      def populate_values_for_model_fields
+        @field_values = @model.columns_hash.map do |name, column|
+          next if @model_fields.disabled_fields.include?(name)
+          next if @model_fields.foreign_fields.include?(name)
 
-    def populate_values_for_virtual_fields
-      virtual_fields = @attributes_config.keys - @model.columns_hash.keys
-      
-      virtual_fields.each do |name|
-        @field_values[name] = generate_custom_field_value(name) if @attributes_config[name]
+          [name, generate_field_value(name, column)]
+        end.compact.to_h
       end
-    end
 
-    def generate_custom_field_value(name)
-      FieldValues::CustomValue.new(name, @attributes_config[name], @index).generate_custom_field_value
-    end
+      def populate_values_for_virtual_fields
+        virtual_fields = @attributes_config.keys - @model.columns_hash.keys
+
+        virtual_fields.each do |name|
+          @field_values[name] = generate_custom_field_value(name) if @attributes_config[name]
+        end
+      end
+
+      def generate_custom_field_value(name)
+        FieldValues::CustomValue.new(name, @attributes_config[name], @index).generate_custom_field_value
+      end
   end
 end

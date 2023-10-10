@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "seedie"
 
@@ -8,10 +10,10 @@ describe Seedie::ModelSeeder do
   let(:reporters) { [] }
 
   subject { described_class.new(model, model_config, config, reporters) }
-  
+
   describe "#generate_records" do
     context "when count is specified in model_config" do
-      let(:model_config) { {"count" => 2, "attributes" => { "email" => "{{Faker::Internet.unique.email}}"} } }
+      let(:model_config) { { "count" => 2, "attributes" => { "email" => "{{Faker::Internet.unique.email}}" } } }
 
       it "generates the specified number of records" do
         subject.generate_records
@@ -21,8 +23,10 @@ describe Seedie::ModelSeeder do
     end
 
     context "when default_count is specified in config" do
-      let(:config) { {"default_count" => 3,
-        "models" => { "user" => { "attributes" => { "email" => "{{Faker::Internet.unique.email}}"} } } }
+      let(:config) { {
+        "default_count" => 3,
+        "models" => { "user" => { "attributes" => { "email" => "{{Faker::Internet.unique.email}}" } } }
+      }
       }
 
       it "generates the default number of records" do
@@ -42,16 +46,17 @@ describe Seedie::ModelSeeder do
 
     context "when associations are specified in model_config" do
       let(:model) { Post }
-      let(:model_config) do 
-        { "associations" =>
-          { 
-            "has_many" => {
-              "comments" => { "count" => 2 }
-            },
-            "has_one" => {
-              "post_metadatum" => { "count" => 1 }
-            }
-          } 
+      let(:model_config) do
+        {
+          "associations" =>
+                    {
+                      "has_many" => {
+                        "comments" => { "count" => 2 }
+                      },
+                      "has_one" => {
+                        "post_metadatum" => { "count" => 1 }
+                      }
+                    }
         }
       end
 
@@ -66,12 +71,13 @@ describe Seedie::ModelSeeder do
     context "when belongs_to associations are specified in model_config" do
       let(:model) { Comment }
       let(:model_config) do
-        { "associations" =>
-          { 
-            "belongs_to" => {
-              "post" => { "attributes" => { "title" => "Post {{index}}" } }
-            }
-          } 
+        {
+          "associations" =>
+                    {
+                      "belongs_to" => {
+                        "post" => { "attributes" => { "title" => "Post {{index}}" } }
+                      }
+                    }
         }
       end
 
