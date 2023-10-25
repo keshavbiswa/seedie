@@ -1,16 +1,1 @@
-AllCops:
-  TargetRubyVersion: 2.6
-  DisabledByDefault: true
-  
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Layout/LineLength:
-  Max: 120
-  Exclude:
-    - "spec/dummy/**/*"
+inherit_from: .rubocop_todo.yml
