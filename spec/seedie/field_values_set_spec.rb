@@ -39,4 +39,16 @@ describe Seedie::FieldValuesSet do
       expect(subject.generate_field_values).to include({ "virtual_field" => "Virtual Field Value" })
     end
   end
+
+  describe "#generate_field_values_with_associations" do
+    before do
+      Post.create!(title: "Post Title")
+    end
+
+    it "generates values for belongs_to associations" do
+      model_config["associations"] = { "belongs_to" => { "post" => "random" } }
+
+      expect(subject.generate_field_values_with_associations).to include({ "post_id" => 1 })
+    end
+  end
 end
