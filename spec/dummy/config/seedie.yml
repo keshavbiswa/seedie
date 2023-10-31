@@ -17,8 +17,7 @@ models:
     disabled_fields: []
   comment:
     attributes:
-      title: "title {{index}}"
-      associations:
-        belongs_to:
-          post: random
-          user: new
+      content: "title {{index}}"
+    associations:
+      belongs_to:
+        post: random

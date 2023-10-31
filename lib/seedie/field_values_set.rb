@@ -1,6 +1,6 @@
 module Seedie
   class FieldValuesSet
-    attr_reader :attributes_config, :index
+    attr_reader :model, :model_config, :attributes_config, :index
 
     def initialize(model, model_config, index)
       @model = model
@@ -18,6 +18,12 @@ module Seedie
       @field_values
     end
 
+    def generate_field_values_with_associations
+      associated_field_values_set = generate_belongs_to_associations
+      model_field_values_set = generate_field_values
+      model_field_values_set.merge!(associated_field_values_set)
+    end
+
     def generate_field_value(name, column)
       return generate_custom_field_value(name) if @attributes_config&.key?(name)
 
@@ -25,6 +31,15 @@ module Seedie
     end
 
     private
+
+    def generate_belongs_to_associations
+      associations_config = model_config["associations"]
+      return {} unless associations_config.present?
+
+      belongs_to_associations = Associations::BelongsTo.new(model, associations_config)
+      belongs_to_associations.generate_associations
+      belongs_to_associations.associated_field_set
+    end
 
     def populate_values_for_model_fields
       @field_values = @model.columns_hash.map do |name, column|

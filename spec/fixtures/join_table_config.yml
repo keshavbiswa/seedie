@@ -1,0 +1,31 @@
+
+default_count: 5
+models:
+  simple_model:
+    attributes: 
+      name: "name {{index}}"
+      content: "content {{index}}"
+      category:
+        values: [tech, news, sports, politics, entertainment]
+        options: { pick_strategy: sequential }
+      score:
+        values: 
+          start: 0
+          end: 100
+        options: { pick_strategy: sequential }
+    disabled_fields: [status]
+  user:
+    attributes:
+      name: "name {{index}}"
+      email: "{{Faker::Internet.email}}"
+      address: "{{Faker::Address.street_address}}"
+    disabled_fields: [nickname password password_digest]
+    associations:
+      has_many: 
+        reviews: 
+          disabled_fields: [review_type]
+          associations:
+            belongs_to:
+              reviewable:
+                polymorphic: simple_model
+                strategy: random
