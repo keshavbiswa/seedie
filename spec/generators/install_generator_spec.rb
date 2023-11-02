@@ -1,9 +1,8 @@
+require "rails_helper"
 require "rails/generators"
 require "generators/seedie/install_generator"
 require "fileutils"
 require "generator_spec"
-require "rails_helper"
-require "seedie"
 
 RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
   destination File.expand_path("../../tmp", __FILE__)

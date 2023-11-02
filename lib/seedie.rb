@@ -5,11 +5,11 @@ require "faker"
 require "yaml"
 require "zeitwerk"
 
-loader = Zeitwerk::Loader.for_gem
-loader.ignore("#{__dir__}/generators")
-loader.setup
-
 module Seedie
+  @loader = Zeitwerk::Loader.for_gem
+  @loader.ignore("#{__dir__}/generators")
+  @loader.setup
+  
   class Error < StandardError; end
   class InvalidFakerMethodError < StandardError; end
   class UnknownColumnTypeError < StandardError; end
@@ -30,7 +30,9 @@ module Seedie
     end
 
     def eager_load!
-      loader.eager_load
+      @loader.eager_load
     end
   end
 end
+
+Seedie.eager_load!
