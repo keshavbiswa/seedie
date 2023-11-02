@@ -1,11 +1,11 @@
 require "rails_helper"
 require "seedie"
 
-RSpec.describe Reporters::ConsoleReporter do
+RSpec.describe Seedie::Reporters::ConsoleReporter do
   let(:console_reporter) { described_class.new }
 
   before do
-    allow_any_instance_of(Reporters::ConsoleReporter).to receive(:update).and_call_original
+    allow_any_instance_of(Seedie::Reporters::ConsoleReporter).to receive(:update).and_call_original
   end
 
   describe "#initialize" do

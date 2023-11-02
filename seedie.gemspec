@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
   spec.add_dependency "faker", ">= 2.9"
   spec.add_dependency "activerecord", ">= 5.2.0"
+  spec.add_dependency "zeitwerk", "~> 2.4"
 
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-rails"

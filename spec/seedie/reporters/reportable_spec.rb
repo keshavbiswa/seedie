@@ -1,13 +1,13 @@
 require "seedie"
 
 class DummyClass
-  include Reporters::Reportable
+  include Seedie::Reporters::Reportable
 end
 
-RSpec.describe Reporters::Reportable do
+RSpec.describe Seedie::Reporters::Reportable do
   let(:dummy_class) { DummyClass.new }
 
-  let(:observer) { Reporters::ConsoleReporter.new }
+  let(:observer) { Seedie::Reporters::ConsoleReporter.new }
   let(:observers) { [observer] }
 
   describe "#report" do
