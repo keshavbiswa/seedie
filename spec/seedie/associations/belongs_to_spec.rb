@@ -65,7 +65,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
         context "when there is only one polymorphic type given" do
           it "assigns the polymorphic association to the associated_field_set" do
             subject.generate_associations
-  
+
             expect(subject.associated_field_set["reviewable_id"]).to be_in([post.id, post2.id])
             expect(subject.associated_field_set["reviewable_type"]).to eq("Post")
           end
@@ -84,7 +84,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
 
           it "randomly assigns the polymorphic association to the associated_field_set" do
             subject.generate_associations
-  
+
             expect(subject.associated_field_set["reviewable_id"]).to be_in([post.id, post2.id, game_room.id, game_room2.id])
             expect(subject.associated_field_set["reviewable_type"]).to be_in(["Post", "GameRoom"])
           end
@@ -97,7 +97,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
 
           it "assigns randomly the polymorphic association to the associated_field_set" do
             subject.generate_associations
-  
+
             expect(subject.associated_field_set["reviewable_id"]).to be_in([post.id, post2.id])
             expect(subject.associated_field_set["reviewable_type"]).to eq("Post")
           end
@@ -110,13 +110,13 @@ RSpec.describe Seedie::Associations::BelongsTo do
 
           it "uniquely assigns the polymorphic association to the associated_field_set" do
             generated_associations = []
-        
+
             2.times do
               subject.generate_associations
               new_record = model.create!(subject.associated_field_set)
               generated_associations << new_record.reviewable_id
             end
-        
+
             expect(generated_associations.uniq.length).to eq(generated_associations.length)
           end
         end
@@ -147,12 +147,11 @@ RSpec.describe Seedie::Associations::BelongsTo do
 
         it "generates one association" do
           subject.generate_associations
-      
+
           expect(Post.count).to eq(1)
           expect(Post.first.title).to eq("New Post 0")
         end
       end
     end
-
   end
 end

@@ -22,7 +22,7 @@ describe Seedie::FieldValues::CustomValue do
 
       context "when the value_template contains faker values" do
         let(:value_template) { "value_template{{index}} {{Faker::Name.name}} {{Faker::Internet.email}}" }
-        
+
         it "returns whatever value_template with faker values set" do
           expect(custom_value.generate_custom_field_value).to eq("value_template1 custom_name custom_email")
         end
@@ -30,17 +30,17 @@ describe Seedie::FieldValues::CustomValue do
 
       context "when the value_template contains non faker method" do
         let(:value_template) { "value_template{{index}} {{NotFaker::Name.name}}" }
-        
+
         it "raises an error" do
           expect {
-            custom_value.generate_custom_field_value 
+            custom_value.generate_custom_field_value
           }.to raise_error(Seedie::InvalidFakerMethodError, "Invalid method: NotFaker::Name.name")
         end
       end
 
       context "when the value_template contains invalid faker method" do
         let(:value_template) { "value_template {{Faker::SomeInvalidMethod.name}}" }
-        
+
         it "raises an error" do
           expect { custom_value.generate_custom_field_value }.to raise_error(NameError)
         end
@@ -49,8 +49,8 @@ describe Seedie::FieldValues::CustomValue do
 
     context "when the value_template is a hash" do
       context "when keys are invalid" do
-        let (:value_template) { { "SomeInvalid key" => "value" } }
-        
+        let(:value_template) { { "SomeInvalid key" => "value" } }
+
         it "raises an error" do
           message = "Invalid keys for name: SomeInvalid key. Only [\"values\", \"value\", \"options\"] are allowed."
           expect {
@@ -60,7 +60,7 @@ describe Seedie::FieldValues::CustomValue do
       end
 
       context "when value key is present" do
-        let (:value_template) { { "value" => "value" } }
+        let(:value_template) { { "value" => "value" } }
 
         it "returns the value" do
           expect(custom_value.generate_custom_field_value).to eq("value")
@@ -68,7 +68,7 @@ describe Seedie::FieldValues::CustomValue do
       end
 
       context "when both values and value keys are present" do
-        let (:value_template) { { "values" => ["value1", "value2"], "value" => "value" } }
+        let(:value_template) { { "values" => ["value1", "value2"], "value" => "value" } }
 
         it "raises an error" do
           message = "Invalid keys for name: values and value cannot be used together."
@@ -79,7 +79,7 @@ describe Seedie::FieldValues::CustomValue do
       end
 
       context "when values key is not an array or a hash" do
-        let (:value_template) { { "values" => "value" } }
+        let(:value_template) { { "values" => "value" } }
 
         it "raises an error" do
           message = "The values key for name must be an array or a hash with start and end keys."
@@ -91,7 +91,7 @@ describe Seedie::FieldValues::CustomValue do
 
       context "when values key is a hash" do
         context "when values hash does not have start and end keys" do
-          let (:value_template) { { "values" => { "invalid_key" => "value" } } }
+          let(:value_template) { { "values" => { "invalid_key" => "value" } } }
 
           it "raises an error" do
             message = "The values key for name must be an array or a hash with start and end keys."
@@ -102,7 +102,7 @@ describe Seedie::FieldValues::CustomValue do
         end
 
         context "when values hash has start and end keys" do
-          let (:value_template) { { "values" => { "start" => 1, "end" => 3 } } }
+          let(:value_template) { { "values" => { "start" => 1, "end" => 3 } } }
 
           it "returns a random value from the given range" do
             expect((1..3)).to include(custom_value.generate_custom_field_value)
@@ -113,7 +113,7 @@ describe Seedie::FieldValues::CustomValue do
       context "when pick_strategy is sequential" do
         context "when values is an array" do
           let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "sequential" } } }
-          
+
           context "when values is less than index" do
             let(:index) { 3 }
 
@@ -128,7 +128,7 @@ describe Seedie::FieldValues::CustomValue do
           it "returns a sequential value from the given array" do
             custom_value = described_class.new(name, value_template, 0)
             expect(custom_value.generate_custom_field_value).to eq("value1")
-  
+
             custom_value = described_class.new(name, value_template, 1)
             expect(custom_value.generate_custom_field_value).to eq("value2")
           end
@@ -136,7 +136,7 @@ describe Seedie::FieldValues::CustomValue do
 
         context "when values is a hash" do
           let(:value_template) { { "values" => { "start" => 1, "end" => 3 }, "options" => { "pick_strategy" => "sequential" } } }
-          
+
           context "when values is less than index" do
             let(:index) { 3 }
 
@@ -151,19 +151,16 @@ describe Seedie::FieldValues::CustomValue do
           it "returns a sequential value from the start and end range" do
             custom_value = described_class.new(name, value_template, 0)
             expect(custom_value.generate_custom_field_value).to eq(1)
-  
+
             custom_value = described_class.new(name, value_template, 1)
             expect(custom_value.generate_custom_field_value).to eq(2)
           end
         end
-
-
       end
 
       context "when pick_strategy is random" do
         let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "random" } } }
         it "returns a random value from the given array" do
-          
           custom_value = described_class.new(name, value_template, 0)
 
           expect((["value1", "value2"])).to include(custom_value.generate_custom_field_value)

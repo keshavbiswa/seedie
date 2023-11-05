@@ -28,8 +28,8 @@ describe Seedie::ModelFields do
     context "when attributes and disabled_fields are not provided in model_config" do
       it "sets other_fields to the column names excluding DEFAULT_DISABLED_FIELDS" do
         model_fields = described_class.new(model, model_config)
-        expect(model_fields.instance_variable_get(:@other_fields)).to eq(%w[name email password password_digest 
-          nickname address])
+        expect(model_fields.instance_variable_get(:@other_fields)).to eq(%w[name email password password_digest
+                                                                            nickname address])
       end
     end
   end

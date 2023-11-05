@@ -11,7 +11,7 @@ describe Seedie::FieldValues::FakeValue do
       it "returns a faker word" do
         allow(column).to receive(:type).and_return(:string)
         allow(Faker::Lorem).to receive(:word).and_return("random_word")
-        
+
         expect(fake_value.generate_fake_value).to eq("random_word")
       end
     end
@@ -70,7 +70,7 @@ describe Seedie::FieldValues::FakeValue do
       it "returns a faker decimal" do
         allow(column).to receive(:type).and_return(:decimal)
         allow(Faker::Number).to receive(:decimal).with(l_digits: 2, r_digits: 2).and_return(45.45)
-        
+
         expect(fake_value.generate_fake_value).to eq(45.45)
       end
     end
@@ -169,7 +169,7 @@ describe Seedie::FieldValues::FakeValue do
 
       it "returns a year" do
         allow(column).to receive(:type).and_return(:year)
-    
+
         expect(fake_value.generate_fake_value).to eq(1938)
       end
     end
@@ -179,7 +179,8 @@ describe Seedie::FieldValues::FakeValue do
         allow(column).to receive(:type).and_return(:unknown)
 
         expect {
- fake_value.generate_fake_value }.to raise_error(Seedie::UnknownColumnTypeError, "Unknown column type: unknown")
+          fake_value.generate_fake_value
+        }.to raise_error(Seedie::UnknownColumnTypeError, "Unknown column type: unknown")
       end
     end
   end

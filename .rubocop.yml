@@ -5,6 +5,9 @@ AllCops:
   NewCops: disable
   SuggestExtensions: false
 
+  Exclude:
+    - "spec/dummy/bin/*"
+
 Style:
   HashSyntax:
     EnforcedStyle: hash_rockets

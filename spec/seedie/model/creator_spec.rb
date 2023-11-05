@@ -40,7 +40,7 @@ RSpec.describe Seedie::Model::Creator do
       it "does not create a new record" do
         expect {
           subject.create(field_values_set)
-        }.not_to change { User.count }
+        }.not_to(change { User.count })
       end
 
       it "returns nil" do

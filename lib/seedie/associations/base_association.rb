@@ -2,7 +2,7 @@ module Seedie
   module Associations
     class BaseAssociation
       include Reporters::Reportable
-      
+
       DEFAULT_COUNT = 1
       INDEX = 0
 

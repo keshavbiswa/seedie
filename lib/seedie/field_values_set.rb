@@ -45,14 +45,14 @@ module Seedie
       @field_values = @model.columns_hash.map do |name, column|
         next if @model_fields.disabled_fields.include?(name)
         next if @model_fields.foreign_fields.include?(name)
-        
+
         [name, generate_field_value(name, column)]
       end.compact.to_h
     end
 
     def populate_values_for_virtual_fields
       virtual_fields = @attributes_config.keys - @model.columns_hash.keys
-      
+
       virtual_fields.each do |name|
         @field_values[name] = generate_custom_field_value(name) if @attributes_config[name]
       end

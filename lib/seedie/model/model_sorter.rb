@@ -2,14 +2,14 @@ module Seedie
   module Model
     class ModelSorter
       include PolymorphicAssociationHelper
-      
+
       def initialize(models)
         @models = models
-        @model_dependencies = models.map {|m| [m, get_model_dependencies(m)]}.to_h
+        @model_dependencies = models.map { |m| [m, get_model_dependencies(m)] }.to_h
         @resolved_queue = []
         @unresolved = []
       end
-    
+
       def sort_by_dependency
         add_independent_models_to_queue
 
@@ -19,7 +19,7 @@ module Seedie
 
         @resolved_queue
       end
-    
+
       private
 
       # Independent models need to be added first
@@ -30,7 +30,7 @@ module Seedie
           end
         end
       end
-    
+
       def resolve_dependencies(model)
         if @unresolved.include?(model)
           puts "Circular dependency detected for #{model}. Ignoring..."
@@ -39,7 +39,7 @@ module Seedie
 
         @unresolved << model
         dependencies = @model_dependencies[model]
-        
+
         if dependencies
           dependencies.each do |dependency|
             resolve_dependencies(dependency) unless @resolved_queue.include?(dependency)
@@ -49,14 +49,14 @@ module Seedie
         @resolved_queue << model
         @unresolved.delete(model)
       end
-    
+
       def get_model_dependencies(model)
         associations = model.reflect_on_all_associations(:belongs_to).reject do |association|
           association.options[:optional] == true # Excluded Optional Associations
         end
-      
+
         return [] if associations.blank?
-      
+
         associations.map do |association|
           if association.options[:class_name]
             constantize_class_name(association.options[:class_name], model.name)
@@ -64,7 +64,7 @@ module Seedie
             types = find_polymorphic_types(model, association.name)
 
             if types.blank?
-              puts "Polymorphic type not found for #{model.name}. Ignoring..." 
+              puts "Polymorphic type not found for #{model.name}. Ignoring..."
               next
             end
           else
@@ -72,8 +72,6 @@ module Seedie
           end
         end.compact
       end
-
-      private
 
       def constantize_class_name(class_name, model_name)
         namespaced_class_name = if model_name.include?("::")
@@ -89,6 +87,6 @@ module Seedie
           class_name.constantize
         end
       end
-    end    
+    end
   end
 end

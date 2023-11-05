@@ -16,7 +16,7 @@ module Seedie
     end
 
     def generate_records
-      report(:model_seed_start, name: "#{model.to_s}")
+      report(:model_seed_start, name: "#{model}")
       model_count(model_config).times do |index|
         record = generate_record(model_config, index)
         associations_config = model_config["associations"]
@@ -26,7 +26,7 @@ module Seedie
           Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
         end
       end
-      report(:model_seed_finish, name: "#{model.to_s}")
+      report(:model_seed_finish, name: "#{model}")
     end
 
     private

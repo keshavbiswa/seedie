@@ -11,7 +11,7 @@ module Seedie
 
       def generate_associations
         return if association_config["belongs_to"].nil?
-        
+
         report(:belongs_to_start)
 
         association_config["belongs_to"].each do |association_name, association_config|
@@ -29,7 +29,7 @@ module Seedie
 
       private
 
-      def handle_association_config_type(reflection, association_name, association_config)
+      def handle_association_config_type(reflection, _association_name, association_config)
         if reflection.polymorphic?
           handle_polymorphic_config_type(reflection, association_config)
         else
@@ -38,7 +38,6 @@ module Seedie
           handle_strategy(klass, reflection, strategy)
         end
       end
-      
 
       def handle_polymorphic_config_type(reflection, association_config)
         type_name = get_polymorphic_class_name(association_config["polymorphic"])
@@ -48,7 +47,7 @@ module Seedie
 
         handle_strategy(klass, reflection, strategy)
       end
-      
+
       # Handles the strategy for belongs_to associations
       # For polymorphic reflection, we might not add a strategy
       # so we need to default it to random
@@ -89,14 +88,14 @@ module Seedie
 
       def handle_new_config_type(klass, reflection)
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
-            
+
         new_associated_record = generate_association(klass, {}, INDEX)
         associated_field_set.merge!(generate_associated_field(new_associated_record.id, reflection.foreign_key))
       end
 
       def handle_other_config_type(klass, reflection, association_config)
         report(:belongs_to_associations, name: klass.to_s, parent_name: model.to_s)
-            
+
         new_associated_record = generate_association(klass, association_config, INDEX)
         associated_field_set.merge!(generate_associated_field(new_associated_record.id, reflection.foreign_key))
       end
