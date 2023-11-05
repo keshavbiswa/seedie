@@ -29,6 +29,9 @@ jobs:
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
+    
+    - name: Rubocop
+      run: bundle exec rubocop
 
     - name: Setup DB
       run: |
@@ -41,6 +44,3 @@ jobs:
       run: bundle exec rspec
       env:
         RAILS_VERSION: ${{ matrix.rails_version }}
-
-    - name: Rubocop
-      run: bundle exec rubocop
