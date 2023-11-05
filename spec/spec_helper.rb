@@ -8,7 +8,7 @@ end
 RSpec.configure do |config|
 
   config.before do
-    allow_any_instance_of(Reporters::ConsoleReporter).to receive(:update) unless ENV["DEBUG_OUTPUT"] == "true"
+    allow_any_instance_of(Seedie::Reporters::ConsoleReporter).to receive(:update) unless ENV["DEBUG_OUTPUT"] == "true"
   end
 
   config.expect_with :rspec do |expectations|
