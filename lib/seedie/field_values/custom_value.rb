@@ -37,7 +37,6 @@ module Seedie
 
       def validate_values
         values = @value_template["values"]
-        options = @value_template["options"]
 
         if values.is_a?(Array) || values.is_a?(Hash)
           validate_sequential_values_length

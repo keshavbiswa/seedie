@@ -6,7 +6,7 @@ module Seedie
       end
 
       def update(event_type, options)
-        indent_level = set_indent_level(event_type)
+        set_indent_level(event_type)
         message = messages(event_type, options)
         @reports << { event_type: event_type, message: message }
 
