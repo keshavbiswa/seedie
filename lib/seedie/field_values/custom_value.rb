@@ -3,7 +3,7 @@ module Seedie
     class CustomValue
       VALID_KEYS = ["values", "value", "options"].freeze
       PICK_STRATEGIES = ["random", "sequential"].freeze
-      
+
       attr_reader :name, :parsed_value
 
       def initialize(name, value_template, index)
@@ -38,7 +38,7 @@ module Seedie
       def validate_values
         values = @value_template["values"]
         options = @value_template["options"]
-        
+
         if values.is_a?(Array) || values.is_a?(Hash)
           validate_sequential_values_length
         else
@@ -52,7 +52,7 @@ module Seedie
 
         if pick_strategy.present? && !PICK_STRATEGIES.include?(pick_strategy)
           raise InvalidCustomFieldOptionsError,
-            "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
+                "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
         end
       end
 
@@ -73,28 +73,28 @@ module Seedie
 
         if values_length < @index + 1
           raise CustomFieldNotEnoughValuesError,
-            "There are not enough values for #{@name}. Please add more values."
+                "There are not enough values for #{@name}. Please add more values."
         end
       end
 
       def validate_keys
         invalid_keys = @value_template.keys - VALID_KEYS
-  
+
         if invalid_keys.present?
           raise InvalidCustomFieldKeysError,
-            "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only #{VALID_KEYS} are allowed."
+                "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only #{VALID_KEYS} are allowed."
         end
 
-        if @value_template.key?("values") 
+        if @value_template.key?("values")
           if @value_template.key?("value")
             raise InvalidCustomFieldKeysError,
-              "Invalid keys for #{@name}: values and value cannot be used together."
+                  "Invalid keys for #{@name}: values and value cannot be used together."
           end
 
           if @value_template["values"].is_a?(Hash)
             if !@value_template["values"].key?("start") || !@value_template["values"].key?("end")
               raise InvalidCustomFieldValuesError,
-                "The values key for #{@name} must be an array or a hash with start and end keys."
+                    "The values key for #{@name} must be an array or a hash with start and end keys."
             end
           end
         end
@@ -123,7 +123,7 @@ module Seedie
                       generate_custom_values_from_range(@value_template["values"]["start"], @value_template["values"]["end"])
                     end
           options = @value_template["options"]
-          
+
           if options.present? && options["pick_strategy"] == "sequential"
             @parsed_value = values[@index]
           else

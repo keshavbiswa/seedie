@@ -33,7 +33,7 @@ module Seedie
         when :bytea
           Faker::Internet.password
         when :bit, :bit_varying
-          ["0","1"].sample
+          ["0", "1"].sample
         when :money
           Faker::Commerce.price.to_s
         when :hstore

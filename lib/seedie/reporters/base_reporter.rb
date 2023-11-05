@@ -17,6 +17,7 @@ module Seedie
 
       def close
         return if output.closed?
+
         output.flush
       end
 
@@ -55,16 +56,16 @@ module Seedie
 
       def indent_level_for(event_type)
         indent_levels = {
-          seed_start: 0, 
-          seed_finish: 0, 
-          model_seed_start: 1, 
-          model_seed_finish: 1, 
-          record_created: 1, 
+          seed_start: 0,
+          seed_finish: 0,
+          model_seed_start: 1,
+          model_seed_finish: 1,
+          record_created: 1,
           random_association: 1,
-          has_many_start: 2, 
-          belongs_to_start: 2, 
-          has_one_start: 2, 
-          associated_records: 3, 
+          has_many_start: 2,
+          belongs_to_start: 2,
+          has_one_start: 2,
+          associated_records: 3,
           belongs_to_associations: 3
         }
 

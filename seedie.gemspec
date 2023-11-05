@@ -33,14 +33,14 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency "faker", ">= 2.9"
   spec.add_dependency "activerecord", ">= 5.2.0"
+  spec.add_dependency "faker", ">= 2.9"
   spec.add_dependency "zeitwerk", "~> 2.4"
 
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "rspec-rails"
   spec.add_development_dependency "generator_spec"
   spec.add_development_dependency "rails"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec-rails"
 
   spec.add_development_dependency "sqlite3", "~> 1.4"
 end

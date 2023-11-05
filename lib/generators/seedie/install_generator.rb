@@ -5,7 +5,7 @@ module Seedie
   module Generators
     class InstallGenerator < Rails::Generators::Base
       include PolymorphicAssociationHelper
-      
+
       EXCLUDED_MODELS = %w[
         ActiveRecord::SchemaMigration
         ActiveRecord::InternalMetadata
@@ -21,19 +21,18 @@ module Seedie
 
       class_option :blank, type: :boolean, default: false, desc: "Generate a blank seedie.yml with examples"
       class_option :excluded_models, type: :array, default: [], desc: "Models to exclude from seedie.yml"
-      class_option :include_only_models, type: :array, default: [], 
-        desc: "Models to be specifically included in seedie.yml. This will ignore all other models."
-
+      class_option :include_only_models, type: :array, default: [],
+                                         desc: "Models to be specifically included in seedie.yml. This will ignore all other models."
 
       desc "Creates a seedie.yml for your application."
       def generate_seedie_file(output = STDOUT)
         if options[:include_only_models].present? && options[:excluded_models].present?
-          raise ArgumentError, "Cannot use both --include_only_models and --excluded_models together." 
+          raise ArgumentError, "Cannot use both --include_only_models and --excluded_models together."
         end
-        
+
         # This needs to be generated before anything else.
         template "seedie_initializer.rb", "config/initializers/seedie.rb"
-        
+
         @excluded_models = options[:excluded_models] + EXCLUDED_MODELS
         @output = output
 
@@ -90,12 +89,12 @@ module Seedie
           if polymorphic_types.include?(column.name) || foreign_keys.include?(column.name)
             next
           end
-          
+
           # Adding default columns to default_columns
           if column.default.present? || column.default_function.present?
             default_columns << column
           elsif column.null == false || has_presence_validator?(model, column.name)
-          # Only add to active if its required or has presence validator
+            # Only add to active if its required or has presence validator
             active_columns << column
           else
             disabled_columns << column
@@ -104,7 +103,7 @@ module Seedie
 
         # Add atleast one column to active columns
         active_columns << disabled_columns.pop if active_columns.empty? && disabled_columns.present?
-        
+
         # Disable all default columns
         disabled_columns += default_columns
 
@@ -156,8 +155,8 @@ module Seedie
           end
           config
         end
-      end      
-      
+      end
+
       def set_polymorphic_association_config(model, association)
         {
           "polymorphic" => find_polymorphic_types(model, association.name),
@@ -179,10 +178,10 @@ module Seedie
 
           all_models.reject do |model|
             @excluded_models.include?(model.name) || # Excluded Reserved Models
-            model.abstract_class? || # Excluded Abstract Models
-            model.table_exists? == false || # Excluded Models without tables
-            model.name.blank? || # Excluded Anonymous Models
-            model.name.start_with?("HABTM_") # Excluded HABTM Models
+              model.abstract_class? || # Excluded Abstract Models
+              model.table_exists? == false || # Excluded Models without tables
+              model.name.blank? || # Excluded Anonymous Models
+              model.name.start_with?("HABTM_") # Excluded HABTM Models
           end
         end
       end

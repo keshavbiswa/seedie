@@ -17,11 +17,11 @@ module Seedie
         return @seedie_config_custom_attributes[@name.to_sym] if @seedie_config_custom_attributes.key?(@name.to_sym)
 
         @unique_prefix = "unique." if has_validation?(:uniqueness)
-        
+
         add_faker_class_and_method(@column.type)
-        
+
         if has_validation?(:inclusion)
-          handle_inclusion_validation 
+          handle_inclusion_validation
         else
           @options += handle_numericality_validation if has_validation?(:numericality)
           @options += handle_length_validation if has_validation?(:length)
