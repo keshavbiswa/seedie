@@ -11,3 +11,8 @@ AllCops:
 Style:
   HashSyntax:
     EnforcedStyle: hash_rockets
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - "lib/generators/seedie/install_generator.rb"
