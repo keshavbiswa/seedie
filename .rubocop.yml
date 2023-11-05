@@ -16,3 +16,15 @@ Metrics/AbcSize:
   Max: 30
   Exclude:
     - "lib/generators/seedie/install_generator.rb"
+
+# Configuration parameters: CountComments, CountAsOne, AllowedMethods, AllowedPatterns.
+# AllowedMethods: refine
+Metrics/BlockLength:
+  CountComments: false
+  Max: 30
+  Exclude: 
+    - "spec/integration/*.rb"
+    - "spec/seedie/**/*.rb"
+    - "spec/generators/*.rb"
+    - "spec/dummy/**/*.rb"
+
