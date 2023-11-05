@@ -1,1 +1,10 @@
 inherit_from: .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: disable
+  SuggestExtensions: false
+
+Style:
+  HashSyntax:
+    EnforcedStyle: hash_rockets
