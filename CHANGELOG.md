@@ -1,3 +1,74 @@
+## Version 0.4.0
+
+### New Features
+
+#### Added HasAndBelongsToMany Association support
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/43)
+
+You can now add `has_and_belongs_to_many` associations to your seedie.yml file:
+
+```yaml
+has_and_belongs_to_many:
+  posts:
+    count: 5
+    attributes:
+      title: "{{Faker::Lorem.sentence}}"
+      body: "{{Faker::Lorem.paragraph}}"
+```
+
+#### Added the ability to generate nested BelongsTo Associations
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/34)
+
+Before, Models had no ability to add assocations to the child_model.
+
+```yaml
+parent_model:
+  attributes:
+    some_attribute: 'hello'
+  associations:
+    has_many:
+      child_model: 2
+```
+
+Now you can add associations to the child_model:
+
+```yaml
+parent_model:
+  attributes:
+    some_attribute: 'hello'
+  associations:
+    has_many:
+      child_model:
+        attributes:
+          title: 'some title'
+        associations:
+          belongs_to:
+            another_parent_model: 'random'
+```
+
+### Enhancements
+
+#### Complete Rubocop Integration with CI
+
+* [Rubocop Integration](https://github.com/keshavbiswa/seedie/pull/33) by [@giovannism20](https://github.com/giovannism20)
+* Rubocop cleanups:
+  - https://github.com/keshavbiswa/seedie/pull/37
+  - https://github.com/keshavbiswa/seedie/pull/38
+  - https://github.com/keshavbiswa/seedie/pull/39
+  - https://github.com/keshavbiswa/seedie/pull/40
+  - https://github.com/keshavbiswa/seedie/pull/41
+  - https://github.com/keshavbiswa/seedie/pull/42
+
+#### Added Zeitwerk Support
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/35)
+
+#### Added Rails 7.1 Support
+
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/36)
+
 ## Version 0.3.0
 
 ### New Features
