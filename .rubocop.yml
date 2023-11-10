@@ -12,7 +12,6 @@ Style:
   HashSyntax:
     EnforcedStyle: hash_rockets
 
-Style:
   GuardClause:
     Enabled: false
 

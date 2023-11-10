@@ -48,7 +48,7 @@ RSpec.describe Seedie::FieldValues::ValueTemplateValidator do
         end
 
         context "when the values key is an array" do
-          let(:value_template) { { "values" => ["value1", "value2"] } }
+          let(:value_template) { { "values" => %w[value1 value2] } }
           subject { described_class.new(value_template, index, name) }
 
           it "does not raise an error" do
