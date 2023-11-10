@@ -48,7 +48,10 @@ module Seedie
       def validate_values
         values = @value_template["values"]
 
-        raise InvalidCustomFieldValuesError, "The values key for #{@name} must be an array or a hash with start and end keys." unless values.is_a?(Array) || values.is_a?(Hash)
+        unless values.is_a?(Array) || values.is_a?(Hash)
+          raise InvalidCustomFieldValuesError,
+                "The values key for #{@name} must be an array or a hash with start and end keys."
+        end
 
         validate_sequential_values_length
       end

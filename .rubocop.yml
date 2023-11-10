@@ -49,6 +49,11 @@ Style/RedundantInterpolation:
   Exclude:
     - 'lib/seedie/reporters/console_reporter.rb'
 
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns.
+# URISchemes: http, https
+Layout/LineLength:
+  Max: 150
+
 Metrics/AbcSize:
   Max: 30
   Exclude:
