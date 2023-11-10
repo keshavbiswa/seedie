@@ -43,6 +43,8 @@ module Seedie
           "Creating BelongsTo associations:"
         when :has_one_start
           "Creating HasOne associations:"
+        when :has_and_belongs_to_many_start
+          "Creating HasAndBelongsToMany associations:"
         when :associated_records
           "Creating #{options[:count]} #{options[:name]} for #{options[:parent_name]}"
         when :random_association

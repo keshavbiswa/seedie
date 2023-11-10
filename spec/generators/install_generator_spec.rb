@@ -149,7 +149,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "sorts models by dependency" do
-      expect(content["models"].keys).to eq %w[user simple_model post review post_metadatum game_room game_room_user comment]
+      expect(content["models"].keys).to eq %w[user simple_model post board review post_metadatum game_room game_room_user comment]
     end
 
     it "generates model_configuration for each model" do

@@ -23,10 +23,11 @@ module Seedie
         record = generate_record(model_config, index)
         associations_config = model_config["associations"]
 
-        if associations_config.present?
-          Associations::HasMany.new(record, model, associations_config, reporters).generate_associations
-          Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
-        end
+        next unless associations_config.present?
+
+        Associations::HasMany.new(record, model, associations_config, reporters).generate_associations
+        Associations::HasAndBelongsToMany.new(record, model, associations_config, reporters).generate_associations
+        Associations::HasOne.new(record, model, associations_config, reporters).generate_associations
       end
       report(:model_seed_finish, name: model.to_s)
     end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "seedie"
 
 describe Seedie::ModelSeeder do
   let(:model) { User }
@@ -81,6 +80,25 @@ describe Seedie::ModelSeeder do
 
         expect(model.first.post).to be_present
         expect(model.first.post.title).to eq "Post 0"
+      end
+    end
+
+    context "when has_and_belongs_to_many associations are specified in model_config" do
+      let(:model) { User }
+      let(:model_config) do
+        { "associations" =>
+          {
+            "has_and_belongs_to_many" => {
+              "boards" => { "count" => 2, "attributes" => { "name" => "Board {{index}}" } }
+            }
+          } }
+      end
+
+      it "generates the specified number of associations" do
+        subject.generate_records
+
+        expect(model.first.boards.size).to eq 2
+        expect(model.first.boards.first.name).to eq "Board 0"
       end
     end
   end

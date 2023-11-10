@@ -1,6 +1,6 @@
 # Seedie
 
-Seedie is a Ruby gem designed to streamline the seeding of your database.
+Seedie is a Ruby gem designed to make it easy to seed your database with realistic data.
 Utilizing the Faker library, Seedie generates realistic data for ActiveRecord models.
 Currently supports only PostrgreSQL and SQLite3 databases.
 The gem includes a Rake task for seeding models and a Rails generator for easy setup.
@@ -144,6 +144,11 @@ models:
         post_metadatum: 
           attributes:
             seo_text: "{{Faker::Lorem.paragraph}}"
+      has_and_belongs_to_many:
+        tags:
+          count: 3
+          attributes:
+            name: "{{Faker::Lorem.word}}"
     disabled_fields: []
   comment:
     attributes:
@@ -165,7 +170,7 @@ In this file:
   - Additionally, we can use placeholders like `{{Faker::Internet.email}}` to generate dynamic and unique data for each record using Faker.
   - We can also specify an array of values that can be picked from randomly or sequentially using the `values` and `pick_strategy` options.
 - `disabled_fields` is an array of fields that should not be automatically filled by Seedie.
-- `associations` specify how associated models should be generated. Here, `has_many`, `belongs_to`, and `has_one` are supported.
+- `associations` specify how associated models should be generated. Here, `has_many`, `belongs_to`, `has_one` and `has_and_belongs_to_many` are supported.
 - The specified number for `has_many` represents the number of associated records to create.
 - For `belongs_to`, the value `random` means that a random existing record will be associated. If there is a unique index associated, then `unique` will be set or else `random` is the default.
 - If attributes are specified under an association, those attributes will be used when creating the associated record(s)
