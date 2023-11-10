@@ -4,10 +4,70 @@ AllCops:
   TargetRubyVersion: 2.7
   NewCops: disable
   SuggestExtensions: false
-
   Exclude:
     - "spec/dummy/bin/*"
 
-Style:
-  HashSyntax:
-    EnforcedStyle: hash_rockets
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+  EnforcedShorthandSyntax: never
+
+Style/GuardClause:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
+# SupportedStyles: assign_to_condition, assign_inside_condition
+Style/ConditionalAssignment:
+    Enabled: false
+
+# Configuration parameters: AllowedConstants.
+Style/Documentation:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
+# SupportedStyles: single_quotes, double_quotes
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+  ConsistentQuotesInMultiline: true
+
+# Configuration parameters: EnforcedStyle.
+# SupportedStyles: both, prefix, postfix
+Style/NegatedIf:
+  Enabled: false
+
+Style/RedundantBegin:
+  Enabled: false
+
+# Configuration parameters: MinDigits, Strict, AllowedNumbers, AllowedPatterns.
+Style/NumericLiterals:
+  Exclude:
+    - 'spec/dummy/db/*.rb'
+
+Style/RedundantInterpolation:
+  Exclude:
+    - 'lib/seedie/reporters/console_reporter.rb'
+
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - "lib/generators/seedie/install_generator.rb"
+
+# Configuration parameters: CountComments, CountAsOne, AllowedMethods, AllowedPatterns.
+# AllowedMethods: refine
+Metrics/BlockLength:
+  CountComments: false
+  Max: 30
+  Exclude: 
+    - "spec/integration/*.rb"
+    - "spec/seedie/**/*.rb"
+    - "spec/generators/*.rb"
+    - "spec/dummy/**/*.rb"
+
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ClassLength:
+  Exclude:
+    - "lib/generators/seedie/install_generator.rb"
+    - "lib/seedie/field_values/faker_builder.rb"
+

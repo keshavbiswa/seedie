@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "seedie"
 
@@ -21,10 +23,10 @@ describe Seedie::ModelSeeder do
     end
 
     context "when default_count is specified in config" do
-      let(:config) {
+      let(:config) do
         { "default_count" => 3,
           "models" => { "user" => { "attributes" => { "email" => "{{Faker::Internet.unique.email}}" } } } }
-      }
+      end
 
       it "generates the default number of records" do
         subject.generate_records

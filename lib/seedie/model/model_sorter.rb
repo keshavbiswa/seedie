@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Model
     class ModelSorter
@@ -38,12 +40,8 @@ module Seedie
         end
 
         @unresolved << model
-        dependencies = @model_dependencies[model]
-
-        if dependencies
-          dependencies.each do |dependency|
-            resolve_dependencies(dependency) unless @resolved_queue.include?(dependency)
-          end
+        @model_dependencies[model]&.each do |dependency|
+          resolve_dependencies(dependency) unless @resolved_queue.include?(dependency)
         end
 
         @resolved_queue << model

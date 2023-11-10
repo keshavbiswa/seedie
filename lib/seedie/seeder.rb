@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   class Seeder
     include Reporters::Reportable

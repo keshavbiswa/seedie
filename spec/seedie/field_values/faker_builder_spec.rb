@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe Seedie::FieldValues::FakerBuilder do
@@ -213,20 +215,20 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
 
       context "when column has inclusion validation with array" do
         let(:column) { double("column", type: :string) }
-        let(:validations) { [double("validation", kind: :inclusion, options: { in: ["foo", "bar"] })] }
+        let(:validations) { [double("validation", kind: :inclusion, options: { in: %w[foo bar] })] }
         let(:faker_builder) { described_class.new("name", column, validations) }
 
         it "returns a valid Faker expression with inclusion options" do
-          expect(faker_builder.build_faker_constant).to eq({ "values" => ["foo", "bar"], "options" => { "pick_strategy" => "random" } })
+          expect(faker_builder.build_faker_constant).to eq({ "values" => %w[foo bar], "options" => { "pick_strategy" => "random" } })
         end
       end
     end
 
     context "when column has numericality validation with range" do
       let(:column) { double("column", type: :integer) }
-      let(:validations) {
+      let(:validations) do
         [double("validation", kind: :numericality, options: { greater_than_or_equal_to: 10, less_than_or_equal_to: 20 })]
-      }
+      end
       let(:faker_builder) { described_class.new("name", column, validations) }
 
       it "returns a valid Faker expression with numericality options" do

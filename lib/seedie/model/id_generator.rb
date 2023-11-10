@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Model
     class IdGenerator
@@ -9,7 +11,7 @@ module Seedie
         id = @model.pluck(:id).sample
         raise InvalidAssociationConfigError, "#{@model} has no records" unless id
 
-        return id
+        id
       end
 
       def unique_id_for(association_klass, model_id_column)

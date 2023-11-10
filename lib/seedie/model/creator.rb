@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Model
     class Creator
@@ -12,7 +14,7 @@ module Seedie
 
       def create!(field_values_set)
         record = @model.create!(field_values_set)
-        report(:record_created, name: "#{record.class}", id: "#{record.id}")
+        report(:record_created, name: record.class.to_s, id: record.id.to_s)
 
         record
       end
@@ -22,7 +24,7 @@ module Seedie
           create!(field_values_set)
         rescue ActiveRecord::RecordInvalid => e
           report(:record_invalid, record: e.record)
-          return nil
+          nil
         end
       end
     end

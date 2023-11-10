@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "seedie"
 
@@ -24,9 +26,9 @@ RSpec.describe Seedie::Associations::BelongsTo do
 
         context "when post does not exist" do
           it "raises InvalidAssociationConfigError" do
-            expect {
+            expect do
               subject.generate_associations
-            }.to raise_error(Seedie::InvalidAssociationConfigError, "Post has no records")
+            end.to raise_error(Seedie::InvalidAssociationConfigError, "Post has no records")
           end
         end
       end
@@ -56,7 +58,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
             "belongs_to" => {
               "user" => "random",
               "reviewable" => {
-                "polymorphic" => "post",
+                "polymorphic" => "post"
               }
             }
           }
@@ -76,7 +78,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
             {
               "belongs_to" => {
                 "reviewable" => {
-                  "polymorphic" => ["post", "game_room"]
+                  "polymorphic" => %w[post game_room]
                 }
               }
             }
@@ -86,7 +88,7 @@ RSpec.describe Seedie::Associations::BelongsTo do
             subject.generate_associations
 
             expect(subject.associated_field_set["reviewable_id"]).to be_in([post.id, post2.id, game_room.id, game_room2.id])
-            expect(subject.associated_field_set["reviewable_type"]).to be_in(["Post", "GameRoom"])
+            expect(subject.associated_field_set["reviewable_type"]).to be_in(%w[Post GameRoom])
           end
         end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   class FieldValuesSet
     attr_reader :model, :model_config, :attributes_config, :index

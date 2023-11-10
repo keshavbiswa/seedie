@@ -1,9 +1,8 @@
+# frozen_string_literal: true
+
 module Seedie
   module FieldValues
     class CustomValue
-      VALID_KEYS = ["values", "value", "options"].freeze
-      PICK_STRATEGIES = ["random", "sequential"].freeze
-
       attr_reader :name, :parsed_value
 
       def initialize(name, value_template, index)
@@ -12,7 +11,7 @@ module Seedie
         @index = index
         @parsed_value = ""
 
-        validate_value_template
+        ValueTemplateValidator.new(@value_template, @index, @name).validate
       end
 
       def generate_custom_field_value
@@ -27,89 +26,21 @@ module Seedie
 
       private
 
-      def validate_value_template
-        return unless @value_template.is_a?(Hash)
-
-        validate_keys
-        validate_values if @value_template.key?("values")
-        validate_options if @value_template.key?("options")
-      end
-
-      def validate_values
-        values = @value_template["values"]
-        options = @value_template["options"]
-
-        if values.is_a?(Array) || values.is_a?(Hash)
-          validate_sequential_values_length
-        else
-          raise InvalidCustomFieldValuesError, "The values key for #{@name} must be an array or a hash with start and end keys."
-        end
-      end
-
-      def validate_options
-        options = @value_template["options"]
-        pick_strategy = options["pick_strategy"]
-
-        if pick_strategy.present? && !PICK_STRATEGIES.include?(pick_strategy)
-          raise InvalidCustomFieldOptionsError,
-                "The pick_strategy for #{@name} must be either 'sequential' or 'random'."
-        end
-      end
-
-      ## If pick strategy is sequential, we need to ensure there is a value for each index
-      # If there isn't sufficient values, we raise an error
-      def validate_sequential_values_length
-        return unless @value_template.key?("options")
-        return unless @value_template["options"]["pick_strategy"] == "sequential"
-
-        values = @value_template["values"]
-
-        if values.is_a?(Hash) && values.keys.sort == ["end", "start"]
-          # Assuming the values are an inclusive range
-          values_length = values["end"] - values["start"] + 1
-        else
-          values_length = values.length
-        end
-
-        if values_length < @index + 1
-          raise CustomFieldNotEnoughValuesError,
-                "There are not enough values for #{@name}. Please add more values."
-        end
-      end
-
-      def validate_keys
-        invalid_keys = @value_template.keys - VALID_KEYS
-
-        if invalid_keys.present?
-          raise InvalidCustomFieldKeysError,
-                "Invalid keys for #{@name}: #{invalid_keys.join(", ")}. Only #{VALID_KEYS} are allowed."
-        end
-
-        if @value_template.key?("values")
-          if @value_template.key?("value")
-            raise InvalidCustomFieldKeysError,
-                  "Invalid keys for #{@name}: values and value cannot be used together."
-          end
-
-          if @value_template["values"].is_a?(Hash)
-            if !@value_template["values"].key?("start") || !@value_template["values"].key?("end")
-              raise InvalidCustomFieldValuesError,
-                    "The values key for #{@name} must be an array or a hash with start and end keys."
-            end
-          end
-        end
-      end
-
       def generate_custom_value_from_string
         @parsed_value = @value_template.gsub("{{index}}", @index.to_s)
 
         @parsed_value.gsub!(/\{\{(.+?)\}\}/) do
-          method_string = $1
+          method_string = ::Regexp.last_match(1)
 
-          if method_string.start_with?("Faker::")
-            eval($1)
-          else
-            raise InvalidFakerMethodError, "Invalid method: #{method_string}"
+          raise InvalidFakerMethodError, "Invalid method: #{method_string}" unless method_string.start_with?("Faker::")
+
+          method_chain = method_string.split(".")
+          # Faker::Name will be shifted off the array
+          faker_class = method_chain.shift.constantize
+
+          # For Faker::Internet.unique.email, there will be two methods in the array
+          method_chain.reduce(faker_class) do |current_class_or_value, method|
+            current_class_or_value.public_send(method)
           end
         end
       end

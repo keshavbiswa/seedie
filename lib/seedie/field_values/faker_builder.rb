@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module FieldValues
     class FakerBuilder
@@ -40,56 +42,44 @@ module Seedie
       def add_faker_class_and_method(type)
         case type
         when :string, :text, :citext
-          @class_prefix = "Lorem."
-          @method_prefix = "word"
+          set_faker("Lorem.", "word")
         when :uuid
-          @class_prefix = "Internet."
-          @method_prefix = "uuid"
+          set_faker("Internet.", "uuid")
         when :integer, :bigint, :smallint
-          @class_prefix = "Number."
-          @method_prefix = "number"
-          @options = "(digits: 5)"
+          set_faker("Number.", "number", "(digits: 5)")
         when :decimal, :float, :real
-          @class_prefix = "Number."
-          @method_prefix = "decimal"
-          @options = "(l_digits: 2, r_digits: 2)"
+          set_faker("Number.", "decimal", "(l_digits: 2, r_digits: 2)")
         when :datetime, :timestamp, :timestamptz, :time, :timetz
-          @class_prefix = "Time."
-          @method_prefix = "between"
-          @options = "(from: DateTime.now - 1, to: DateTime.now)"
+          set_faker("Time.", "between", "(from: DateTime.now - 1, to: DateTime.now)")
         when :date
-          @class_prefix = "Date."
-          @method_prefix = "between"
-          @options = "(from: Date.today - 1, to: Date.today)"
+          set_faker("Date.", "between", "(from: Date.today - 1, to: Date.today)")
         when :boolean
-          @class_prefix = "Boolean."
-          @method_prefix = "boolean"
+          set_faker("Boolean.", "boolean")
         when :json, :jsonb
           @faker_expression = { "value" => "Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })" }
         when :inet
-          @class_prefix = "Internet."
-          @method_prefix = "ip_v4_address"
+          set_faker("Internet.", "ip_v4_address")
         when :cidr, :macaddr
-          @class_prefix = "Internet."
-          @method_prefix = "mac_address"
+          set_faker("Internet.", "mac_address")
         when :bytea
-          @class_prefix = "Internet."
-          @method_prefix = "password"
+          set_faker("Internet.", "password")
         when :bit, :bit_varying
-          @class_prefix = "Internet."
-          @method_prefix = "password"
+          set_faker("Internet.", "password")
         when :money
-          @class_prefix = "Commerce."
-          @method_prefix = "price.to_s"
+          set_faker("Commerce.", "price.to_s")
         when :hstore
           @faker_expression = { "value" => "Json.shallow_json(width: 3, options: { key: 'Name.first_name', value: 'Number.number(digits: 2)' })" }
         when :year
-          @class_prefix = "Number."
-          @method_prefix = "number"
-          @options = "(digits: 4)"
+          set_faker("Number.", "number", "(digits: 4)")
         else
           raise UnknownColumnTypeError, "Unknown column type: #{type}"
         end
+      end
+
+      def set_faker(class_prefix, method_prefix, options = "")
+        @class_prefix = class_prefix
+        @method_prefix = method_prefix
+        @options = options
       end
 
       def has_validation?(kind)

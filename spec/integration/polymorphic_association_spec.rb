@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "PolymorphicAssociation" do
@@ -15,7 +17,7 @@ RSpec.describe "PolymorphicAssociation" do
     end
 
     it "assigns polymorphic associations for Reviewable" do
-      expect(Review.first.reviewable_type).to be_in(["Post", "GameRoom"])
+      expect(Review.first.reviewable_type).to be_in(%w[Post GameRoom])
       expect(Review.pluck(:reviewable_id) - Post.ids - GameRoom.ids).to be_empty
     end
   end

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Seedie
   class ModelFields
-    DEFAULT_DISABLED_FIELDS = %w[id created_at updated_at]
+    DEFAULT_DISABLED_FIELDS = %w[id created_at updated_at].freeze
 
     attr_reader :model_name, :model_config, :fields, :disabled_fields, :foreign_fields
 

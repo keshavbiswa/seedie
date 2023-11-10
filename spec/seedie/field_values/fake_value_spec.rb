@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "seedie"
 
@@ -139,7 +141,7 @@ describe Seedie::FieldValues::FakeValue do
       it "returns a bit" do
         allow(column).to receive(:type).and_return(:bit)
 
-        expect(["1", "0"]).to include(fake_value.generate_fake_value)
+        expect(%w[1 0]).to include(fake_value.generate_fake_value)
       end
     end
 
@@ -178,9 +180,9 @@ describe Seedie::FieldValues::FakeValue do
       it "raises an error" do
         allow(column).to receive(:type).and_return(:unknown)
 
-        expect {
+        expect do
           fake_value.generate_fake_value
-        }.to raise_error(Seedie::UnknownColumnTypeError, "Unknown column type: unknown")
+        end.to raise_error(Seedie::UnknownColumnTypeError, "Unknown column type: unknown")
       end
     end
   end
