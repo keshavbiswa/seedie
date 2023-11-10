@@ -94,7 +94,7 @@ module Seedie
           # Adding default columns to default_columns
           if column.default.present? || column.default_function.present?
             default_columns << column
-          elsif column.null == false || has_presence_validator?(model, column.name)
+          elsif column.null == false || presence_validator?(model, column.name)
             # Only add to active if its required or has presence validator
             active_columns << column
           else
@@ -163,7 +163,7 @@ module Seedie
         }
       end
 
-      def has_presence_validator?(model, column_name)
+      def presence_validator?(model, column_name)
         model.validators_on(column_name).any? { |v| v.kind == :presence }
       end
 
