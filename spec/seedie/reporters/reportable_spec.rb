@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "seedie"
 
 class DummyClass
@@ -12,7 +14,7 @@ RSpec.describe Seedie::Reporters::Reportable do
 
   describe "#report" do
     let(:event_type) { :test_event }
-    let(:body) { { key: 'value' } }
+    let(:body) { { key: "value" } }
 
     before do
       dummy_class.add_observer(observer)

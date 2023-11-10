@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Associations
     class BelongsTo < BaseAssociation
@@ -101,13 +103,11 @@ module Seedie
       end
 
       def get_type(association_config)
-        if association_config.is_a?(String)
-          raise InvalidAssociationConfigError, "Invalid association config" unless ["random", "new", "unique"].include?(association_config)
-
-          return association_config
-        else
-          association_config
+        if association_config.is_a?(String) && !%w[random new unique].include?(association_config)
+          raise InvalidAssociationConfigError, "Invalid association config"
         end
+
+        association_config
       end
     end
   end

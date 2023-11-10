@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SimpleModel < ApplicationRecord
   validates :category, inclusion: { in: %w[tech news sports politics entertainment] }, presence: true
 

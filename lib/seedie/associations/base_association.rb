@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Associations
     class BaseAssociation
@@ -39,7 +41,7 @@ module Seedie
       end
 
       def generate_associated_field(id, association_name)
-        { "#{association_name}" => id }
+        { association_name.to_s => id }
       end
     end
   end

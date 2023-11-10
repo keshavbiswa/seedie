@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module FieldValues
     class CustomValue
@@ -28,19 +30,17 @@ module Seedie
         @parsed_value = @value_template.gsub("{{index}}", @index.to_s)
 
         @parsed_value.gsub!(/\{\{(.+?)\}\}/) do
-          method_string = $1
+          method_string = ::Regexp.last_match(1)
 
-          if method_string.start_with?("Faker::")
-            method_chain = method_string.split('.')
-            # Faker::Name will be shifted off the array
-            faker_class = method_chain.shift.constantize
+          raise InvalidFakerMethodError, "Invalid method: #{method_string}" unless method_string.start_with?("Faker::")
 
-            # For Faker::Internet.unique.email, there will be two methods in the array
-            method_chain.reduce(faker_class) do |current_class_or_value, method|
-              current_class_or_value.public_send(method)
-            end
-          else
-            raise InvalidFakerMethodError, "Invalid method: #{method_string}"
+          method_chain = method_string.split(".")
+          # Faker::Name will be shifted off the array
+          faker_class = method_chain.shift.constantize
+
+          # For Faker::Internet.unique.email, there will be two methods in the array
+          method_chain.reduce(faker_class) do |current_class_or_value, method|
+            current_class_or_value.public_send(method)
           end
         end
       end

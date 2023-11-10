@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "seedie"
 require "rails_helper"
 
@@ -9,9 +11,9 @@ RSpec.describe Seedie::Model::Creator do
 
   describe "#create!" do
     it "creates a new record" do
-      expect {
+      expect do
         subject.create!(field_values_set)
-      }.to change { User.count }.by(1)
+      end.to change { User.count }.by(1)
     end
 
     it "returns the created record" do
@@ -22,9 +24,9 @@ RSpec.describe Seedie::Model::Creator do
   describe "#create" do
     context "when the record is valid" do
       it "creates a new record" do
-        expect {
+        expect do
           subject.create(field_values_set)
-        }.to change { User.count }.by(1)
+        end.to change { User.count }.by(1)
       end
 
       it "returns the created record" do
@@ -38,9 +40,9 @@ RSpec.describe Seedie::Model::Creator do
       end
 
       it "does not create a new record" do
-        expect {
+        expect do
           subject.create(field_values_set)
-        }.not_to(change { User.count })
+        end.not_to(change { User.count })
       end
 
       it "returns nil" do

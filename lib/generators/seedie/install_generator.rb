@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails/generators/base"
 require "seedie"
 
@@ -15,7 +17,7 @@ module Seedie
         ActionText::RichText
         ActionMailbox::InboundEmail
         ActionText::EncryptedRichText
-      ]
+      ].freeze
 
       source_root File.expand_path("templates", __dir__)
 
@@ -25,7 +27,7 @@ module Seedie
                                          desc: "Models to be specifically included in seedie.yml. This will ignore all other models."
 
       desc "Creates a seedie.yml for your application."
-      def generate_seedie_file(output = STDOUT)
+      def generate_seedie_file(output = $stdout)
         if options[:include_only_models].present? && options[:excluded_models].present?
           raise ArgumentError, "Cannot use both --include_only_models and --excluded_models together."
         end
@@ -56,9 +58,8 @@ module Seedie
 
         output_warning_for_extra_models(models)
 
-        models.reduce({}) do |config, model|
+        models.each_with_object({}) do |model, config|
           config[model.name.underscore] = model_configuration(model)
-          config
         end
       end
 
@@ -114,14 +115,13 @@ module Seedie
       end
 
       def active_columns_configuration(model, columns)
-        columns.reduce({}) do |config, column|
+        columns.each_with_object({}) do |column, config|
           validations = model.validators_on(column.name)
           config[column.name] = if validations.present?
                                   FieldValues::FakerBuilder.new(column.name, column, validations).build_faker_constant
                                 else
                                   FieldValues::FakeValue.new(column.name, column).generate_fake_value
                                 end
-          config
         end
       end
 
@@ -134,7 +134,7 @@ module Seedie
           "associations" => {
             "belongs_to" => belongs_to_associations_configuration(model),
             "has_one" => {}, # TODO: Add has_one associations
-            "has_many" => {}, # TODO: Add has_many associations
+            "has_many" => {} # TODO: Add has_many associations
           }
         }
       end
@@ -146,14 +146,13 @@ module Seedie
 
         unique_indexes = model.connection.indexes(model.table_name).select(&:unique).flat_map(&:columns)
 
-        belongs_to_associations.reduce({}) do |config, association|
+        belongs_to_associations.each_with_object({}) do |association, config|
           if association.polymorphic?
             config[association.name.to_s] = set_polymorphic_association_config(model, association)
           else
             association_has_unique_index = unique_indexes.include?(association.foreign_key.to_s)
             config[association.name.to_s] = association_has_unique_index ? "unique" : "random"
           end
-          config
         end
       end
 

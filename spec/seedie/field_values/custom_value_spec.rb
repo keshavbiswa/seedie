@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "seedie"
 
@@ -32,9 +34,9 @@ describe Seedie::FieldValues::CustomValue do
         let(:value_template) { "value_template{{index}} {{NotFaker::Name.name}}" }
 
         it "raises an error" do
-          expect {
+          expect do
             custom_value.generate_custom_field_value
-          }.to raise_error(Seedie::InvalidFakerMethodError, "Invalid method: NotFaker::Name.name")
+          end.to raise_error(Seedie::InvalidFakerMethodError, "Invalid method: NotFaker::Name.name")
         end
       end
 
@@ -53,9 +55,9 @@ describe Seedie::FieldValues::CustomValue do
 
         it "raises an error" do
           message = "Invalid keys for name: SomeInvalid key. Only [\"values\", \"value\", \"options\"] are allowed."
-          expect {
+          expect do
             custom_value.generate_custom_field_value
-          }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
+          end.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
         end
       end
 
@@ -68,13 +70,13 @@ describe Seedie::FieldValues::CustomValue do
       end
 
       context "when both values and value keys are present" do
-        let(:value_template) { { "values" => ["value1", "value2"], "value" => "value" } }
+        let(:value_template) { { "values" => %w[value1 value2], "value" => "value" } }
 
         it "raises an error" do
           message = "Invalid keys for name: values and value cannot be used together."
-          expect {
+          expect do
             custom_value.generate_custom_field_value
-          }.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
+          end.to raise_error(Seedie::InvalidCustomFieldKeysError, message)
         end
       end
 
@@ -83,9 +85,9 @@ describe Seedie::FieldValues::CustomValue do
 
         it "raises an error" do
           message = "The values key for name must be an array or a hash with start and end keys."
-          expect {
+          expect do
             custom_value.generate_custom_field_value
-          }.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
+          end.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
         end
       end
 
@@ -95,9 +97,9 @@ describe Seedie::FieldValues::CustomValue do
 
           it "raises an error" do
             message = "The values key for name must be an array or a hash with start and end keys."
-            expect {
+            expect do
               custom_value.generate_custom_field_value
-            }.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
+            end.to raise_error(Seedie::InvalidCustomFieldValuesError, message)
           end
         end
 
@@ -112,16 +114,16 @@ describe Seedie::FieldValues::CustomValue do
 
       context "when pick_strategy is sequential" do
         context "when values is an array" do
-          let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "sequential" } } }
+          let(:value_template) { { "values" => %w[value1 value2], "options" => { "pick_strategy" => "sequential" } } }
 
           context "when values is less than index" do
             let(:index) { 3 }
 
             it "raises an error" do
               message = "There are not enough values for name. Please add more values."
-              expect {
+              expect do
                 custom_value.generate_custom_field_value
-              }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+              end.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
             end
           end
 
@@ -142,9 +144,9 @@ describe Seedie::FieldValues::CustomValue do
 
             it "raises an error" do
               message = "There are not enough values for name. Please add more values."
-              expect {
+              expect do
                 custom_value.generate_custom_field_value
-              }.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
+              end.to raise_error(Seedie::CustomFieldNotEnoughValuesError, message)
             end
           end
 
@@ -159,23 +161,23 @@ describe Seedie::FieldValues::CustomValue do
       end
 
       context "when pick_strategy is random" do
-        let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "random" } } }
+        let(:value_template) { { "values" => %w[value1 value2], "options" => { "pick_strategy" => "random" } } }
         it "returns a random value from the given array" do
           custom_value = described_class.new(name, value_template, 0)
 
-          expect((["value1", "value2"])).to include(custom_value.generate_custom_field_value)
+          expect(%w[value1 value2]).to include(custom_value.generate_custom_field_value)
         end
       end
 
       context "when pick_strategy is invalid" do
-        let(:value_template) { { "values" => ["value1", "value2"], "options" => { "pick_strategy" => "invalid" } } }
+        let(:value_template) { { "values" => %w[value1 value2], "options" => { "pick_strategy" => "invalid" } } }
 
         it "raises an error" do
           message = "The pick_strategy for name must be either 'sequential' or 'random'."
 
-          expect {
+          expect do
             custom_value.generate_custom_field_value
-          }.to raise_error(Seedie::InvalidCustomFieldOptionsError, message)
+          end.to raise_error(Seedie::InvalidCustomFieldOptionsError, message)
         end
       end
     end

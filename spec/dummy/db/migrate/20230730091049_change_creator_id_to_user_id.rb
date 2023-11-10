@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeCreatorIdToUserId < ActiveRecord::Migration[7.0]
   def change
     rename_column :game_rooms, :creator_id, :user_id

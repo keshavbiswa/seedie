@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "seedie"
 require "rails_helper"
 
@@ -19,9 +21,9 @@ RSpec.describe Seedie::Model::IdGenerator do
 
     context "when there are no records" do
       it "raises InvalidAssociationConfigError" do
-        expect {
+        expect do
           subject.random_id
-        }.to raise_error(Seedie::InvalidAssociationConfigError, "User has no records")
+        end.to raise_error(Seedie::InvalidAssociationConfigError, "User has no records")
       end
     end
   end
@@ -40,9 +42,9 @@ RSpec.describe Seedie::Model::IdGenerator do
 
     context "when there are no records" do
       it "raises InvalidAssociationConfigError" do
-        expect {
+        expect do
           subject.unique_id_for(Comment, "post_id")
-        }.to raise_error(Seedie::InvalidAssociationConfigError, "No unique ids for Post")
+        end.to raise_error(Seedie::InvalidAssociationConfigError, "No unique ids for Post")
       end
     end
   end

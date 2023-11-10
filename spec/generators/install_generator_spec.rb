@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "rails/generators"
 require "generators/seedie/install_generator"
@@ -5,7 +7,7 @@ require "fileutils"
 require "generator_spec"
 
 RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
-  destination File.expand_path("../../tmp", __FILE__)
+  destination File.expand_path("../tmp", __dir__)
   let(:seedie_config) { File.join(destination_root, "config", "seedie.yml") }
   let(:seedie_initializer) { File.join(destination_root, "config", "initializers", "seedie.rb") }
   let(:content) { YAML.load_file(seedie_config) }
@@ -109,10 +111,10 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "raises an error" do
-      expect {
+      expect do
         generator = described_class.new([], { include_only_models: ["User"], excluded_models: ["Post"] }, { destination_root: destination_root })
         generator.generate_seedie_file(output)
-      }.to raise_error(ArgumentError, "Cannot use both --include_only_models and --excluded_models together.")
+      end.to raise_error(ArgumentError, "Cannot use both --include_only_models and --excluded_models together.")
     end
   end
 
@@ -147,7 +149,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "sorts models by dependency" do
-      expect(content["models"].keys).to eq ["user", "simple_model", "post", "review", "post_metadatum", "game_room", "game_room_user", "comment"]
+      expect(content["models"].keys).to eq %w[user simple_model post review post_metadatum game_room game_room_user comment]
     end
 
     it "generates model_configuration for each model" do
@@ -226,7 +228,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "generates random attributes from a given values array" do
-      category_values = { "values" => ["tech", "news", "sports", "politics", "entertainment"], "options" => { "pick_strategy" => "random" } }
+      category_values = { "values" => %w[tech news sports politics entertainment], "options" => { "pick_strategy" => "random" } }
 
       expect(content["models"]["simple_model"]["attributes"]["category"]).to eq(category_values)
     end

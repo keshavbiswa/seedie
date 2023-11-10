@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "CustomAttributes" do
-  let(:category_array) { ["tech", "news", "sports", "politics", "entertainment"] }
+  let(:category_array) { %w[tech news sports politics entertainment] }
   describe "RandomAttributes" do
     let(:config_path) { "spec/fixtures/random_attributes_config.yml" }
 

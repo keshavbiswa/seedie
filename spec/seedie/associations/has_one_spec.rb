@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 require "seedie"
 
@@ -35,9 +37,9 @@ RSpec.describe Seedie::Associations::HasOne do
         let(:association_config) { { "has_one" => { "post_metadatum" => 2 } } }
 
         it "raises InvalidAssociationConfigError" do
-          expect {
+          expect do
             subject.generate_associations
-          }.to raise_error(Seedie::InvalidAssociationConfigError, "has_one association cannot be more than 1")
+          end.to raise_error(Seedie::InvalidAssociationConfigError, "has_one association cannot be more than 1")
         end
       end
     end

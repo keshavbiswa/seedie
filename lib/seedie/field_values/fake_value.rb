@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module FieldValues
     class FakeValue
@@ -96,7 +98,7 @@ module Seedie
       end
 
       def generate_bit
-        ["0", "1"].sample
+        %w[0 1].sample
       end
 
       def generate_money

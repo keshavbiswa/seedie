@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module Reporters
     class ConsoleReporter < BaseReporter
@@ -10,7 +12,7 @@ module Seedie
         message = messages(event_type, options)
         @reports << { event_type: event_type, message: message }
 
-        output.print "#{" " * INDENT_SIZE * @indent_level}"
+        output.print "#{' ' * INDENT_SIZE * @indent_level}"
         output.puts message
       end
     end

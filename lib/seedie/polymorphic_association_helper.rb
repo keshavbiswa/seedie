@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seedie
   module PolymorphicAssociationHelper
     # Returns the type of the polymorphic association

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "ComplexSeed" do
@@ -35,7 +37,7 @@ RSpec.describe "ComplexSeed" do
     end
 
     it "adds category to each post randomly" do
-      expect(Post.first.category).to be_in(["tech", "news", "sports", "politics", "entertainment"])
+      expect(Post.first.category).to be_in(%w[tech news sports politics entertainment])
     end
 
     it "sets the user association from existing users" do
@@ -107,11 +109,11 @@ RSpec.describe "ComplexSeed" do
     end
 
     it "assigns category to each SimpleModel sequentially" do
-      expect(SimpleModel.pluck(:category)).to eq ["tech", "news"]
+      expect(SimpleModel.pluck(:category)).to eq %w[tech news]
     end
 
     it "assigns default status to SimpleModel" do
-      expect(SimpleModel.pluck(:status)).to eq ["active", "active"]
+      expect(SimpleModel.pluck(:status)).to eq %w[active active]
     end
   end
 end
