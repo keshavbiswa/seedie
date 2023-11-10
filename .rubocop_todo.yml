@@ -21,12 +21,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 15
 
-# Offense count: 2
-Naming/AccessorMethodName:
-  Exclude:
-    - 'lib/generators/seedie/install_generator.rb'
-    - 'lib/seedie/reporters/base_reporter.rb'
-
 # Offense count: 3
 # Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
 # NamePrefix: is_, has_, have_

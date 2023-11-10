@@ -31,3 +31,9 @@ Metrics/BlockLength:
     - "spec/generators/*.rb"
     - "spec/dummy/**/*.rb"
 
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ClassLength:
+  Exclude:
+    - "lib/generators/seedie/install_generator.rb"
+    - "lib/seedie/field_values/faker_builder.rb"
+

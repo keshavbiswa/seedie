@@ -72,7 +72,7 @@ module Seedie
         indent_levels[event_type]
       end
 
-      def set_indent_level(event_type)
+      def update_indent_level(event_type)
         if event_type.in?([:record_created, :random_association, :unique_association])
           @indent_level += 1 if !@reports.last[:event_type].in?([:record_created, :random_association, :unique_association])
         elsif @reports.blank? || @reports.last[:event_type] != event_type

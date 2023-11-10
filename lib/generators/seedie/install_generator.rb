@@ -41,7 +41,7 @@ module Seedie
         else
           Rails.application.eager_load! # Load all models. This is required!!
 
-          @models = get_models
+          @models = collect_models
           @models_config = build_models_config
           template "seedie.yml", "config/seedie.yml"
         end
@@ -168,8 +168,8 @@ module Seedie
         model.validators_on(column_name).any? { |v| v.kind == :presence }
       end
 
-      def get_models
-        @get_models ||= begin
+      def collect_models
+        @collect_models ||= begin
           all_models = ActiveRecord::Base.descendants
 
           if options[:include_only_models].present?
