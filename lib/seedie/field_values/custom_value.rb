@@ -31,7 +31,14 @@ module Seedie
           method_string = $1
 
           if method_string.start_with?("Faker::")
-            eval($1)
+            method_chain = method_string.split('.')
+            # Faker::Name will be shifted off the array
+            faker_class = method_chain.shift.constantize
+
+            # For Faker::Internet.unique.email, there will be two methods in the array
+            method_chain.reduce(faker_class) do |current_class_or_value, method|
+              current_class_or_value.public_send(method)
+            end
           else
             raise InvalidFakerMethodError, "Invalid method: #{method_string}"
           end

@@ -34,10 +34,6 @@ Naming/PredicateName:
     - 'lib/seedie/field_values/faker_builder.rb'
     - 'lib/seedie/polymorphic_association_helper.rb'
 
-# Offense count: 1
-Security/Eval:
-  Exclude:
-    - 'lib/seedie/field_values/custom_value.rb'
 
 # Offense count: 21
 # This cop supports safe autocorrection (--autocorrect).
