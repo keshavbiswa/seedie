@@ -54,13 +54,13 @@ $ rails generate seedie:install --blank
 This will generate a blank seedie.yml config file for you that you can now customize according to your needs.
 
 ### Excluding Models
-If you want to exclude certain models while generating the `seedie.yml`, use the `--exclude_models` option:
+If you want to exclude certain models while generating the `seedie.yml`, use the `--excluded_models` option:
 
 ```bash
-$ rails generate seedie:install --exclude_models User Admin Post
+$ rails generate seedie:install --excluded_models User Admin Post
 ```
 
-NOTE: Some models may not be excluded because of their dependencies. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will not be excluded even if you specify it in the `--exclude_models` option.
+NOTE: Some models may not be excluded because of their dependencies. For example, if you have a model `Post` that belongs to a model `User`, then the `User` model will not be excluded even if you specify it in the `--excluded_models` option.
 
 You'll get a warning in your console if any models are not excluded:
 
@@ -113,7 +113,7 @@ $ rake seedie:seed
 
 This will use the configurations specified in seedie.yml to seed your models.
 
-The seedie.yml file has entries for each model in your application, and you can customize the configuration for each one. 
+The seedie.yml file has entries for each model in your application, and you can customize the configuration for each one.
 
 Here's an example of a more advanced configuration in seedie.yml:
 
@@ -133,7 +133,7 @@ models:
       title: "title {{index}}"
       category:
         values: [tech, sports, politics, entertainment]
-        options: 
+        options:
           pick_strategy: random # or sequential
     associations:
       has_many:
@@ -141,7 +141,7 @@ models:
       belongs_to:
         user: random # or new
       has_one:
-        post_metadatum: 
+        post_metadatum:
           attributes:
             seo_text: "{{Faker::Lorem.paragraph}}"
       has_and_belongs_to_many:
@@ -178,7 +178,7 @@ In this file:
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. 
+After checking out the repo, run `bin/setup` to install dependencies.
 Then, run `bundle exec rspec` to run the tests.
 By default, the tests will supress output of the seeds progress.
 Use `DEBUG_OUTPUT=true bundle exec rspec` to see the output of the seeds.
