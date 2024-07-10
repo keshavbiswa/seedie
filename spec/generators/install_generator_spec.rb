@@ -153,7 +153,7 @@ RSpec.describe Seedie::Generators::InstallGenerator, type: :generator do
     end
 
     it "generates model_configuration for each model" do
-      expect(content["models"].each { |_model, config| expect(config).to include("attributes", "associations") })
+      expect(content["models"].each_value { |config| expect(config).to include("attributes", "associations") })
     end
   end
 
