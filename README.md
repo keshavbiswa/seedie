@@ -8,6 +8,10 @@ The gem includes a Rake task for seeding models and a Rails generator for easy s
 [![Gem Version](https://badge.fury.io/rb/seedie.svg)](https://badge.fury.io/rb/seedie)
 ![Build Status](https://github.com/keshavbiswa/seedie/workflows/CI/badge.svg?branch=main)
 
+## Screencast
+
+[![Introducing Seedie](https://img.youtube.com/vi/3W0wRrOtsTk/0.jpg)](https://www.youtube.com/watch?v=3W0wRrOtsTk)
+
 ## Installation
 
 Add the following line to your application's Gemfile:
