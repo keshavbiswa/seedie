@@ -16,7 +16,8 @@ module Seedie
       end
 
       def build_faker_constant
-        return @seedie_config_custom_attributes[@name.to_sym] if @seedie_config_custom_attributes.key?(@name.to_sym)
+        custom_attribute = fetch_custom_attribute
+        return custom_attribute if fetch_custom_attribute
 
         @unique_prefix = "unique." if has_validation?(:uniqueness)
 
@@ -38,6 +39,14 @@ module Seedie
       end
 
       private
+
+      def fetch_custom_attribute
+        if @seedie_config_custom_attributes[@name.to_sym].is_a?(Hash)
+          return @seedie_config_custom_attributes[@name.to_sym][@column.name.to_sym]
+        end
+
+        @seedie_config_custom_attributes[@name.to_sym]
+      end
 
       def add_faker_class_and_method(type)
         case type
