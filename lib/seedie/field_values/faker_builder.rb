@@ -42,7 +42,7 @@ module Seedie
 
       def fetch_custom_attribute
         if @seedie_config_custom_attributes[@name.to_sym].is_a?(Hash)
-          return @seedie_config_custom_attributes[@name.to_sym][@column.name.to_sym]
+          return @seedie_config_custom_attributes.dig(@name.to_sym, @column.name.to_sym)
         end
 
         @seedie_config_custom_attributes[@name.to_sym]
