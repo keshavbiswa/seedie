@@ -30,15 +30,15 @@ RSpec.describe Seedie::FieldValues::FakerBuilder do
       end
 
       context "when there is a model specific custom attribute" do
-        let(:column) { double("column", name: :email, type: :string) }
+        let(:column) { double("column", name: :name, type: :string) }
         let(:faker_builder) { described_class.new("user", column, validations) }
 
         before do
           Seedie.configure do |config|
             config.prepare_custom_attributes_for :user
 
-            config.custom_attributes[:user][:email] = "model_specific_custom_attribute"
-            config.custom_attributes[:email] = "global_custom_attribute"
+            config.custom_attributes[:user][:name] = "model_specific_custom_attribute"
+            config.custom_attributes[:name] = "global_custom_attribute"
           end
         end
 
