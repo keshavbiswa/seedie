@@ -1,3 +1,33 @@
+## Verson 0.4.1
+
+### New Features
+
+#### Added Model-specific Custom Attributes
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/47)
+
+You can now define custom attributes for specific models in your `Seedie.configure` block:
+
+```ruby
+Seedie.configure do |config|
+  # Default custom attribute for all models
+  config.custom_attributes[:email] = "{{Faker::Internet.unique.email}}"
+
+  # Model-specific custom attribute
+  config.custom_attributes[:user][:email] = "email_#{rand(10)}@example.com"
+end
+```
+
+### Enhancements
+
+#### Rubocop Cleanup
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/45)
+
+#### Improved README
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/44)
+
+#### Added Screencast
+* [GitHub PR](https://github.com/keshavbiswa/seedie/pull/46)
+
 ## Version 0.4.0
 
 ### New Features
